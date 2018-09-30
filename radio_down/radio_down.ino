@@ -11,10 +11,10 @@
  *
  */
 
-final int setupmode = true //normal operation requires setupmode to be false
-
+final int setupmode = false //normal operation requires setupmode to be false
 
 void setup() {
+    pinMode(LED_BUILTIN, OUTPUT);// for blinking internal LED
     Serial.begin(9600); //9600 Baud communication with computer
     Serial1.begin(9600);//9600 Baud communication with RF module
 
@@ -23,15 +23,23 @@ void setup() {
         Serial1.write("+++");// "+++" enters command mode
         Serial.println("System response: " + Serial1.readString())
 
+        /**
         Serial.println("Entering command mode with string: \"+++\"")
         Serial1.write("+++");// "+++" enters command mode
         Serial.println("System response: " + Serial1.readString())
+         /*TODO: edit with updated command sequence using above format*/
     }
-
 }
 
 void loop() {
     if (!setupmode) {
         //main loop:
+
+        Serial.println("Hello World!");
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(1000);
+
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(1000);
     }
 }
