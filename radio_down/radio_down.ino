@@ -10,11 +10,28 @@
  * Written by Alec Vercruysse
  *
  */
+
+final int setupmode = true //normal operation requires setupmode to be false
+
+
 void setup() {
-    Serial.begin(9600) //9600 Baud communication with computer
-    Serial1.begin(9600)//9600 Baud communication with RF module
+    Serial.begin(9600); //9600 Baud communication with computer
+    Serial1.begin(9600);//9600 Baud communication with RF module
+
+    if (setupmode) {
+        Serial.println("Entering command mode with string: \"+++\"")
+        Serial1.write("+++");// "+++" enters command mode
+        Serial.println("System response: " + Serial1.readString())
+
+        Serial.println("Entering command mode with string: \"+++\"")
+        Serial1.write("+++");// "+++" enters command mode
+        Serial.println("System response: " + Serial1.readString())
+    }
+
 }
 
 void loop() {
-
+    if (!setupmode) {
+        //main loop:
+    }
 }
