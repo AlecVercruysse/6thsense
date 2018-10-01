@@ -1,4 +1,8 @@
 #include <SoftwareSerial.h>
+#include <SD.h>
+ 
+File myFile;
+
 //copied from: http://www.doctormonk.com/2012/05/sparkfun-venus-gps-and-arduino.html
 SoftwareSerial gpsSerial(10, 11); // RX, TX (TX not used)
 const int sentenceSize = 80;
@@ -7,8 +11,39 @@ char sentence[sentenceSize];
 
 void setup()
 {
+  const int chipSelect = 53;
+  
   Serial.begin(9600);
   gpsSerial.begin(9600);
+
+  Serial.print("Initializing SD card...");
+  // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
+  // Note that even if it's not used as the CS pin, the hardware SS pin 
+  // (10 on most Arduino boards, 53 on the Mega) must be left as an output 
+  // or the SD library functions will not work. 
+   pinMode(chipSelect, OUTPUT);
+ 
+  if (!SD.begin(chipSelect)) {
+    Serial.println("initialization failed!");
+    return;
+  }
+  Serial.println("initialization done.");
+ 
+  // open the file. note that only one file can be open at a time,
+  // so you have to close this one before opening another.
+  myFile = SD.open("gps-test.txt", FILE_WRITE);
+ 
+  // if the file opened okay, write to it:
+  if (myFile) {
+    Serial.print("Writing to gps-test.txt...");
+    myFile.println("testing 4, 4, 5.");
+  // close the file:
+    myFile.close();
+    Serial.println("done.");
+  } else {
+    // if the file didn't open, print an error:
+    Serial.println("error opening test.txt");
+  }
 }
 
 void loop()
@@ -37,6 +72,33 @@ void displayGPS()
   getField(field, 0);
   if (strcmp(field, "$GPRMC") == 0)
   {
+    // open the file. note that only one file can be open at a time,
+    // so you have to close this one before opening another.
+    myFile = SD.open("gps-test.txt", FILE_WRITE);
+   
+    // if the file opened okay, write to it:
+    if (myFile) {
+      Serial.print("Writing to gps-test.txt...");
+      
+      myFile.print("Lat: ");
+      getField(field, 3);  // number
+      myFile.print(field);
+      getField(field, 4); // N/S
+      myFile.print(field);
+      
+      myFile.print(" Long: ");
+      getField(field, 5);  // number
+      myFile.print(field);
+      getField(field, 6);  // E/W
+      myFile.println(field);
+      
+      // close the file:
+      myFile.close();
+      Serial.println("done with sd card.");
+    } else {
+      // if the file didn't open, print an error:
+      Serial.println("error opening gps-test.txt");
+    }
     Serial.print("Lat: ");
     getField(field, 3);  // number
     Serial.print(field);
