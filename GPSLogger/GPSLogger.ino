@@ -9,6 +9,12 @@ const int sentenceSize = 80;
 
 char sentence[sentenceSize];
 
+int ThermistorPin = 0;
+int Vo;
+float R1 = 10000;
+float logR2, R2, T, Tc, Tf;
+float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
+
 void setup()
 {
   const int chipSelect = 53;
@@ -74,11 +80,20 @@ void displayGPS()
   {
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
-    myFile = SD.open("gps-test.txt", FILE_WRITE);
+    myFile = SD.open("test.txt", FILE_WRITE);
    
     // if the file opened okay, write to it:
     if (myFile) {
       Serial.print("Writing to gps-test.txt...");
+
+      Vo = analogRead(ThermistorPin);
+      R2 = R1 * (1023.0 / (float)Vo - 1.0);
+      logR2 = log(R2);
+      T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2));
+      Tc = T - 273.15;
+      Tf = (Tc * 9.0)/ 5.0 + 32.0; 
+      myFile.print(Tc);
+      myFile.print(" C,");
       
       myFile.print("Lat: ");
       getField(field, 3);  // number
@@ -91,6 +106,8 @@ void displayGPS()
       myFile.print(field);
       getField(field, 6);  // E/W
       myFile.println(field);
+
+      //displayTemp();
       
       // close the file:
       myFile.close();
@@ -133,4 +150,19 @@ void getField(char* buffer, int index)
     sentencePos ++;
   }
   buffer[fieldPos] = '\0';
-} 
+}
+void displayTemp()
+{
+  Vo = analogRead(ThermistorPin);
+  R2 = R1 * (1023.0 / (float)Vo - 1.0);
+  logR2 = log(R2);
+  T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2));
+  Tc = T - 273.15;
+  Tf = (Tc * 9.0)/ 5.0 + 32.0; 
+
+  Serial.print("Temperature: "); 
+  Serial.print(Tf);
+  Serial.print(" F; ");
+  Serial.print(Tc);
+  Serial.println(" C");  
+}
