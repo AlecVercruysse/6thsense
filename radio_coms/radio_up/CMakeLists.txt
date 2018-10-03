@@ -1,17 +1,15 @@
 cmake_minimum_required(VERSION 2.8.4)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/ArduinoToolchain.cmake)
-set(PROJECT_NAME radio_down)
+set(PROJECT_NAME radio_up)
 project(${PROJECT_NAME})
 
-print_board_list()
-
-set(${CMAKE_PROJECT_NAME}_SKETCH radio_down.ino)
+set(${CMAKE_PROJECT_NAME}_SKETCH radio_up.ino)
 
 #### Uncomment below additional settings as needed.
 set(${CMAKE_PROJECT_NAME}_BOARD mega)
 set(${CMAKE_PROJECT_NAME}_PORT /dev/ttyACM0)
-#set(mega.build.mcu atmega2560)
-#set(mega.upload.protocol wiring)
-#set(mega.upload.speed 115200)
+set(mega.build.mcu atmega2560)
+set(mega.upload.protocol wiring)
+set(mega.upload.speed 115200)
 
 generate_arduino_firmware(${CMAKE_PROJECT_NAME})

@@ -1,2 +1,5 @@
 .idea
 cmake*
+.DS_Store
+*~
+.*~

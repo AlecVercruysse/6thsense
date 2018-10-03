@@ -14,4 +14,6 @@ ASR Balloon Launch
  | File/directory | Creator | Desciption |
  |:---------------|:--------|:-----------|
  |radio_down|Alec (PL)|arduino mega code for interfacing with the up/downlink trancievers|
+ |GPSLogger|Luke (SE)|arduino mega code for logging GPS to SD thru Serial1|
+ |ThermistorReaders|Luke (SE)|prints calibrated temp. to serial|
  
