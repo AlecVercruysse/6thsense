@@ -1,5 +1,5 @@
-#include <Arduino.h>
-#include "../../../../../../usr/share/arduino-1.8.7/hardware/arduino/avr/cores/arduino/HardwareSerial.h"
+//#include <Arduino.h>
+//#include "../../../../../../usr/share/arduino-1.8.7/hardware/arduino/avr/cores/arduino/HardwareSerial.h"
 
 /*
  * Code for the Digi 9XTend OEM RF module connected to an arduino mega
@@ -12,6 +12,7 @@
  * Written by Alec Vercruysse
  *
  */
+/**
 int setupmode = false; //normal operation requires setupmode to be false. Setupmode currently does not work
 int shutdownpin = 22;
 int rssipin = 24; //also doubles as config pin
@@ -46,17 +47,31 @@ void setup() {
     }
     else {
         //establish connection:
-        Serial.println("sending hello-msg \"6thsense-balloon\"...");
-        Serial1.println("6thsense-balloon");
-        Serial.println("sent.");
-        Serial.println("waiting for response...");
-        while (Serial1.available() == 0) {
-            continue;
+        bool connectionEstablished = false;
+        while (!connectionEstablished) {
+            Serial.println("sending hello-msg \"6thsense-balloon\"...");
+            Serial1.write("6thsense-balloon");
+            Serial.println("sent.");
+            Serial.println("waiting for response...");
+            while (Serial1.available() < 12) {
+                delay(5000);
+                Serial.println("No reply. Resending...");
+                Serial1.write("6thsense-balloon");
+            }
+            int responseSize = Serial1.available();
+            char response[responseSize + 1];
+            Serial1.readBytes(response, responseSize);
+            response[responseSize] = '\0';
+            Serial.print("Response Recieved of size ");
+            Serial.print(responseSize, HEX);
+            Serial.println("!\nResponse: ");
+            Serial.println(response);
+            if (strncmp(response, "6thsense-base", 12) == 0) {
+                connectionEstablished = true;
+            } else {
+                Serial.println("not 6thsense-base. Continuing search.");
+            }
         }
-        char response[100];
-        Serial1.readBytes(response, 100);
-        Serial.println("Response Recieved!\nResponse: ");
-        Serial.println(response);
         Serial.print("starting transmissions...");
     }
 }
@@ -68,7 +83,7 @@ void loop() {
         delay(1000);
         digitalWrite(LED_BUILTIN, LOW);
         delay(1000);
-        Serial.println("Starting communication");
+        Serial.println("sending data...");
 
         int imgSize = 5;
         char img[] = {0x01, 0x11, 0xe8, 0xff};
@@ -79,3 +94,4 @@ void loop() {
         Serial1.write("stop");
     }
 }
+*/

@@ -3,11 +3,11 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/ArduinoToolchain.cmake)
 set(PROJECT_NAME radio_coms)
 project(${PROJECT_NAME})
 
-set(${CMAKE_PROJECT_NAME}_SKETCH radio_down.ino)
+set(${CMAKE_PROJECT_NAME}_SKETCH radio_down_basic.ino)
 
 #### Uncomment below additional settings as needed.
 set(${CMAKE_PROJECT_NAME}_BOARD mega)
-set(${CMAKE_PROJECT_NAME}_PORT /dev/ttyACM0)
+set(${CMAKE_PROJECT_NAME}_PORT /dev/ttyACM2)
 set(mega.build.mcu atmega2560)
 set(mega.upload.protocol wiring)
 set(mega.upload.speed 115200)
