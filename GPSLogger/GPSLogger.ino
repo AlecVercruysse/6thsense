@@ -37,18 +37,18 @@ void setup()
  
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  myFile = SD.open("gps-test.txt", FILE_WRITE);
+  myFile = SD.open("logger.txt", FILE_WRITE);
  
   // if the file opened okay, write to it:
   if (myFile) {
-    Serial.print("Writing to gps-test.txt...");
-    myFile.println("testing 4, 4, 5.");
+    Serial.print("Writing to logger.txt...");
+    myFile.println("Temp, Longitude, Latitude,");
   // close the file:
     myFile.close();
     Serial.println("done.");
   } else {
     // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
+    Serial.println("error opening the logger.txt");
   }
 }
 
@@ -80,20 +80,12 @@ void displayGPS()
   {
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
-    myFile = SD.open("test.txt", FILE_WRITE);
+    displayTemp();
+    myFile = SD.open("logger.txt", FILE_WRITE);
    
     // if the file opened okay, write to it:
     if (myFile) {
-      Serial.print("Writing to gps-test.txt...");
-
-      Vo = analogRead(ThermistorPin);
-      R2 = R1 * (1023.0 / (float)Vo - 1.0);
-      logR2 = log(R2);
-      T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2));
-      Tc = T - 273.15;
-      Tf = (Tc * 9.0)/ 5.0 + 32.0; 
-      myFile.print(Tc);
-      myFile.print(" C,");
+      Serial.print("Writing to logger.txt...");
       
       myFile.print("Lat: ");
       getField(field, 3);  // number
@@ -111,22 +103,22 @@ void displayGPS()
       
       // close the file:
       myFile.close();
-      Serial.println("done with sd card.");
+      Serial.println("done with logging gps on sd card.");
     } else {
       // if the file didn't open, print an error:
-      Serial.println("error opening gps-test.txt");
+      Serial.println("error opening logger.txt");
     }
-    Serial.print("Lat: ");
-    getField(field, 3);  // number
-    Serial.print(field);
-    getField(field, 4); // N/S
-    Serial.print(field);
-    
-    Serial.print(" Long: ");
-    getField(field, 5);  // number
-    Serial.print(field);
-    getField(field, 6);  // E/W
-    Serial.println(field);
+//    Serial.print("Lat: ");
+//    getField(field, 3);  // number
+//    Serial.print(field);
+//    getField(field, 4); // N/S
+//    Serial.print(field);
+//    
+//    Serial.print(" Long: ");
+//    getField(field, 5);  // number
+//    Serial.print(field);
+//    getField(field, 6);  // E/W
+//    Serial.println(field);
   }
 }
 
@@ -160,9 +152,19 @@ void displayTemp()
   Tc = T - 273.15;
   Tf = (Tc * 9.0)/ 5.0 + 32.0; 
 
-  Serial.print("Temperature: "); 
-  Serial.print(Tf);
-  Serial.print(" F; ");
-  Serial.print(Tc);
-  Serial.println(" C");  
+//  Serial.print(Tc);
+//  Serial.print(" C,"); 
+  myFile = SD.open("logger.txt", FILE_WRITE);
+   
+  // if the file opened okay, write to it:
+  if (myFile) {
+    myFile.print(Tc);
+    myFile.print(" C,"); 
+    myFile.close();
+      Serial.println("done with logging temp on sd card.");
+  } else {
+    // if the file didn't open, print an error:
+    Serial.println("error opening logger.txt");
+  }
+  
 }
