@@ -16,4 +16,4 @@ ASR Balloon Launch
  |radio_down|Alec (PL)|arduino mega code for interfacing with the up/downlink trancievers|
  |GPSLogger|Luke (SE)|arduino mega code for logging GPS to SD thru Serial1|
  |ThermistorReaders|Luke (SE)|prints calibrated temp. to serial|
- 
+ |av_experiment|Alec (PL)|Spectrometer experiment (requires mega i2c)| 

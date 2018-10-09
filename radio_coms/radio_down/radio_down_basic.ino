@@ -12,20 +12,20 @@ void setup() {
     Serial1.begin(9600);//9600 Baud communication with RF module
 }
 
-void loop() {
-    /** This code works, sending byte values
-    while (true) {
-        for (byte i = 0; i < 255; i++) {
-            Serial.write(i);
-            Serial1.write(i);
-            delay(200);
-        }
+void tBA(String n, byte *arr) {
+    for (int i = 0; i < n.length(); i++) {
+        byte b = int(n.charAt(i));
+        arr[i] = b;
     }
-     /**/
-    sendDataAsBytes();
 }
 
-void sendDataAsBytes(/*byte *dataArr, int dASize*/) {
+void txArr(byte *buffer, int size) {
+    for (int i = 0; i < size; i++) {
+        Serial.write(buffer[i]);
+    }
+}
+
+void sendDataAsBytes() {
     byte start_sequence[] = {0, 0, 0, 0, 0, 0};
     byte next_data_sequence[] = {6, 6, 6, 6, 6, 6};
 
@@ -42,17 +42,20 @@ void sendDataAsBytes(/*byte *dataArr, int dASize*/) {
     txArr(lat_arr, gps_lat.length());
     txArr(next_data_sequence, 6);
     txArr(long_arr, gps_long.length());
+    byte test = 12;
+    Serial.write(test);
 }
 
-void tBA(String n, byte *arr) {
-    for (int i = 0; i < n.length(); i++) {
-        byte b = int(n.charAt(i));
-        arr[i] = b;
+void loop() {
+    /**///This code works, sending byte values
+    while (true) {
+        for (byte i = 0; i < 255; i++) {
+            Serial.write(i);
+            Serial1.write(i);
+            delay(200);
+        }
     }
+     /**/
+    sendDataAsBytes();
 }
 
-void txArr(byte *buffer, int size) {
-    for (int i = 0; i < size; i++) {
-        Serial.write(buffer[i]);
-    }
-}
