@@ -21,7 +21,8 @@ void tBA(String n, byte *arr) {
 
 void txArr(byte *buffer, int size) {
     for (int i = 0; i < size; i++) {
-        Serial.write(buffer[i]);
+        Serial.print(buffer[i]);
+        Serial1.print(buffer[i]);
     }
 }
 
@@ -39,15 +40,18 @@ void sendDataAsBytes() {
 
     //send sequence:
     txArr(start_sequence, 6);
+    delay(100);
     txArr(lat_arr, gps_lat.length());
+    delay(100);
     txArr(next_data_sequence, 6);
+    delay(100);
     txArr(long_arr, gps_long.length());
-    byte test = 12;
-    Serial.write(test);
+    delay(100);
 }
 
 void loop() {
-    /**///This code works, sending byte values
+    /**
+    //This code works, sending byte values
     while (true) {
         for (byte i = 0; i < 255; i++) {
             Serial.write(i);
@@ -57,5 +61,6 @@ void loop() {
     }
      /**/
     sendDataAsBytes();
+    delay(1000);
 }
 
