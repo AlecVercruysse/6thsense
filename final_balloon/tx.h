@@ -1,15 +1,9 @@
-#include <Arduino.h>
-#include <math.h>       /* log10 */
-#include <stdlib.h>     /* atoi */
+#define shutdownpin 22
 
-int shutdownpin = 22;
-
-void setup() {
+void setupTx() {
     pinMode(shutdownpin, OUTPUT);
     digitalWrite(shutdownpin, HIGH);
-
-    Serial.begin(9600); //9600 Baud communication with computer
-    Serial1.begin(9600);//9600 Baud communication with RF module
+    Serial1.begin(9600);
 }
 
 void tBA(String n, byte *arr) {
@@ -48,19 +42,3 @@ void sendDataAsBytes() {
     txArr(long_arr, gps_long.length());
     delay(100);
 }
-
-void loop() {
-    /**
-    //This code works, sending byte values
-    while (true) {
-        for (byte i = 0; i < 255; i++) {
-            Serial.write(i);
-            Serial1.write(i);
-            delay(200);
-        }
-    }
-     /**/
-    sendDataAsBytes();
-    delay(1000);
-}
-

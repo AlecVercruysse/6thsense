@@ -1,5 +1,7 @@
 #include <Wire.h>
 #include "spectrometer/AS7265X.h"
+#include "spectrometer/AS7265X.cpp"
+#include "tx.h"
 
 //spectrometer code (AV individual experiment):
 #define intPin 3
@@ -18,8 +20,13 @@ AS7265X AS7265X(intPin);
 
 
 void setup() {
-  Serial.begin(9200); //start serial comms with computer
+
+  //start serial comms with computer
+  Serial.begin(9200);
   delay(4000);
+
+  //setup tx;
+  setupTx();
 
   //spectrometer setup (AV individual experiment)
   Wire.begin(); //start i2c master mode
@@ -77,7 +84,7 @@ void loop() {
         Serial.print(spectrometer_run); Serial.print(","); Serial.print(freq[i]); Serial.print(","); Serial.println(calData[i]);
 
       }
-      Serial.println(" ")
+      Serial.println(" ");
 
     }
   }
