@@ -70,7 +70,6 @@ void setupSpectrometer() {
     Serial.println("done");
 }
 
-//TODO: return decently formatted string
 String checkSpectrometer() {
     String toReturn;
     if (intFlag) {
@@ -79,11 +78,13 @@ String checkSpectrometer() {
         status = AS7265X.getStatus();
         if (status & 0x02) {
             AS7265X.readCalData(calData);
+            toReturn.concat(spectrometer_run); toReturn.concat(">");
             for (int i = 0; i < 18; i++) {
-                Serial.print(spectrometer_run); Serial.print(","); Serial.print(freq[i]); Serial.print(","); Serial.println(calData[i]);
+                //Serial.print(spectrometer_run); Serial.print(","); Serial.print(freq[i]); Serial.print(","); Serial.println(calData[i]);
+                toReturn.concat(freq[i]); toReturn.concat(":"); toReturn.concat(calData[i]);
             }
-            Serial.println(" ");
-
+            //Serial.println(" ");
+            toReturn.concat(",");
         }
     }
     return toReturn;

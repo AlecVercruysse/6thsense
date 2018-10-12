@@ -9,7 +9,8 @@
  * 1 | GPS Long
  * 2 | Spectrometer data
  */
-String data_arr[3];
+#define numObs 3
+String data_arr[numObs];
 
 void setup() {
 
@@ -32,4 +33,6 @@ void loop() {
 
   //spectrometer code (AV individual experiment)
   data_arr[2] = checkSpectrometer();
+
+  sendDataAsBytes(data_arr, numObs);
 }
