@@ -70,7 +70,9 @@ void setupSpectrometer() {
     Serial.println("done");
 }
 
-void checkSpectrometer() {
+//TODO: return decently formatted string
+String checkSpectrometer() {
+    String toReturn;
     if (intFlag) {
         spectrometer_run++;
         intFlag = false;
@@ -84,5 +86,6 @@ void checkSpectrometer() {
 
         }
     }
+    return toReturn;
 }
 

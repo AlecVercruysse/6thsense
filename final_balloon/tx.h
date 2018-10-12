@@ -20,10 +20,11 @@ void txArr(byte *buffer, int size) {
     }
 }
 
-void sendDataAsBytes() {
+void sendDataAsBytes(String data[], int num_items) {
     byte start_sequence[] = {42, 42, 42, 42, 42, 42};
     byte next_data_sequence[] = {45, 45, 45, 45, 45, 45};
 
+    /**
     //example data to send down:
     String gps_lat = "23425634N";
     String gps_long = "6586755E";
@@ -41,4 +42,16 @@ void sendDataAsBytes() {
     delay(100);
     txArr(long_arr, gps_long.length());
     delay(100);
+     **/
+    txArr(start_sequence, 6);
+    for(int i = 0; i < num_items; i++) {
+        delay(100);
+        byte value[data[i].length()];
+        tBA(data[i], value);
+        txArr(value, data[i].length());
+        if (i < num_items - 1) {
+            delay(100);
+            txArr(next_data_sequence, 6);
+        }
+    }
 }
