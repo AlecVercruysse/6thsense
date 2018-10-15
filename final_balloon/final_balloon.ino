@@ -1,8 +1,8 @@
 #include <Wire.h>
 #include "spectrometer/spectrometer.h"
 #include "tx.h"
+#include "sd_logger.h"
 
-//amount of separate observations we're sending down
 /*
  * Index | data item
  * 0 | GPS Lat
@@ -13,13 +13,14 @@
 String data_arr[numObs];
 
 void setup() {
-
+  
   //start serial comms with computer
   Serial.begin(9200);
   delay(4000);
 
-  //setup tx;
+  //setup tx and SD card logger;
   setupTx();
+  setupLogger();
 
   //spectrometer setup (AV individual experiment)
   setupSpectrometer();
@@ -35,4 +36,5 @@ void loop() {
   data_arr[2] = checkSpectrometer();
 
   sendDataAsBytes(data_arr, numObs);
+  logDataToSD(data_arr, numObs);
 }

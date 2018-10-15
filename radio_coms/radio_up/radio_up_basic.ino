@@ -18,12 +18,12 @@ int idx = 0;
 
 //byte[] current
 void loop() {
-    int incoming_data = Serial1.read();
+    char incoming_data = Serial1.read();
     //last6[idx] = incoming_data;
     //i = (i + 1) % 6;
     /**/
     if (incoming_data != -1) {
-        Serial.println(incoming_data);
+        Serial.print(incoming_data);
     }
     /**/
 
