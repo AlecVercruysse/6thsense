@@ -48,6 +48,7 @@ void logDataToSD(String data[], int num_items) {
                 myFile.print(", ");
             }
         }
+        myFile.println(" ");
         myFile.close();
     } else {
         Serial.println("error opening logger.txt");
