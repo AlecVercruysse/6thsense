@@ -29,23 +29,21 @@ void setup() {
   setupSensors();
 
   //spectrometer setup (AV individual experiment)
-  setupSpectrometer();
+  //setupSpectrometer();
   
 }
 
 void loop() {
 
-  //get gps data and add it to the data_arr
-  //TODO: luke
   data_arr[0] = getClock();
+
   data_arr[1] = getGPS();
 
   data_arr[2] = getPressure();
 
-  //spectrometer code (AV individual experiment)
   data_arr[3] = getTemp();
 
-  data_arr[4] = checkSpectrometer();
+  data_arr[4] = "spectrometer placeholder";//checkSpectrometer();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);

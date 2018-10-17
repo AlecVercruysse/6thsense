@@ -80,7 +80,8 @@ String checkSpectrometer() {
             AS7265X.readCalData(calData);
             toReturn.concat(spectrometer_run); toReturn.concat(">");
             for (int i = 0; i < 18; i++) {
-                //Serial.print(spectrometer_run); Serial.print(","); Serial.print(freq[i]); Serial.print(","); Serial.println(calData[i]);
+                //Serial.prin
+                // t(spectrometer_run); Serial.print(","); Serial.print(freq[i]); Serial.print(","); Serial.println(calData[i]);
                 toReturn.concat(freq[i]); toReturn.concat(":"); toReturn.concat(calData[i]);
             }
             //Serial.println(" ");
