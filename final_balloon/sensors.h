@@ -100,6 +100,9 @@ void getField(char* buffer, int index)
   buffer[fieldPos] = '\0';
 }
 
+/**
+ * Todo: doesn't return if no gps data available. Need to implement a timeout or something.
+ */
 String getGPS()
 {
   static int i = 0;

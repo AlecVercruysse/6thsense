@@ -37,11 +37,11 @@ void loop() {
 
   data_arr[0] = getClock();
 
-  data_arr[1] = "gps_placeholder"; //getGPS();
+  data_arr[1] = getGPS();
 
   data_arr[2] = getPressure();
 
-  data_arr[3] = "temp_placeholder";// getTemp();
+  data_arr[3] = getTemp();
 
   data_arr[4] = "spectrometer placeholder";//checkSpectrometer();
 
