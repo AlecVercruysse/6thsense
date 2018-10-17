@@ -24,25 +24,6 @@ void sendDataAsBytes(String data[], int num_items) {
     byte start_sequence[] = {42, 42, 42, 42, 42, 42};
     byte next_data_sequence[] = {45, 45, 45, 45, 45, 45};
 
-    /**
-    //example data to send down:
-    String gps_lat = "23425634N";
-    String gps_long = "6586755E";
-    byte lat_arr[gps_lat.length()];
-    byte long_arr[gps_long.length()];
-    tBA(gps_lat, lat_arr);
-    tBA(gps_long, long_arr);
-
-    //send sequence:
-    txArr(start_sequence, 6);
-    delay(100);
-    txArr(lat_arr, gps_lat.length());
-    delay(100);
-    txArr(next_data_sequence, 6);
-    delay(100);
-    txArr(long_arr, gps_long.length());
-    delay(100);
-     **/
     txArr(start_sequence, 6);
     for(int i = 0; i < num_items; i++) {
         delay(100);
@@ -54,4 +35,5 @@ void sendDataAsBytes(String data[], int num_items) {
             txArr(next_data_sequence, 6);
         }
     }
+    Serial.println(" ");
 }

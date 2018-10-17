@@ -10,13 +10,13 @@ const int sentenceSize = 80;
 
 char sentence[sentenceSize];
 
-int ThermistorPin = 0;
+int ThermistorPin = A1;
 int Vo;
 float R1 = 10000;
 float logR2, R2, T, Tc, Tf;
 float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
 
-int pressure = A1;
+int pressure = A0;
 int pressvalue = 0;
 
 RTC_DS1307 rtc;
@@ -25,7 +25,7 @@ void setupSensors()
 {
   // const int chipSelect = 53;
   
-  Serial.begin(9600);
+  //Serial.begin(9600); Serial already initiated in main sketch
   gpsSerial.begin(9600);
   rtc.begin();
 
@@ -77,6 +77,28 @@ void setupSensors()
 //    }
 //  }
 //}
+
+void getField(char* buffer, int index)
+{
+  int sentencePos = 0;
+  int fieldPos = 0;
+  int commaCount = 0;
+  while (sentencePos < sentenceSize)
+  {
+    if (sentence[sentencePos] == ',')
+    {
+      commaCount ++;
+      sentencePos ++;
+    }
+    if (commaCount == index)
+    {
+      buffer[fieldPos] = sentence[sentencePos];
+      fieldPos ++;
+    }
+    sentencePos ++;
+  }
+  buffer[fieldPos] = '\0';
+}
 
 String getGPS()
 {
@@ -153,34 +175,12 @@ String getGPS()
 //    Serial.println(field);
 }
 
-void getField(char* buffer, int index)
-{
-  int sentencePos = 0;
-  int fieldPos = 0;
-  int commaCount = 0;
-  while (sentencePos < sentenceSize)
-  {
-    if (sentence[sentencePos] == ',')
-    {
-      commaCount ++;
-      sentencePos ++;
-    }
-    if (commaCount == index)
-    {
-      buffer[fieldPos] = sentence[sentencePos];
-      fieldPos ++;
-    }
-    sentencePos ++;
-  }
-  buffer[fieldPos] = '\0';
-}
-
 String getClock()
 {
   DateTime now = rtc.now();
-  String hour = (now.hour(), DEC);
-  String minute = (now.minute(), DEC);
-  String second = (now.second(), DEC);
+  String hour = String(now.hour(), DEC);
+  String minute = String(now.minute(), DEC);
+  String second = String(now.second(), DEC);
   String total = String(hour + ":" + minute + ":" + second);
   return total;
 
