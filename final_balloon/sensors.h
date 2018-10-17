@@ -105,42 +105,82 @@ void getField(char* buffer, int index)
  */
 String getGPS()
 {
-  static int i = 0;
-  if (gpsSerial.available())
+  bool gotSentence = false;
+  while(!gotSentence)
   {
-    Serial.println("gps available: ");
-    char ch = gpsSerial.read();
-    while ( ch != '\n' && i < sentenceSize)
+    static int i = 0;
+    if (gpsSerial.available())
     {
       char ch = gpsSerial.read();
-      sentence[i] = ch;
-      i++;
-    }
-    sentence[i] = '\0';
-    Serial.println(sentence);
-    i = 0;
-    char field[20];
-    getField(field, 0);
-    if (strcmp(field, "$GPRMC") == 0)
-    {
-      getField(field, 3);  // number
-      String lat_num = String(field);
-      getField(field, 4); // N/S
-      String lat_direction = String(field);
-
-      getField(field, 5);  // number
-      String long_num = String(field);
-      getField(field, 6);  // E/W
-      String long_direction = String(field);
-
-      return String("Lat: " + lat_num + lat_direction + " Long: " + long_num + long_direction);
+      if (ch != '\n' && i < sentenceSize)
+      {
+        sentence[i] = ch;
+        i++;
+      }
+      else
+      {
+        gotSentence = true;
+        sentence[i] = '\0';
+        i = 0;
+        char field[20];
+        getField(field, 0);
+        if (strcmp(field, "$GPRMC") == 0)
+        {
+          getField(field, 3);  // number
+          String lat_num = String(field);
+          getField(field, 4); // N/S
+          String lat_direction = String(field);
+          
+          getField(field, 5);  // number
+          String long_num = String(field);
+          getField(field, 6);  // E/W
+          String long_direction = String(field);
+          
+          return String("Lat: " + lat_num + lat_direction + " Long: " + long_num + long_direction);
+        }
+        else
+        {
+          return String("GPS error :(");
+        }
+      }
     }
   }
-  else
-  {
-    Serial.println("No GPS Connection");
-    return String("no gps");
-  }
+//  static int i = 0;
+//  if (gpsSerial.available())
+//  {
+//    Serial.println("gps available: ");
+//    char ch = gpsSerial.read();
+//    while ( ch != '\n' && i < sentenceSize)
+//    {
+//      char ch = gpsSerial.read();
+//      sentence[i] = ch;
+//      i++;
+//    }
+//    sentence[i] = '\0';
+//    Serial.println(sentence);
+//    i = 0;
+//    char field[20];
+//    getField(field, 0);
+//    if (strcmp(field, "$GPRMC") == 0)
+//    {
+//      getField(field, 3);  // number
+//      String lat_num = String(field);
+//      getField(field, 4); // N/S
+//      String lat_direction = String(field);
+//
+//      getField(field, 5);  // number
+//      String long_num = String(field);
+//      getField(field, 6);  // E/W
+//      String long_direction = String(field);
+//
+//      return String("Lat: " + lat_num + lat_direction + " Long: " + long_num + long_direction);
+//    }
+//  }
+//  else
+//  {
+//    Serial.println("No GPS Connection");
+//    return String("no gps");
+//  }
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
     // myFile = SD.open("logger.txt", FILE_WRITE);
