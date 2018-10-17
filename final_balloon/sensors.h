@@ -108,30 +108,30 @@ String getGPS()
   static int i = 0;
   if (gpsSerial.available())
   {
+    Serial.println("gps available: ");
     char ch = gpsSerial.read();
-    while (ch != '\n' && i < sentenceSize)
+    while ( ch != '\n' && i < sentenceSize)
     {
       char ch = gpsSerial.read();
       sentence[i] = ch;
       i++;
     }
     sentence[i] = '\0';
+    Serial.println(sentence);
     i = 0;
     char field[20];
     getField(field, 0);
     if (strcmp(field, "$GPRMC") == 0)
     {
-      myFile.print("Lat: ");
       getField(field, 3);  // number
-      String lat_num = (String) field;
+      String lat_num = String(field);
       getField(field, 4); // N/S
-      String lat_direction = (String) field;
+      String lat_direction = String(field);
 
-      myFile.print(" Long: ");
       getField(field, 5);  // number
-      String long_num = (String) field;
+      String long_num = String(field);
       getField(field, 6);  // E/W
-      String long_direction = (String) field;
+      String long_direction = String(field);
 
       return String("Lat: " + lat_num + lat_direction + " Long: " + long_num + long_direction);
     }
