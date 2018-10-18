@@ -16,6 +16,8 @@
 String data_arr[numObs];
 const double PRESSURE_TO_CUT_DOWN = 93.675;
 double pressure_value = 100.0;
+String pressure_string = "";
+int cut_down_pin = 7;
 
 void setup() {
   
@@ -41,8 +43,9 @@ void loop() {
 
   data_arr[1] = getGPS();
 
-  pressureValue = getPressure();
-  data_arr[2] = pressureValue;
+  pressure_string = getPressure();
+  data_arr[2] = pressure_string;
+  pressure_value = pressure_string.toDouble();
 
   data_arr[3] = getTemp();
 
@@ -50,4 +53,10 @@ void loop() {
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
+
+  //change this to altitude later
+  if (pressure_value < PRESSURE_TO_CUT_DOWN)
+  {
+    digitalWrite(cut_down_pin, HIGH);
+  }
 }

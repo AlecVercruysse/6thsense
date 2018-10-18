@@ -135,6 +135,6 @@ String getPressure()
   // gets pressure in kPa
   pressunits = (0.2544 * (pressvalue)) - 26.24;
   altitude = getAltitude(pressunits);
-  Serial.println(altitude);
+  //Serial.println(altitude);
   return String(pressunits);
 }
