@@ -4,6 +4,7 @@
 #include <SPI.h>
 //#include "adafruit/Adafruit_Sensor.h"
 #include "adafruit/Adafruit_BME280.h"
+#include "adafruit/Adafruit_BME280.cpp"
 
 #define BME_SCK 13
 #define BME_MISO 12
@@ -79,10 +80,4 @@ String getBMETemp()
 
 //    String temperature = String("Arduino temperature = " + theTemp + " *C");
     return theTemp;
-}
-
-
-void loopBME() { 
-    printValues();
-    delay(1000);
 }
