@@ -14,6 +14,7 @@ void setup() {
 }
 
 void loop() {
+    /**
     incoming_data = Serial1.read();
     do {
         if (incoming_data != -1) {
@@ -22,4 +23,10 @@ void loop() {
     } while (!(line.length() > 6 && line.charAt(line.length() - 1) == '*'));
     Serial.println(line);
     line = "";
+    /**/
+    char inc = Serial1.read();
+    if (inc != -1){
+      Serial.print(inc);
+    }
+    /**/
 }
