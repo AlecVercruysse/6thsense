@@ -1,8 +1,8 @@
-#include "VernierLib.h" //include Vernier functions in this sketch
-VernierLib Vernier; //create an instance of the VernierLib library
+//#include "VernierLib.h" //include Vernier functions in this sketch
+//VernierLib Vernier; //create an instance of the VernierLib library
 #include <Wire.h>
 #include <SPI.h>
-#include "adafruit/Adafruit_Sensor.h"
+//#include "adafruit/Adafruit_Sensor.h"
 #include "adafruit/Adafruit_BME280.h"
 
 #define BME_SCK 13
@@ -18,9 +18,9 @@ Adafruit_BME280 bme; // I2C
 float sensorReading; //create global variable to store sensor reading
 unsigned long delayTime;
 
-void setup() {
+void setupBME() {
     Serial.begin(9600);
-    Vernier.autoID(); //identify the sensor being used
+    //Vernier.autoID(); //identify the sensor being used
 
     bool status;
     //Serial.println("Standard,Arduino");
@@ -32,11 +32,6 @@ void setup() {
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
         while (1);
     }
-}
-
-void loop() { 
-    printValues();
-    delay(1000);
 }
 
 void printValues() {
@@ -68,3 +63,9 @@ void printValues() {
 
     Serial.println();
 }
+
+void loopBME() { 
+    printValues();
+    delay(1000);
+}
+

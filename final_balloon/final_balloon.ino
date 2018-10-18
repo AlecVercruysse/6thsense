@@ -3,6 +3,7 @@
 #include "tx.h"
 #include "sd_logger.h"
 #include "sensors.h"
+#include "humidity.h"
 
 /*
  * Index | data item
