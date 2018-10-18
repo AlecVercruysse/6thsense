@@ -18,7 +18,7 @@ String data_arr[numObs];
 const double PRESSURE_TO_CUT_DOWN = 93.675;
 double pressure_value = 100.0;
 String pressure_string = "";
-int cut_down_pin = 7;
+int cut_down_pin = 30;
 
 void setup() {
   
