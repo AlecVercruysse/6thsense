@@ -34,7 +34,7 @@ void setupBME() {
     }
 }
 
-void printValues() {
+String getBMEHumidity() {
     // not bme380, but rather the standard/probe
 //    float arduinoVoltage = analogRead(A0); //print data value 
 //    float sensorVoltage = arduinoVoltage / 1024 * 5.0;
@@ -52,20 +52,37 @@ void printValues() {
     //Serial.print("Approx. Altitude = ");
     //Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
     //Serial.println(" m");
+//
+//    Serial.print("Arduino humidity = ");
+//    Serial.print(bme.readHumidity());
+//    Serial.println(" %");
 
-    Serial.print("Arduino humidity = ");
-    Serial.print(bme.readHumidity());
-    Serial.println(" %");
+    String theHumidity = String(bme.readHumidity());
 
-    Serial.print("Arduino temperature = ");
-    Serial.print(bme.readTemperature());
-    Serial.println(" *C");
+//    String humidity = String("Arduino humidity = " + theHumidity + " %");
+    return theHumidity;
 
-    Serial.println();
+//    Serial.print("Arduino temperature = ");
+//    Serial.print(bme.readTemperature());
+//    Serial.println(" *C");
+//
+//    Serial.println();
 }
+
+String getBMETemp()
+{
+//    Serial.print("Arduino temperature = ");
+//    Serial.print(bme.readTemperature());
+//    Serial.println(" *C");
+
+    String theTemp = String(bme.readTemperature());
+
+//    String temperature = String("Arduino temperature = " + theTemp + " *C");
+    return theTemp;
+}
+
 
 void loopBME() { 
     printValues();
     delay(1000);
 }
-
