@@ -24,6 +24,8 @@ void setup() {
   //start serial comms with computer
   Serial.begin(9200);
   delay(4000);
+  
+  pinMode(cut_down_pin, OUTPUT);
 
   //setup tx and SD card logger;
   setupTx();
