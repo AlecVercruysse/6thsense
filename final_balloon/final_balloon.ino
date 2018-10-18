@@ -14,6 +14,8 @@
  */
 #define numObs 5
 String data_arr[numObs];
+const double PRESSURE_TO_CUT_DOWN = 93.675;
+double pressure_value = 100.0;
 
 void setup() {
   
@@ -39,7 +41,8 @@ void loop() {
 
   data_arr[1] = getGPS();
 
-  data_arr[2] = getPressure();
+  pressureValue = getPressure();
+  data_arr[2] = pressureValue;
 
   data_arr[3] = getTemp();
 

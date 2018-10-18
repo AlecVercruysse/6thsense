@@ -16,9 +16,13 @@ float R1 = 10000;
 float logR2, R2, T, Tc, Tf;
 float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
 
-int pressure = A0;
-int pressvalue = 0;
-int pressunits = 0;
+int pressure = A1;
+double pressvalue = 0;
+double pressunits = 0;
+double altitude = 0;
+const double CURRENT_GROUND_PRESSURE = 0.99;
+double a = 8420.0;
+
 
 RTC_DS1307 rtc;
 
@@ -69,13 +73,16 @@ String getGPS()
       }
       else
       {
-        gotSentence = true;
+//        Serial.print("Sentence:");
+//        Serial.println(sentence);
+//        Serial.println("sentence above");
         sentence[i] = '\0';
         i = 0;
         char field[20];
         getField(field, 0);
         if (strcmp(field, "$GPRMC") == 0)
         {
+          gotSentence = true;
           getField(field, 3);  // number
           String lat_num = String(field);
           getField(field, 4); // N/S
@@ -88,13 +95,10 @@ String getGPS()
           
           return String("Lat: " + lat_num + lat_direction + " Long: " + long_num + long_direction);
         }
-        else
-        {
-          return String("GPS error :(");
-        }
       }
     }
   }
+  Serial.println(gotSentence);
 }
 
 String getClock()
@@ -117,10 +121,20 @@ String getTemp()
   Tf = (Tc * 9.0)/ 5.0 + 32.0; 
   return String(Tc);
 }
+//estimation
+double getAltitude(double presskpa)
+{
+  double pressurePa = presskpa * 1000;
+  double theAltitude = a * log(pressurePa / CURRENT_GROUND_PRESSURE);
+  return theAltitude;
+}
 
 String getPressure()
 {
   pressvalue = analogRead(pressure);
-  pressunits = 0.2544 * (pressvalue) - 26.24;
+  // gets pressure in kPa
+  pressunits = (0.2544 * (pressvalue)) - 26.24;
+  altitude = getAltitude(pressunits);
+  Serial.println(altitude);
   return String(pressunits);
 }
