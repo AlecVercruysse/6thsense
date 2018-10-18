@@ -29,7 +29,7 @@ void setupLogger() {
         Serial.print("Writing to logger.txt...");
 
         //column heads
-        myFile.println("Time, GPS, Pressure, Temp, Spectrometer,");
+        myFile.println("Time, GPS, Pressure, Outer Temp, Humidity, Inner Temp, Spectrometer,");
         // close the file:
         myFile.close();
         Serial.println("done.");
