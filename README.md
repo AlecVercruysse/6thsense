@@ -17,4 +17,4 @@ ASR Balloon Launch
  |GPSLogger|Luke (SE)|arduino mega code for logging GPS to SD thru Serial1|
  |ThermistorReaders|Luke (SE)|prints calibrated temp. to serial|
  |av_experiment|Alec (PL)|Spectrometer experiment (requires mega i2c)| 
- |final_balloon|all files for the final balloon launch as it currently stands|
+ |final_balloon|Team|all files for the final balloon launch as it currently stands|
