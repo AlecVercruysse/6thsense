@@ -20,11 +20,8 @@ float sensorReading; //create global variable to store sensor reading
 unsigned long delayTime;
 
 void setupBME() {
-    Serial.begin(9600);
-    //Vernier.autoID(); //identify the sensor being used
 
     bool status;
-    //Serial.println("Standard,Arduino");
 
     // default settings
     // (you can also pass in a Wire library object like &Wire2)
@@ -36,48 +33,12 @@ void setupBME() {
 }
 
 String getBMEHumidity() {
-    // not bme380, but rather the standard/probe
-//    float arduinoVoltage = analogRead(A0); //print data value 
-//    float sensorVoltage = arduinoVoltage / 1024 * 5.0;
-//    float humidityPCT = sensorVoltage * 30.43 - 25.81;
-    
-    //Serial.print("Standard humidity: ");
-    //Serial.print(humidityPCT);
-    //Serial.print(",");
-    //Serial.println(" %");
-    
-    //Serial.print("Pressure = ");
-    //Serial.print(bme.readPressure() / 100.0F);
-    //Serial.println(" hPa");
-
-    //Serial.print("Approx. Altitude = ");
-    //Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
-    //Serial.println(" m");
-//
-//    Serial.print("Arduino humidity = ");
-//    Serial.print(bme.readHumidity());
-//    Serial.println(" %");
-
     String theHumidity = String(bme.readHumidity());
-
-//    String humidity = String("Arduino humidity = " + theHumidity + " %");
     return theHumidity;
-
-//    Serial.print("Arduino temperature = ");
-//    Serial.print(bme.readTemperature());
-//    Serial.println(" *C");
-//
-//    Serial.println();
 }
 
 String getBMETemp()
 {
-//    Serial.print("Arduino temperature = ");
-//    Serial.print(bme.readTemperature());
-//    Serial.println(" *C");
-
     String theTemp = String(bme.readTemperature());
-
-//    String temperature = String("Arduino temperature = " + theTemp + " *C");
     return theTemp;
 }

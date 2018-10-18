@@ -3,7 +3,7 @@
 #include "tx.h"
 #include "sd_logger.h"
 #include "sensors.h"
-#include "humidity.h"
+//#include "humidity.h"
 
 /*
  * Index | data item
@@ -15,7 +15,7 @@
  */
 #define numObs 7
 String data_arr[numObs];
-const double PRESSURE_TO_CUT_DOWN = 93.675;
+const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
 String pressure_string = "";
 int cut_down_pin = 30;
@@ -50,9 +50,9 @@ void loop() {
   data_arr[2] = pressure_string;
   pressure_value = pressure_string.toDouble();
 
-  data_arr[3] = getBMETemp();
+  data_arr[3] = String("bmetemp");//getBMETemp();
 
-  data_arr[4] = getBMEHumidity();
+  data_arr[4] = String("getBMEHumidity()");
 
   data_arr[5] = getTemp();
 
