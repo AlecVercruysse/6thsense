@@ -8,6 +8,7 @@ ASR Balloon Launch
  - try to keep everything in subdirectories to help isolate different code
  - If you add a directory/file to the root directory, please give it a description in the readme!
    - If you have a directory with many other people working on it, consider giving it it's own description md file
+ - **make sure the build compiles before you push please!!**
  
  Thanks
  

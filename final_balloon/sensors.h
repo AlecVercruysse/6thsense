@@ -1,8 +1,8 @@
 #include <SoftwareSerial.h>
 
 #include <Wire.h>
-#include "RTClib.h"
- 
+#include "RTClib/RTClib.h"
+#include "RTClib/RTClib.cpp"
 
 //copied from: http://www.doctormonk.com/2012/05/sparkfun-venus-gps-and-arduino.html
 SoftwareSerial gpsSerial(10, 11); // RX, TX (TX not used)
@@ -24,12 +24,14 @@ const double CURRENT_GROUND_PRESSURE = 0.99;
 double a = 8420.0;
 
 
-RTC_DS1307 rtc;
+RTC_DS1307 rtc; //i2c address 0x68?
 
 void setupSensors()
 {
   gpsSerial.begin(9600);
-  rtc.begin();
+
+  // not needed. This method simply calls Wire.begin(), which is called by the BME sensor.
+  //rtc.begin();
 }
 
 void getField(char* buffer, int index)
@@ -54,9 +56,7 @@ void getField(char* buffer, int index)
   buffer[fieldPos] = '\0';
 }
 
-/**
- * Todo: doesn't return if no gps data available. Need to implement a timeout or something.
- */
+
 String getGPS()
 {
   bool gotSentence = false;
@@ -131,10 +131,14 @@ double getAltitude(double presskpa)
 
 String getPressure()
 {
-  pressvalue = analogRead(pressure);
-  // gets pressure in kPa
+  //take the average of 10 readings
+  int sumPressureVoltages;
+  for (int i = 0; i < 10; i++) {
+    sumPressureVoltages += analogRead(pressure);
+  }
+  pressvalue = ((double) sumPressureVoltages) / 10;
+  // gets pressure in kPa TODO: need to find the new formula
   pressunits = (0.2544 * (pressvalue)) - 26.24 + 2.12;
   altitude = getAltitude(pressunits);
-  //Serial.println(altitude);
   return String(pressunits);
 }

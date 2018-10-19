@@ -26,7 +26,7 @@ void setupLogger() {
 
     // if the file opened okay, write to it:
     if (myFile) {
-        Serial.print("Writing to logger.txt...");
+        Serial.print("Writing headers to logger.txt...");
 
         //column heads
         myFile.println("Time, GPS, Pressure, Outer Temp, Humidity, Inner Temp, Spectrometer,");

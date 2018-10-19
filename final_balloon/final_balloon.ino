@@ -1,17 +1,18 @@
-#include <Wire.h>
+//#include <Wire.h> not needed: included elsewhere, in BME.cpp
+#include "humidity.h"
 #include "spectrometer/spectrometer.h"
 #include "tx.h"
 #include "sd_logger.h"
 #include "sensors.h"
-//#include "humidity.h"
 
 /*
  * Index | data item
  * 0 | Time
  * 1 | GPS
  * 2 | Pressure
- * 3 | Temperature (C)
- * 4 | Spectrometer data
+ * 3 | Outside Temperature (C)
+ * 5 | Inside temperature (C)
+ * 6 | Spectrometer data
  */
 #define numObs 7
 String data_arr[numObs];
@@ -32,7 +33,8 @@ void setup() {
   setupTx();
   setupLogger();
 
-  // setup clock and the temp and GPS sensors
+  // setup clock and the temp and GPS sensors and BME
+  setupBME();
   setupSensors();
 
   //spectrometer setup (AV individual experiment)
@@ -50,9 +52,9 @@ void loop() {
   data_arr[2] = pressure_string;
   pressure_value = pressure_string.toDouble();
 
-  data_arr[3] = String("bmetemp");//getBMETemp();
+  data_arr[3] = getBMETemp();
 
-  data_arr[4] = String("getBMEHumidity()");
+  data_arr[4] = getBMEHumidity();
 
   data_arr[5] = getTemp();
 
@@ -61,7 +63,7 @@ void loop() {
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
 
-  //change this to altitude later
+  //change this to altitude later TODO: only cut down if the last couple measurements (e.g. 10+) are @threshold
   if (pressure_value < PRESSURE_TO_CUT_DOWN)
   {
     digitalWrite(cut_down_pin, HIGH);
