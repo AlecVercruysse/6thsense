@@ -4,3 +4,6 @@ cmake*
 */.DS_Store
 *~
 .*~
+radio_coms/sensitive_data.py
+radio_coms/radiovis
+radio_coms/__*

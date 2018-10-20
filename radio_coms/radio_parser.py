@@ -1,5 +1,8 @@
 import tkinter as tk
 import re
+import gmplot
+from sensitive_data import getapikey
+import webbrowser
 
 data_stream = open("radio_raw.txt")
 data_buffer = ""
@@ -74,6 +77,9 @@ class Application(tk.Frame):
         self.readratebtn = tk.Button(self, text="\tx"+str(readrate)+" \t", command=togglereadrate)
         self.readratebtn.grid(row=2, column=1, sticky="w")
 
+        self.genmap = tk.Button(self, text="generate position map", fg="green", command=self.generateMap)
+        self.genmap.grid(row=2, column=2, sticky="w")
+
         self.latestvalsdisplay = [tk.Label(self, text=k+": "+str(v), width=35, anchor="w") for k, v in latest_vals.items()]
         [self.latestvalsdisplay[i].grid(row=3+int(i/4), column=i%4, sticky="nw") for i in range(len(self.latestvalsdisplay))]
 
@@ -106,6 +112,25 @@ class Application(tk.Frame):
         #if not self.paused and self.rawbufferscroll.get()[1] != 1.0 and len(self.rawbufferscroll.get()) == 2:
         #    self.togglePause()
 
+    def dms2dd(self, degrees, minutes, seconds, direction):
+        dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60);
+        if direction == 'W' or direction == 'S':
+            dd *= -1
+        return dd;
+
+    def generateMap(self):
+        global latest_vals
+        gps = re.search(r"Lat: (.*)(\w) Long: (.*)(\w)", latest_vals["GPS"])
+        lat = re.search(r"(\d+)(\d\d).(\d+)", gps[1])
+        latdd = self.dms2dd(int(lat[1]), int(lat[2]), float(lat[3])/100, gps[2])
+        long = re.search(r"(\d+)(\d\d).(\d+)", gps[3])
+        longdd = self.dms2dd(int(long[1]), int(long[2]), float(long[3]) / 100, gps[4])
+        print(latdd)
+        print(longdd)
+        map = gmplot.GoogleMapPlotter(latdd, longdd, 13, apikey=getapikey())
+        map.marker(latdd, longdd, 'cornflowerblue')
+        map.draw("map.html")
+        webbrowser.open("map.html")
 
 def getVals(db):
     latest = re.search(r".*\n(.*)\n[^\n]*$", db, re.S)
