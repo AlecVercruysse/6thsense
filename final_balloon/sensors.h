@@ -20,8 +20,9 @@ int pressure = A1;
 double pressvalue = 0;
 double pressunits = 0;
 double altitude = 0;
-const double CURRENT_GROUND_PRESSURE = 0.99;
-double a = 8420.0;
+const double PRESSURE_SEALEVEL = 101325;
+const double PRESSURE_11K = 22629.5;
+const double PRESSURE_20K = 5473.875;
 
 
 RTC_DS1307 rtc; //i2c address 0x68?
@@ -125,8 +126,19 @@ String getTemp()
 double getAltitude(double presskpa)
 {
   double pressurePa = presskpa * 1000;
-  double theAltitude = a * log(pressurePa / CURRENT_GROUND_PRESSURE);
-  return theAltitude;
+  if(PRESSURE_11K > pressurePa)
+  {
+    altitude = (1 - pow(pressurePa / PRESSURE_SEALEVEL, 1 / 5.255816)) * 44329;
+  }
+  else if(PRESSURE_11K < pressurePa < PRESSURE_20K)
+  {
+    altitude = 10999 - 6341.4 * log(pressurePa / (PRESSURE_SEALEVEL * 0.22361));
+  }
+  else
+  {
+    altitude = (pow(pressurePa / PRESSURE_SEALEVEL, 1 / -34.16319) - 0.988626) * 198903;
+  }
+  return altitude;
 }
 
 String getPressure()
@@ -139,6 +151,6 @@ String getPressure()
   pressvalue = ((double) sumPressureVoltages) / 10;
   // gets pressure in kPa TODO: need to find the new formula
   pressunits = (0.2544 * (pressvalue)) - 26.24 + 2.12;
-  altitude = getAltitude(pressunits);
+  getAltitude(pressunits);
   return String(pressunits);
 }
