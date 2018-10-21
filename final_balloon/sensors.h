@@ -16,7 +16,7 @@ float R1 = 10000;
 float logR2, R2, T, Tc, Tf;
 float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
 
-int pressure = A1;
+int pressure = A0;
 double pressvalue = 0;
 double pressunits = 0;
 double altitude = 0;
@@ -152,5 +152,6 @@ String getPressure()
   // gets pressure in kPa TODO: need to find the new formula
   pressunits = (0.2544 * (pressvalue)) - 26.24 + 2.12;
   getAltitude(pressunits);
-  return String(pressunits);
+  //return String(pressunits);
+  return String(pressvalue);
 }

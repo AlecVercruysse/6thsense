@@ -3,6 +3,7 @@ import re
 import gmplot
 from sensitive_data import getapikey
 import webbrowser
+import os
 
 data_stream = open("radio_raw.txt")
 data_buffer = ""
@@ -130,7 +131,8 @@ class Application(tk.Frame):
         map = gmplot.GoogleMapPlotter(latdd, longdd, 13, apikey=getapikey())
         map.marker(latdd, longdd, 'cornflowerblue')
         map.draw("map.html")
-        webbrowser.open("map.html")
+        #print(webbrowser.open_new_tab("map.html"))
+        webbrowser.open('file://' + os.path.realpath("map.html"))
 
 def getVals(db):
     latest = re.search(r".*\n(.*)\n[^\n]*$", db, re.S)
