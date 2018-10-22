@@ -123,8 +123,9 @@ String getTemp()
   return String(Tc);
 }
 //estimation
-double getAltitude(double presskpa)
+double getAltitude()
 {
+  double presskpa = getPressure().toDouble();
   double pressurePa = presskpa * 1000;
   if(PRESSURE_11K > pressurePa)
   {
@@ -149,8 +150,7 @@ String getPressure()
     sumPressureVoltages += analogRead(pressure);
   }
   pressvalue = ((double) sumPressureVoltages) / 10;
-  // gets pressure in kPa TODO: need to find the new formula
+  // gets pressure in kPa
   pressunits = (0.2554 * (pressvalue)) - 25.295;
-  getAltitude(pressunits);
   return String(pressunits);
 }
