@@ -40,7 +40,7 @@ void setup() {
   setupSensors();
 
   //spectrometer setup (AV individual experiment)
-  //setupSpectrometer();
+  setupSpectrometer();
   
 }
 
@@ -62,7 +62,7 @@ void loop() {
 
   data_arr[6] = getTemp();
 
-  data_arr[7] = "spectrometer placeholder";//checkSpectrometer();
+  data_arr[7] = checkSpectrometer();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
