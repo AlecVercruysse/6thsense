@@ -1,3 +1,4 @@
+import cProfile
 import tkinter as tk
 import re
 import gmplot
@@ -80,7 +81,6 @@ def update_vals_history():
                     val.append(time_since_start)
                 else:
                     val.append(latest_vals[key])
-            print(len(vals_history["time"]))
             graph_i = 0
         graph_i = graph_i + 1
 
@@ -225,7 +225,9 @@ while start_time == 0:
     if "time" in latest_vals:
         start_time = to_seconds(latest_vals["time"])
 print(start_time)
-while True:
+
+def loop():
+    global data_buffer, data_stream, latest_vals, app
     data_buffer = data_buffer + data_stream.read(readrate)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
@@ -235,6 +237,12 @@ while True:
     app.updatedata(data_buffer)
     app.update_idletasks()
     app.update()
+
+def loop1k():
+    for _ in range(10000):
+        loop()
+while True:
+    cProfile.run('loop1k()')
 
 # example code:
 '''

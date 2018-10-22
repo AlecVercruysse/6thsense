@@ -5,8 +5,6 @@ from sensitive_data import getapikey
 import webbrowser
 import os
 
-import matplotlib
-
 data_stream = open("radio_raw.txt")
 data_buffer = ""
 
@@ -75,6 +73,7 @@ def update_vals_history():
 
 
 def plot_all(mplobjs, canvases):
+    #TODO:https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
     if graph_i == graph_resolution:
         for i in range(len(mplobjs)):
             mplobjs[i].clear()
