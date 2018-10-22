@@ -14,7 +14,7 @@
  * 5 | Inside temperature (C)
  * 6 | Spectrometer data
  */
-#define numObs 7
+#define numObs 8
 String data_arr[numObs];
 const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
@@ -48,17 +48,19 @@ void loop() {
 
   data_arr[1] = getGPS();
 
+  data_arr[2] = getAltitude();
+
   pressure_string = getPressure();
-  data_arr[2] = pressure_string;
+  data_arr[3] = pressure_string;
   pressure_value = pressure_string.toDouble();
 
-  data_arr[3] = getBMETemp();
+  data_arr[4] = getBMETemp();
 
-  data_arr[4] = getBMEHumidity();
+  data_arr[5] = getBMEHumidity();
 
-  data_arr[5] = getTemp();
+  data_arr[6] = getTemp();
 
-  data_arr[6] = "spectrometer placeholder";//checkSpectrometer();
+  data_arr[7] = "spectrometer placeholder";//checkSpectrometer();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
