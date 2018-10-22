@@ -62,24 +62,25 @@ def update_times():
 def update_vals_history():
     global graph_i
     if vals_history["time"][-1] != time_since_start:
-        if graph_i==graph_resolution:
-            for key, val in vals_history.items():
-                if key == "time":
-                    val.append(time_since_start)
-                else:
-                    val.append(latest_vals[key])
-            graph_i = 0
-        graph_i = graph_i + 1
+        for key, val in vals_history.items():
+            if key == "time":
+                pass
+                #val.append(x, time_since_start)
+            else:
+                val.extend([time_since_start, latest_vals[key]])
 
 
-def plot_all(mplobjs, canvases):
+
+def update_plot(canvases):
+    return
+    '''
     #TODO:https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
-    if graph_i == graph_resolution:
-        for i in range(len(mplobjs)):
-            mplobjs[i].clear()
-            mplobjs[i].plot(vals_history["time"], vals_history[vals_to_graph[i]])
-            canvases[i].draw()
-
+    for i in range(len(canvases)):
+        pointlist = vals_history[vals_to_graph[i]]
+        xm = max([pointlist[x] for x in pointlist if pointlist.index(x)%2==1])
+        pointlist = [(xm-x)/ for x in pointlist]
+        canvases[i].coords(vals_to_graph[i],)
+    '''
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -92,58 +93,58 @@ class Application(tk.Frame):
         self.reading = tk.Label(self, text="Reading from output.txt...", font=("Helvetica", 16), anchor="w")
         self.reading.grid(row=0, column=0, sticky="w")
 
-        self.rawbufferframe = tk.Frame(self, width=150, bg="black")
+        self.rawbufferframe = tk.Frame(self, width=141)
         self.rawbufferscroll = tk.Scrollbar(self.rawbufferframe)
         self.textfrombuffer = tk.Text(master=self.rawbufferframe, width=140, height=20,
                                       yscrollcommand=self.rawbufferscroll.set)
-        self.textfrombuffer.grid(row=0, column=0)
+        self.textfrombuffer.grid(row=0, column=0, columnspan=4, sticky="new")
 
         self.rawbufferscroll.config(command=self.textfrombuffer.yview)
         # self.rawbufferscroll.grid(row=0, column=6, sticky="nsw")
         self.rawbufferscroll.grid(row=0, column=1, sticky="nsw")
 
-        self.rawbufferframe.grid(row=1, column=0, columnspan=4, sticky="w")
+        self.rawbufferframe.grid(row=1, column=0, columnspan=4, sticky="nw")
 
         self.paused = False
-        self.pause = tk.Button(self, text="\t||\t", fg="blue", command=self.togglePause)
-        self.pause.grid(row=2, column=0, sticky="w")
+        self.pause = tk.Button(self.rawbufferframe, text="\t||\t", fg="blue", command=self.togglePause)
+        self.pause.grid(row=1, column=0, sticky="w")
 
-        self.readratebtn = tk.Button(self, text="\tx" + str(readrate) + " \t", command=togglereadrate)
-        self.readratebtn.grid(row=2, column=1, sticky="w")
+        self.readratebtn = tk.Button(self.rawbufferframe, text="\tx" + str(readrate) + " \t", command=togglereadrate)
+        self.readratebtn.grid(row=1, column=1, sticky="w")
 
-        self.genmap = tk.Button(self, text="generate position map", fg="green", command=self.generateMap)
-        self.genmap.grid(row=2, column=2, sticky="w")
+        self.genmap = tk.Button(self.rawbufferframe, text="generate position map", fg="green", command=self.generateMap)
+        self.genmap.grid(row=1, column=2, sticky="w")
 
-        self.latestvalsdisplayframe = tk.Frame(self)
-        self.latestvalsdisplayframe.grid(row=3, column=0, columnspan=4, sticky='n')
+        self.latestvalsdisplayframe = tk.Frame(self.rawbufferframe, width=140)
+        self.latestvalsdisplayframe.grid(row=3, column=0, columnspan=4, sticky='nw')
         self.latestvalsdisplay = [tk.Label(self.latestvalsdisplayframe, text=k + ": " + str(v), width=35, anchor="w")
                                   for k, v in latest_vals.items()]
-        [self.latestvalsdisplay[i].grid(row=int(i / 4), column=i % 4, sticky="nw") for i in
+        [self.latestvalsdisplay[i].grid(row=int(i / 3), column=i % 3, sticky="nw") for i in
          range(len(self.latestvalsdisplay))]
 
         self.vislabel = tk.Label(self, text="Data v. Time:", font=("Helvetica", 16))
         self.vislabel.grid(row=0, column=4, sticky="w")
 
         self.graphs_frame = tk.Frame(self, width=100)
-        self.graphs_frame.grid(row=1, column=4, sticky="n")
+        self.graphs_frame.grid(row=1, column=4, sticky="nw")
 
         self.grah_x_axis_scale_label = tk.Label(self.graphs_frame, text="Time to graph (s)", anchor="w")
-        self.grah_x_axis_scale_label.grid(row=1, column=0, sticky="w")
+        self.grah_x_axis_scale_label.grid(row=1, column=0, sticky="ew")
 
         self.graph_x_axis_scale_slider = tk.Scale(self.graphs_frame, from_=60, to=3600, orient="horizontal")
-        self.graph_x_axis_scale_slider.grid(row=2, column=0, sticky="w")
+        self.graph_x_axis_scale_slider.grid(row=2, column=0, sticky="ew")
 
         self.graph_x_axis_lowlim_label = tk.Label(self.graphs_frame, text="rewind (s)", anchor="w")
-        self.graph_x_axis_lowlim_label.grid(row=3, column=0, sticky="w")
+        self.graph_x_axis_lowlim_label.grid(row=3, column=0, sticky="ew")
 
         self.graph_x_axis_lowlim_slider = tk.Scale(self.graphs_frame, from_=0, to=time_since_start, orient="horizontal")
-        self.graph_x_axis_lowlim_slider.grid(row=4, column=0, sticky="w")
+        self.graph_x_axis_lowlim_slider.grid(row=4, column=0, sticky="ew")
 
-        self.mplfigures = [Figure(figsize=(2, 2), dpi=100) for _ in vals_to_graph]
-        self.mplplots = [f.add_subplot(111) for f in self.mplfigures]
-        self.graphCanvases = [FigureCanvasTkAgg(fig, master=self) for fig in self.mplfigures]
-        plot_all(self.mplplots, self.graphCanvases)
-        [self.graphCanvases[i].get_tk_widget().grid(row=i + 1, column=5, sticky="nw") for i in
+        self.graphCanvases = [tk.Canvas(self.graphs_frame, bg="gray", height=150, width=300) for _ in vals_to_graph]
+        self.graphLabels = [tk.Label(self.graphs_frame, text=label) for label in vals_to_graph]
+        [self.graphLabels[i].grid(row=i*2 + 5, column=0, sticky="n") for i in range(len(self.graphLabels))]
+        [self.graphCanvases[i].create_line((0, 0, 10, 10), tag=vals_to_graph[i], fill='darkblue', width=1) for i in range(len(self.graphCanvases))]
+        [self.graphCanvases[i].grid(row=i*2 + 6, column=0, sticky="nw") for i in
          range(len(self.graphCanvases))]
 
     def togglePause(self):
@@ -163,8 +164,7 @@ class Application(tk.Frame):
             i = i + 1
         self.readratebtn["text"] = "\tx" + str(readrate) + "\t"
         self.graph_x_axis_lowlim_slider.config(to=time_since_start)
-        plot_all(self.mplplots, self.graphCanvases)
-        [canvas.draw() for canvas in self.graphCanvases]
+        update_plot(self.graphCanvases)
 
     def updatetextfrombuffer(self, db):
         if self.paused:

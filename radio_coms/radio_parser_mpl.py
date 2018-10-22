@@ -156,7 +156,7 @@ class Application(tk.Frame):
         self.mplplots = [f.add_subplot(111) for f in self.mplfigures]
         self.graphCanvases = [FigureCanvasTkAgg(fig, master=self) for fig in self.mplfigures]
         plot_all(self.mplplots, self.graphCanvases)
-        [self.graphCanvases[i].get_tk_widget().grid(row=i + 1, column=5, sticky="nw") for i in
+        [self.graphCanvases[i].get_tk_widget().grid(row=i + 2, column=4, sticky="nw") for i in
          range(len(self.graphCanvases))]
 
     def togglePause(self):
