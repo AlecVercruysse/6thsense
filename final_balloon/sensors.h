@@ -150,7 +150,7 @@ String getPressure()
   }
   pressvalue = ((double) sumPressureVoltages) / 10;
   // gets pressure in kPa TODO: need to find the new formula
-  pressunits = (0.2544 * (pressvalue)) - 26.24 + 2.12;
+  pressunits = (0.2554 * (pressvalue)) - 25.295;
   getAltitude(pressunits);
   //return String(pressunits);
   return String(pressvalue);
