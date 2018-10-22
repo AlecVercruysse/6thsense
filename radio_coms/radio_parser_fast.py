@@ -17,7 +17,7 @@ readrate = 10
 vals_to_graph = ["pressure", "inside temp"]
 vals_history = {}
 for k in vals_to_graph:
-    vals_history[k] = [0]
+    vals_history[k] = [0, 0, 0, 0]
 vals_history["time"] = [0]
 
 start_time = 0  # start time in seconds
@@ -60,27 +60,29 @@ def update_times():
 
 
 def update_vals_history():
-    global graph_i
     if vals_history["time"][-1] != time_since_start:
         for key, val in vals_history.items():
             if key == "time":
-                pass
-                #val.append(x, time_since_start)
+                val.append(time_since_start)
             else:
-                val.extend([time_since_start, latest_vals[key]])
+                val.extend([time_since_start, float(latest_vals[key])])
 
 
 
-def update_plot(canvases):
-    return
-    '''
+def update_plot(canvases, scale, xlim):
     #TODO:https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
     for i in range(len(canvases)):
-        pointlist = vals_history[vals_to_graph[i]]
-        xm = max([pointlist[x] for x in pointlist if pointlist.index(x)%2==1])
-        pointlist = [(xm-x)/ for x in pointlist]
-        canvases[i].coords(vals_to_graph[i],)
-    '''
+        pointlist = vals_history[vals_to_graph[i]][-scale*2:]
+        xm = min([pointlist[xi] for xi in range(len(pointlist)) if xi % 2 == 0])
+        ym = max([pointlist[yi] for yi in range(len(pointlist)) if yi % 2 == 1])
+        if ym == 0:
+            ym = 1
+        if xm == 0:
+            xm = 1
+        pointlist = [(pointlist[xi]-xm)/(2+time_since_start-xm)*canvases[i].winfo_width() if xi % 2 == 0
+                     else (ym-.75*pointlist[xi])/ym*canvases[i].winfo_height() for xi in range(len(pointlist))]
+        canvases[i].coords("line", *pointlist)
+
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -143,7 +145,8 @@ class Application(tk.Frame):
         self.graphCanvases = [tk.Canvas(self.graphs_frame, bg="gray", height=150, width=300) for _ in vals_to_graph]
         self.graphLabels = [tk.Label(self.graphs_frame, text=label) for label in vals_to_graph]
         [self.graphLabels[i].grid(row=i*2 + 5, column=0, sticky="n") for i in range(len(self.graphLabels))]
-        [self.graphCanvases[i].create_line((0, 0, 10, 10), tag=vals_to_graph[i], fill='darkblue', width=1) for i in range(len(self.graphCanvases))]
+        [self.graphCanvases[i].create_line((0, 0, 10, 10), tag="line", fill='darkred', width=1) for i in range(len(self.graphCanvases))]
+        [canvas.create_text(0, 0, text="x") for canvas in self.graphCanvases]
         [self.graphCanvases[i].grid(row=i*2 + 6, column=0, sticky="nw") for i in
          range(len(self.graphCanvases))]
 
@@ -164,7 +167,7 @@ class Application(tk.Frame):
             i = i + 1
         self.readratebtn["text"] = "\tx" + str(readrate) + "\t"
         self.graph_x_axis_lowlim_slider.config(to=time_since_start)
-        update_plot(self.graphCanvases)
+        update_plot(self.graphCanvases, self.graph_x_axis_scale_slider.get(), self.graph_x_axis_lowlim_slider.get())
 
     def updatetextfrombuffer(self, db):
         if self.paused:
@@ -182,7 +185,7 @@ class Application(tk.Frame):
         dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60);
         if direction == 'W' or direction == 'S':
             dd *= -1
-        return dd;
+        return dd
 
     def generateMap(self):
         global latest_vals
@@ -196,7 +199,6 @@ class Application(tk.Frame):
         map = gmplot.GoogleMapPlotter(latdd, longdd, 13, apikey=getapikey())
         map.marker(latdd, longdd, 'cornflowerblue')
         map.draw("map.html")
-        # print(webbrowser.open_new_tab("map.html"))
         webbrowser.open('file://' + os.path.realpath("map.html"))
 
 
@@ -222,29 +224,3 @@ while True:
     app.updatedata(data_buffer)
     app.update_idletasks()
     app.update()
-
-# example code:
-'''
-class Application(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.pack()
-        self.create_widgets()
-
-    def create_widgets(self):
-        self.hi_there = tk.Button(self)
-        self.hi_there["text"] = "Hello World\n(click me)"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
-
-        self.quit = tk.Button(self, text="QUIT", fg="red",
-                              command=root.destroy)
-        self.quit.pack(side="bottom")
-
-    def say_hi(self):
-        print("hi there, everyone!")
-
-root = tk.Tk()
-app = Application(master=root)
-app.mainloop()
-'''
