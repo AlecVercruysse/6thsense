@@ -9,10 +9,12 @@
  * Index | data item
  * 0 | Time
  * 1 | GPS
- * 2 | Pressure
- * 3 | Outside Temperature (C)
- * 5 | Inside temperature (C)
- * 6 | Spectrometer data
+ * 2 | Altitude 
+ * 3 | Pressure
+ * 4 | Outside Temperature (C)
+ * 5 | Humidity (%)
+ * 6 | Inside Payload temperature (C)
+ * 7 | Spectrometer data
  */
 #define numObs 8
 String data_arr[numObs];
