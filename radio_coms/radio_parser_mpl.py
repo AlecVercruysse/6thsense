@@ -23,7 +23,7 @@ latest_vals_indexes = ["time", "GPS", "pressure", "outside temp", "humidity", "i
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
-readrate = 10
+read_rate = 10
 
 graph_resolution = 10#int(50 / readrate)  # graphing is very computer intensive, so we don't store/graph all values
 graph_i = 0  # loop iteration num. starts over when reached graph_resolution
@@ -52,7 +52,7 @@ def getVals(db):
 
 
 def togglereadrate():
-    global readrate, graph_resolution
+    global read_rate, graph_resolution
     readrates = [1, 2, 5, 10, 100]
     readrate = readrates[(readrates.index(readrate) + 1) % len(readrates)]
 
@@ -121,7 +121,7 @@ class Application(tk.Frame):
         self.pause = tk.Button(self, text="\t||\t", fg="blue", command=self.togglePause)
         self.pause.grid(row=2, column=0, sticky="w")
 
-        self.readratebtn = tk.Button(self, text="\tx" + str(readrate) + " \t", command=togglereadrate)
+        self.readratebtn = tk.Button(self, text="\tx" + str(read_rate) + " \t", command=togglereadrate)
         self.readratebtn.grid(row=2, column=1, sticky="w")
 
         self.genmap = tk.Button(self, text="generate position map", fg="green", command=self.generateMap)
@@ -174,7 +174,7 @@ class Application(tk.Frame):
         for k, v in latest_vals.items():
             self.latestvalsdisplay[i]["text"] = k + ": " + str(v)
             i = i + 1
-        self.readratebtn["text"] = "\tx" + str(readrate) + "\t"
+        self.readratebtn["text"] = "\tx" + str(read_rate) + "\t"
         self.graph_x_axis_lowlim_slider.config(to=time_since_start)
         plot_all(self.mplplots, self.graphCanvases)
         [canvas.draw() for canvas in self.graphCanvases]
@@ -189,7 +189,7 @@ class Application(tk.Frame):
         if not self.paused:
             self.textfrombuffer.see("end")
         # if not self.paused and self.rawbufferscroll.get()[1] != 1.0 and len(self.rawbufferscroll.get()) == 2:
-        #    self.togglePause()
+        #    self.toggle_pause()
 
     def dms2dd(self, degrees, minutes, seconds, direction):
         dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60);
@@ -218,7 +218,7 @@ root.title("6thsense balloon launch -- live ")
 app = Application(master=root)
 
 while start_time == 0:
-    data_buffer = data_buffer + data_stream.read(readrate)
+    data_buffer = data_buffer + data_stream.read(read_rate)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = getVals(data_buffer)
@@ -228,13 +228,13 @@ print(start_time)
 
 def loop():
     global data_buffer, data_stream, latest_vals, app
-    data_buffer = data_buffer + data_stream.read(readrate)
+    data_buffer = data_buffer + data_stream.read(read_rate)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = getVals(data_buffer)
     update_times()
     update_vals_history()
-    app.updatedata(data_buffer)
+    app.update_data(data_buffer)
     app.update_idletasks()
     app.update()
 

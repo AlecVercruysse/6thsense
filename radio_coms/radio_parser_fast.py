@@ -12,7 +12,7 @@ latest_vals_indexes = ["time", "GPS", "pressure", "outside temp", "humidity", "i
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
-readrate = 10
+read_rate = 10
 
 vals_to_graph = ["pressure", "inside temp"]
 vals_history = {}
@@ -25,7 +25,7 @@ current_time = 0
 time_since_start = 0
 
 
-def getVals(db):
+def get_vals(db):
     latest = re.search(r".*\n(.*)\n[^\n]*$", db, re.S)
     vals = re.split(r'-+', (latest[1] if latest else ""))
     # [vals.append("x") for _ in range(7 - len(vals))]
@@ -38,15 +38,16 @@ def getVals(db):
         return r
 
 
-def togglereadrate():
-    global readrate, graph_resolution
-    readrates = [1, 2, 5, 10, 100]
-    readrate = readrates[(readrates.index(readrate) + 1) % len(readrates)]
+def toggle_read_rate():
+    global read_rate, graph_resolution
+    read_rates = [1, 2, 5, 10, 100]
+    read_rate = read_rates[(read_rates.index(read_rate) + 1) % len(read_rates)]
+
 
 def to_seconds(strin):
     time = re.match(r"(\d+):(\d+):(\d+)", strin)
     if time:
-        return 24 * 60 * int(time[1]) + 60 * int(time[2]) + int(time[3])
+        return 60 * 60 * int(time[1]) + 60 * int(time[2]) + int(time[3])
     else:
         return 0
 
@@ -69,19 +70,21 @@ def update_vals_history():
 
 
 def update_plot(canvases, scale, gtexts):
-    #TODO:https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
+    # TODO:https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
     for i in range(len(canvases)):
-        pointlist = vals_history[vals_to_graph[i]][-scale*2:]
-        xm = min([pointlist[xi] for xi in range(len(pointlist)) if xi % 2 == 0])
-        ym = max([pointlist[yi] for yi in range(len(pointlist)) if yi % 2 == 1])
-        if ym == 0:
-            ym = 1
-        if xm == 0:
-            xm = 1
-        pointlist = [(pointlist[xi]-xm)/(2+time_since_start-xm)*canvases[i].winfo_width() if xi % 2 == 0
-                     else (ym-.75*pointlist[xi])/ym*canvases[i].winfo_height() for xi in range(len(pointlist))]
-        canvases[i].coords("line", *pointlist)
-        canvases[i].itemconfigure(gtexts[i], text=str(pointlist[-1])[:5])
+        point_list = vals_history[vals_to_graph[i]][-scale * 2:]
+        x_min = min([point_list[xi] for xi in range(len(point_list)) if xi % 2 == 0])
+        y_max = max([point_list[yi] for yi in range(len(point_list)) if yi % 2 == 1])
+        if y_max == 0:
+            y_max = 1
+        if x_min == 0:
+            x_min = 1
+        point_list = [
+            (point_list[xi] - x_min) / (2 + time_since_start - x_min) * canvases[i].winfo_width() if xi % 2 == 0
+            else (y_max - .75 * point_list[xi]) / y_max * canvases[i].winfo_height() for xi in range(len(point_list))]
+        canvases[i].coords("line", *point_list)
+        canvases[i].itemconfigure(gtexts[i], text=str(point_list[-1])[:5])
+
 
 def reset_vals():
     global data_buffer, vals_history, start_time, vals_to_graph, time_since_start, current_time
@@ -90,14 +93,40 @@ def reset_vals():
     for k in vals_to_graph:
         vals_history[k] = [0, 0, 0, 0]
     vals_history["time"] = [0]
-    start_time=0
+    start_time = 0
     while start_time == 0:
-        data_buffer = data_buffer + data_stream.read(readrate)
+        data_buffer = data_buffer + data_stream.read(read_rate)
         data_buffer = re.sub(r"\*+", "\n", data_buffer)
         data_buffer = re.sub(r"\n+", "\n", data_buffer)
-        latest_vals = getVals(data_buffer)
+        latest_vals = get_vals(data_buffer)
         if "time" in latest_vals:
             start_time = to_seconds(latest_vals["time"])
+
+
+def format_raw_time(s):
+    return str(s // 3600) + "h " + str(s % 3600 // 60) + "m " + str(s % 60) + "s"
+
+
+def dms2dd(degrees, minutes, seconds, direction):
+    dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60);
+    if direction == 'W' or direction == 'S':
+        dd *= -1
+    return dd
+
+
+def generate_map():
+    global latest_vals
+    gps = re.search(r"Lat: (.*)(\w) Long: (.*)(\w)", latest_vals["GPS"])
+    lat = re.search(r"(\d+)(\d\d).(\d+)", gps[1])
+    latdd = dms2dd(int(lat[1]), int(lat[2]), float(lat[3]) / 100, gps[2])
+    long = re.search(r"(\d+)(\d\d).(\d+)", gps[3])
+    longdd = dms2dd(int(long[1]), int(long[2]), float(long[3]) / 100, gps[4])
+    print(latdd)
+    print(longdd)
+    map = gmplot.GoogleMapPlotter(latdd, longdd, 13, apikey=getapikey())
+    map.marker(latdd, longdd, 'cornflowerblue')
+    map.draw("map.html")
+    webbrowser.open('file://' + os.path.realpath("map.html"))
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -110,40 +139,39 @@ class Application(tk.Frame):
         self.reading = tk.Label(self, text="Reading from output.txt...", font=("Helvetica", 16), anchor="w")
         self.reading.grid(row=0, column=0, sticky="w")
 
-        self.clearbufferbutton = tk.Button(self, text="!clear buffer!", fg="red", command=reset_vals)
-        self.clearbufferbutton.grid(row=0, column=3, sticky="w")
+        self.clear_buffer_button = tk.Button(self, text="!clear buffer!", fg="red", command=reset_vals)
+        self.clear_buffer_button.grid(row=0, column=3, sticky="w")
 
-        self.rawbufferframe = tk.Frame(self, width=141)
-        self.rawbufferscroll = tk.Scrollbar(self.rawbufferframe)
-        self.textfrombuffer = tk.Text(master=self.rawbufferframe, width=140, height=20,
-                                      yscrollcommand=self.rawbufferscroll.set)
-        self.textfrombuffer.grid(row=0, column=0, columnspan=4, sticky="new")
+        self.raw_buffer_frame = tk.Frame(self, width=141)
+        self.raw_buffer_scroll = tk.Scrollbar(self.raw_buffer_frame)
+        self.text_from_buffer = tk.Text(master=self.raw_buffer_frame, width=140, height=20,
+                                        yscrollcommand=self.raw_buffer_scroll.set)
+        self.text_from_buffer.grid(row=0, column=0, columnspan=4, sticky="new")
 
-        self.rawbufferscroll.config(command=self.textfrombuffer.yview)
-        # self.rawbufferscroll.grid(row=0, column=6, sticky="nsw")
-        self.rawbufferscroll.grid(row=0, column=1, sticky="nsw")
+        self.raw_buffer_scroll.config(command=self.text_from_buffer.yview)
+        self.raw_buffer_scroll.grid(row=0, column=1, sticky="nsw")
 
-        self.rawbufferframe.grid(row=1, column=0, columnspan=4, sticky="nw")
+        self.raw_buffer_frame.grid(row=1, column=0, columnspan=4, sticky="nw")
 
         self.paused = False
-        self.pause = tk.Button(self.rawbufferframe, text="\t||\t", fg="blue", command=self.togglePause)
-        self.pause.grid(row=1, column=0, sticky="w")
+        self.pause_button = tk.Button(self.raw_buffer_frame, text="\t||\t", fg="blue", command=self.toggle_pause)
+        self.pause_button.grid(row=1, column=0, sticky="w")
 
-        self.readratebtn = tk.Button(self.rawbufferframe, text="\tx" + str(readrate) + " \t", command=togglereadrate)
-        self.readratebtn.grid(row=1, column=1, sticky="w")
+        self.read_rate_button = tk.Button(self.raw_buffer_frame, text="\tx" + str(read_rate) + " \t", command=toggle_read_rate)
+        self.read_rate_button.grid(row=1, column=1, sticky="w")
 
-        self.genmap = tk.Button(self.rawbufferframe, text="generate position map", fg="green", command=self.generateMap)
-        self.genmap.grid(row=1, column=2, sticky="w")
+        self.gen_map_button = tk.Button(self.raw_buffer_frame, text="generate position map", fg="green", command=generate_map)
+        self.gen_map_button.grid(row=1, column=2, sticky="w")
 
-        self.latestvalsdisplayframe = tk.Frame(self.rawbufferframe, width=140)
-        self.latestvalsdisplayframe.grid(row=3, column=0, columnspan=4, sticky='nw')
-        self.latestvalsdisplay = [tk.Label(self.latestvalsdisplayframe, text=k + ": " + str(v), width=35, anchor="w")
-                                  for k, v in latest_vals.items()]
-        [self.latestvalsdisplay[i].grid(row=int(i / 3), column=i % 3, sticky="nw") for i in
-         range(len(self.latestvalsdisplay))]
+        self.latest_vals_display_frame = tk.Frame(self.raw_buffer_frame, width=140)
+        self.latest_vals_display_frame.grid(row=3, column=0, columnspan=4, sticky='nw')
+        self.latest_vals_display = [tk.Label(self.latest_vals_display_frame, text=k + ": " + str(v), width=35, anchor="w")
+                                    for k, v in latest_vals.items()]
+        [self.latest_vals_display[i].grid(row=int(i / 3), column=i % 3, sticky="nw") for i in
+         range(len(self.latest_vals_display))]
 
-        self.vislabel = tk.Label(self, text="Data v. Time:", font=("Helvetica", 16))
-        self.vislabel.grid(row=0, column=4, sticky="w")
+        self.vis_label = tk.Label(self, text="Data v. Time:", font=("Helvetica", 16))
+        self.vis_label.grid(row=0, column=4, sticky="w")
 
         self.graphs_frame = tk.Frame(self, width=100)
         self.graphs_frame.grid(row=1, column=4, sticky="nw")
@@ -160,64 +188,44 @@ class Application(tk.Frame):
         self.graph_x_axis_lowlim_slider = tk.Scale(self.graphs_frame, from_=0, to=time_since_start, orient="horizontal")
         self.graph_x_axis_lowlim_slider.grid(row=4, column=0, sticky="ew")
 
-        self.graphCanvases = [tk.Canvas(self.graphs_frame, bg="gray", height=150, width=300) for _ in vals_to_graph]
-        self.graphLabels = [tk.Label(self.graphs_frame, text=label) for label in vals_to_graph]
-        [self.graphLabels[i].grid(row=i*2 + 5, column=0, sticky="n") for i in range(len(self.graphLabels))]
-        [self.graphCanvases[i].create_line((0, 0, 10, 10), tag="line", fill='darkred', width=1) for i in range(len(self.graphCanvases))]
-        self.graph_texts = [canvas.create_text(250, 10, text="x") for canvas in self.graphCanvases]
-        [self.graphCanvases[i].grid(row=i*2 + 6, column=0, sticky="nw") for i in
-         range(len(self.graphCanvases))]
+        self.graph_canvases = [tk.Canvas(self.graphs_frame, bg="gray", height=150, width=300) for _ in vals_to_graph]
+        self.graph_labels = [tk.Label(self.graphs_frame, text=label) for label in vals_to_graph]
+        [self.graph_labels[i].grid(row=i * 2 + 5, column=0, sticky="n") for i in range(len(self.graph_labels))]
+        [self.graph_canvases[i].create_line((0, 0, 10, 10), tag="line", fill='darkred', width=1) for i in
+         range(len(self.graph_canvases))]
+        self.graph_texts = [canvas.create_text(250, 10, text="x") for canvas in self.graph_canvases]
+        [self.graph_canvases[i].grid(row=i * 2 + 6, column=0, sticky="nw") for i in
+         range(len(self.graph_canvases))]
 
-    def togglePause(self):
+    def toggle_pause(self):
         self.paused = not self.paused
         if self.paused:
-            self.pause["text"] = "\t>>\t"
+            self.pause_button["text"] = "\t>>\t"
         else:
-            self.textfrombuffer.see("end")
-            self.pause["text"] = "\t||\t"
+            self.text_from_buffer.see("end")
+            self.pause_button["text"] = "\t||\t"
 
-    def updatedata(self, db):
-        self.updatetextfrombuffer(db)
-        self.reading["text"] = "Reading from output.txt...\t\ttime elapsed: " + str(time_since_start) + "s"
+    def update_data(self, db):
+        self.update_text_from_buffer(db)
+        self.reading["text"] = "Reading from output.txt...\t\ttime elapsed: " + str(
+            time_since_start) + "s\t(" + format_raw_time(time_since_start) + ")"
         i = 0
         for k, v in latest_vals.items():
-            self.latestvalsdisplay[i]["text"] = k + ": " + str(v)
+            self.latest_vals_display[i]["text"] = k + ": " + str(v)
             i = i + 1
-        self.readratebtn["text"] = "\tx" + str(readrate) + "\t"
+        self.read_rate_button["text"] = "\tx" + str(read_rate) + "\t"
         self.graph_x_axis_lowlim_slider.config(to=time_since_start)
-        update_plot(self.graphCanvases, self.graph_x_axis_scale_slider.get(), self.graph_texts)
+        update_plot(self.graph_canvases, self.graph_x_axis_scale_slider.get(), self.graph_texts)
 
-    def updatetextfrombuffer(self, db):
+    def update_text_from_buffer(self, db):
         if self.paused:
             return
-        self.textfrombuffer.config(state="normal")
-        self.textfrombuffer.delete(1.0, "end")
-        self.textfrombuffer.insert("end", data_buffer)
-        self.textfrombuffer.config(state="disabled")
+        self.text_from_buffer.config(state="normal")
+        self.text_from_buffer.delete(1.0, "end")
+        self.text_from_buffer.insert("end", data_buffer)
+        self.text_from_buffer.config(state="disabled")
         if not self.paused:
-            self.textfrombuffer.see("end")
-        # if not self.paused and self.rawbufferscroll.get()[1] != 1.0 and len(self.rawbufferscroll.get()) == 2:
-        #    self.togglePause()
-
-    def dms2dd(self, degrees, minutes, seconds, direction):
-        dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60);
-        if direction == 'W' or direction == 'S':
-            dd *= -1
-        return dd
-
-    def generateMap(self):
-        global latest_vals
-        gps = re.search(r"Lat: (.*)(\w) Long: (.*)(\w)", latest_vals["GPS"])
-        lat = re.search(r"(\d+)(\d\d).(\d+)", gps[1])
-        latdd = self.dms2dd(int(lat[1]), int(lat[2]), float(lat[3]) / 100, gps[2])
-        long = re.search(r"(\d+)(\d\d).(\d+)", gps[3])
-        longdd = self.dms2dd(int(long[1]), int(long[2]), float(long[3]) / 100, gps[4])
-        print(latdd)
-        print(longdd)
-        map = gmplot.GoogleMapPlotter(latdd, longdd, 13, apikey=getapikey())
-        map.marker(latdd, longdd, 'cornflowerblue')
-        map.draw("map.html")
-        webbrowser.open('file://' + os.path.realpath("map.html"))
+            self.text_from_buffer.see("end")
 
 
 root = tk.Tk()
@@ -225,20 +233,20 @@ root.title("6thsense balloon launch -- live ")
 app = Application(master=root)
 
 while start_time == 0:
-    data_buffer = data_buffer + data_stream.read(readrate)
+    data_buffer = data_buffer + data_stream.read(read_rate)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
-    latest_vals = getVals(data_buffer)
+    latest_vals = get_vals(data_buffer)
     if "time" in latest_vals:
         start_time = to_seconds(latest_vals["time"])
 print(start_time)
 while True:
-    data_buffer = data_buffer + data_stream.read(readrate)
+    data_buffer = data_buffer + data_stream.read(read_rate)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
-    latest_vals = getVals(data_buffer)
+    latest_vals = get_vals(data_buffer)
     update_times()
     update_vals_history()
-    app.updatedata(data_buffer)
+    app.update_data(data_buffer)
     app.update_idletasks()
     app.update()
