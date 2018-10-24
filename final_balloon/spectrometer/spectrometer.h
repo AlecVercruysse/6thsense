@@ -28,8 +28,8 @@ void myIntHandler ()
 }
 
 void setupSpectrometer() {
-    Wire.begin(); //start i2c master mode
-    Wire.setClock(400000);      // I2C frequency at 400 kHz
+    //Wire.begin(); //start i2c master mode
+    //Wire.setClock(400000);      // I2C frequency at 400 kHz
     delay(1000);
     pinMode(intPin, INPUT);
     AS7265X.I2Cscan();
