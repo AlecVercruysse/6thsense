@@ -8,13 +8,14 @@ import os
 data_stream = open("radio_raw.txt")
 data_buffer = ""
 
-latest_vals_indexes = ["time", "GPS", "pressure", "outside temp", "humidity", "inside temp", "spectrometer"]
+latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "humidity", "inside temp", "spectrometer"]
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
 read_rate = 10
 
-vals_to_graph = ["pressure", "inside temp"]
+vals_to_graph = ["altitude", "pressure", "outside temp", "inside temp"]
+
 vals_history = {}
 for k in vals_to_graph:
     vals_history[k] = [0, 0, 0, 0]
