@@ -74,9 +74,6 @@ String getGPS()
       }
       else
       {
-//        Serial.print("Sentence:");
-//        Serial.println(sentence);
-//        Serial.println("sentence above");
         sentence[i] = '\0';
         i = 0;
         char field[20];
