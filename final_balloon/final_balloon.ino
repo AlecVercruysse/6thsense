@@ -4,6 +4,7 @@
 #include "tx.h"
 #include "sd_logger.h"
 #include "sensors.h"
+#include "accelerometer.h"
 
 /*
  * Index | data item
@@ -16,7 +17,7 @@
  * 6 | Inside Payload temperature (C)
  * 7 | Spectrometer data
  */
-#define numObs 8
+#define numObs 9
 String data_arr[numObs];
 const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
@@ -41,6 +42,8 @@ void setup() {
 
   //spectrometer setup (AV individual experiment)
   setupSpectrometer();
+
+  setupAccel();
   
 }
 
@@ -63,6 +66,8 @@ void loop() {
   data_arr[6] = getTemp();
 
   data_arr[7] = checkSpectrometer();
+
+  data_arr[8] = getAccel();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
