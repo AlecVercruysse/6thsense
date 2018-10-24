@@ -12,3 +12,4 @@ radio_coms/map.html
 */radiovis/
 #ignore ubuntu venv ^^
 */sensitive_data.py
+*/.Rhistory
