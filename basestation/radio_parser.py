@@ -1,3 +1,14 @@
+"""
+General Data visualization for the balloon. Reads from a text file, logs (unvalidaded) gps coordinates to
+balloon_gps_out.txt for map_vis.py to better parse. gives basic val vs. time graphs, and basic location
+visualization.
+
+This serves as the base parser for the system -- this controls stream parse rate, and allows visualization for
+"raw" packets.
+"""
+
+__author__ = "Alec Vercruysse"
+
 import tkinter as tk
 import re
 import gmplot
@@ -7,6 +18,8 @@ import os
 
 data_stream = open("radio_raw.txt")
 data_buffer = ""
+
+gps_out = open("balloon_gps_out.txt", "w")
 
 latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "humidity", "inside temp", "spectrometer"]
 latest_vals = {}
@@ -30,12 +43,13 @@ def get_vals(db):
     latest = re.search(r".*\n(.*)\n[^\n]*$", db, re.S)
     vals = re.split(r'-+', (latest[1] if latest else ""))
     # [vals.append("x") for _ in range(7 - len(vals))]
-    if len(vals) != 7:
+    if len(vals) != len(latest_vals_indexes):
         return latest_vals
     else:
         r = {}
         for i in range(len(latest_vals_indexes)):
             r[latest_vals_indexes[i]] = vals[i]
+        gps_out.write(latest_vals["GPS"])
         return r
 
 
