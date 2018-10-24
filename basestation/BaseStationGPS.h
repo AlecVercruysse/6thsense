@@ -7,7 +7,7 @@ const int sentenceSize = 80;
 char sentence[sentenceSize];
 
 void setupGPS() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   gpsSerial.begin(9600);
 }
 
