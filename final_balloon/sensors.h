@@ -123,7 +123,7 @@ String getTemp()
 String getPressure()
 {
   //take the average of 10 readings
-  int sumPressureVoltages;
+  int sumPressureVoltages = 0;
   for (int i = 0; i < 10; i++) {
     sumPressureVoltages += analogRead(pressure);
   }

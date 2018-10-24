@@ -41,9 +41,9 @@ void setup() {
   setupSensors();
 
   //spectrometer setup (AV individual experiment)
-  setupSpectrometer();
+  //setupSpectrometer();
 
-  setupAccel();
+  //setupAccel();
   
 }
 
@@ -67,7 +67,7 @@ void loop() {
 
   data_arr[7] = "spectrometer placeholder";//checkSpectrometer();
 
-  data_arr[8] = getAccel();
+  data_arr[8] = "acceleration placeholder";//getAccel();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
