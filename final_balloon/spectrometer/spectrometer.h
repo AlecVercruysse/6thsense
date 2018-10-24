@@ -34,7 +34,7 @@ void setupSpectrometer() {
     //Wire.begin(); //start i2c master mode. Unused because Wire.begin() is already called for the arduino.
     //Wire.setClock(400000); // I2C frequency at 400 kHz. Best not to use because other devices are also on the i2c bus
     delay(1000);
-    pinMode(intPin, INPUT);
+    pinMode(intPin, INPUT_PULLUP);
     AS7265X.I2Cscan();
     Serial.println("I2C scan done");
     AS7265X.init(gain, mode, intTime);
@@ -76,7 +76,7 @@ void setupSpectrometer() {
 
 String checkSpectrometer() {
     String toReturn;
-    if (intFlag) {
+    if (digitalRead(intPin) == LOW) {//if (intFlag) {
         spectrometer_run++;
         intFlag = false;
         status = AS7265X.getStatus();
