@@ -119,6 +119,20 @@ String getTemp()
   Tf = (Tc * 9.0)/ 5.0 + 32.0; 
   return String(Tc);
 }
+
+String getPressure()
+{
+  //take the average of 10 readings
+  int sumPressureVoltages;
+  for (int i = 0; i < 10; i++) {
+    sumPressureVoltages += analogRead(pressure);
+  }
+  pressvalue = ((double) sumPressureVoltages) / 10;
+  // gets pressure in kPa
+  pressunits = (0.2554 * (pressvalue)) - 25.295;
+  return String(pressunits);
+}
+
 //estimation
 double getAltitude()
 {
@@ -137,17 +151,4 @@ double getAltitude()
     altitude = (pow(pressurePa / PRESSURE_SEALEVEL, 1 / -34.16319) - 0.988626) * 198903;
   }
   return altitude;
-}
-
-String getPressure()
-{
-  //take the average of 10 readings
-  int sumPressureVoltages;
-  for (int i = 0; i < 10; i++) {
-    sumPressureVoltages += analogRead(pressure);
-  }
-  pressvalue = ((double) sumPressureVoltages) / 10;
-  // gets pressure in kPa
-  pressunits = (0.2554 * (pressvalue)) - 25.295;
-  return String(pressunits);
 }

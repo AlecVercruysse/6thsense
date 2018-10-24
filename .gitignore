@@ -8,3 +8,7 @@ radio_coms/sensitive_data.py
 radio_coms/radiovis
 radio_coms/__*
 radio_coms/map.html
+*/__*
+*/radiovis/
+#ignore ubuntu venv ^^
+*/sensitive_data.py

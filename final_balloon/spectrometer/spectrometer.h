@@ -1,7 +1,10 @@
 //
+// Code for Kris Winer's inexpensive spectrometer using AMS' AS7265X Spectral Senor Suite. Code adapted from
+// his repository, found at https://github.com/kriswiner/AS7265X
+//
 // Created by Alec Vercruysse on 10/12/18.
 //
-#include <Wire.h>
+//#include <Wire.h>
 #include "AS7265X.h"
 #include "AS7265X.cpp"
 
@@ -28,8 +31,8 @@ void myIntHandler ()
 }
 
 void setupSpectrometer() {
-    Wire.begin(); //start i2c master mode
-    Wire.setClock(400000);      // I2C frequency at 400 kHz
+    //Wire.begin(); //start i2c master mode. Unused because Wire.begin() is already called for the arduino.
+    //Wire.setClock(400000); // I2C frequency at 400 kHz. Best not to use because other devices are also on the i2c bus
     delay(1000);
     pinMode(intPin, INPUT);
     AS7265X.I2Cscan();
@@ -59,14 +62,15 @@ void setupSpectrometer() {
     delay(100);
     AS7265X.configureLed(ledIndCurrent1, ledDrvCurrent1, 1);
     AS7265X.disableIndLed(1);
-    AS7265X.enableDrvLed(1);
+    //AS7265X.enableDrvLed(1);
+    AS7265X.disableDrvLed(1); // turn off all LEDs, we're looking at the skys
     delay(100);
     AS7265X.configureLed(ledIndCurrent2, ledDrvCurrent2, 2);
     AS7265X.disableIndLed(2);
     AS7265X.disableDrvLed(2);
     delay(100);
     Serial.print("attaching interrupt to myIntHandler()...");
-    attachInterrupt(intPin, myIntHandler, FALLING);
+    attachInterrupt(digitalPinToInterrupt(intPin), myIntHandler, FALLING);
     Serial.println("done");
 }
 
@@ -85,7 +89,7 @@ String checkSpectrometer() {
                 toReturn.concat(freq[i]); toReturn.concat(":"); toReturn.concat(calData[i]);
             }
             //Serial.println(" ");
-            toReturn.concat(",");
+            //toReturn.concat(",");
         }
     }
     return toReturn;
