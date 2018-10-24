@@ -138,11 +138,11 @@ double getAltitude()
 {
   double presskpa = getPressure().toDouble();
   double pressurePa = presskpa * 1000;
-  if(PRESSURE_11K > pressurePa)
+  if(PRESSURE_11K < pressurePa)
   {
     altitude = (1 - pow(pressurePa / PRESSURE_SEALEVEL, 1 / 5.255816)) * 44329;
   }
-  else if(PRESSURE_11K < pressurePa < PRESSURE_20K)
+  else if(PRESSURE_11K > pressurePa && pressurePa > PRESSURE_20K)
   {
     altitude = 10999 - 6341.4 * log(pressurePa / (PRESSURE_SEALEVEL * 0.22361));
   }

@@ -41,7 +41,7 @@ void setup() {
   setupSensors();
 
   //spectrometer setup (AV individual experiment)
-  //setupSpectrometer();
+  setupSpectrometer();
 
   //setupAccel();
   
@@ -65,7 +65,7 @@ void loop() {
 
   data_arr[6] = getTemp();
 
-  data_arr[7] = "spectrometer placeholder";//checkSpectrometer();
+  data_arr[7] = checkSpectrometer();
 
   data_arr[8] = "acceleration placeholder";//getAccel();
 
