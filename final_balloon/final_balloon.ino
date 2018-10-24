@@ -4,7 +4,7 @@
 #include "tx.h"
 #include "sd_logger.h"
 #include "sensors.h"
-#include "accelerometer.h"
+#include "accelerometer/accelerometer.h"
 
 /*
  * Index | data item
@@ -65,7 +65,7 @@ void loop() {
 
   data_arr[6] = getTemp();
 
-  data_arr[7] = checkSpectrometer();
+  data_arr[7] = "spectrometer placeholder";//checkSpectrometer();
 
   data_arr[8] = getAccel();
 

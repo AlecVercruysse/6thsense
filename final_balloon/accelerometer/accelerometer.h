@@ -44,8 +44,10 @@ THE SOFTWARE.
 // I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
 // for both classes must be in the include path of your project
 #include "I2Cdev.h"
+#include "I2Cdev.cpp"
 
 #include "MPU6050_6Axis_MotionApps20.h"
+#include "MPU6050.cpp"
 //#include "MPU6050.h" // not necessary if using MotionApps include file
 
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
@@ -274,6 +276,6 @@ String getAccel() {
         String yaw = String(ypr[0] * 180/M_PI);
         String pitch = String(ypr[1] * 180/M_PI);
         String roll = String(ypr[2] * 180/M_PI);
-        return Stirng(yaw + ";" + pitch + ";" + roll);
+        return String(yaw + ";" + pitch + ";" + roll);
     }
 }
