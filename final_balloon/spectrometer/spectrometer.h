@@ -70,7 +70,7 @@ void setupSpectrometer() {
     AS7265X.disableDrvLed(2);
     delay(100);
     Serial.print("attaching interrupt to myIntHandler()...");
-    attachInterrupt(intPin, myIntHandler, FALLING);
+    attachInterrupt(digitalPinToInterrupt(intPin), myIntHandler, FALLING);
     Serial.println("done");
 }
 
