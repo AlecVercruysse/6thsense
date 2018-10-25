@@ -19,7 +19,7 @@
  */
 #define numObs 9
 String data_arr[numObs];
-const double PRESSURE_TO_CUT_DOWN = 108;
+const double PRESSURE_TO_CUT_DOWN = 1.08;
 double pressure_value = 100.0;
 String pressure_string = "";
 int cut_down_pin = 30;
