@@ -41,6 +41,32 @@ class Application(tk.Frame):
         self.reading = tk.Label(self, text="Location Visualizer", font=("Helvetica", 16), anchor="w")
         self.reading.grid(row=0, column=0, sticky="w")
 
+        self.rawbuffer_text_frame = tk.Frame(self)
+        self.rawbuffer_text_frame.grid(row=1, column=0, sticky="nw")
+
+        self.balloon_raw_buffer_text = tk.Text(self.rawbuffer_text_frame, text=balloon_gps_raw_buffer)
+        self.base_raw_buffer_text = tk.Text(self.rawbuffer_text_frame, text=base_gps_buffer)
+
+        self.balloon_raw_buffer_text.grid(row=0, column=0, sticky="nw")
+        self.base_raw_buffer_text.grid(row=0, column=1, sticky="nw")
+
+        self.paused = False
+        self.pause_button = tk.Button(self.rawbuffer_text_frame, text="\t||\t", fg="blue", command=self.toggle_pause)
+        self.pause_button.grid(row=1, column=0, sticky="w")
+
+    def update_graphics(self):
+        if self.paused:
+            return
+        self.base_raw_buffer_text["text"] = base_gps_buffer
+        self.balloon_raw_buffer_text["text"] = balloon_gps_raw_buffer
+
+    def toggle_pause(self):
+        self.paused = not self.paused
+        if self.paused:
+            self.pause_button["text"] = "\t>>\t"
+        else:
+            self.text_from_buffer.see("end")
+            self.pause_button["text"] = "\t||\t"
 
 root = tk.Tk()
 root.title("6thsense balloon launch -- mapping")
@@ -48,5 +74,6 @@ app = Application(master=root)
 
 while True:
     update_buffers()
+    app.update_graphics()
     app.update_idletasks()
     app.update()
