@@ -25,9 +25,9 @@ String pressure_string = "";
 int cut_down_pin = 30;
 String start_time = "8:32:15";
 String current_time = "8:32:15";
-double seconds_passed_to_cutdown = 5400.0;
+double seconds_passed_to_cutdown = 7200.0;
 String current_temp = "21.7";
-double temp_to_cutdown = 19.3;
+double temp_to_cutdown = -10.3;
 int num_times_cutdown_criteria_met = 0;
 
 void setup() {
@@ -35,6 +35,8 @@ void setup() {
   //start serial comms with computer
   Serial.begin(9200);
   delay(4000);
+
+  num_times_cutdown_criteria_met = 0;
   
   pinMode(cut_down_pin, OUTPUT);
 
@@ -50,6 +52,8 @@ void setup() {
   setupSpectrometer();
 
   //setupAccel();
+
+  start_time = getClock();
   
 }
 
