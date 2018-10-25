@@ -23,12 +23,20 @@ const double PRESSURE_TO_CUT_DOWN = 1.08;
 double pressure_value = 100.0;
 String pressure_string = "";
 int cut_down_pin = 30;
+String start_time = "8:32:15";
+String current_time = "8:32:15";
+double seconds_passed_to_cutdown = 7200.0;
+String current_temp = "21.7";
+double temp_to_cutdown = -10.3;
+int num_times_cutdown_criteria_met = 0;
 
 void setup() {
   
   //start serial comms with computer
   Serial.begin(9200);
   delay(4000);
+
+  num_times_cutdown_criteria_met = 0;
   
   pinMode(cut_down_pin, OUTPUT);
 
@@ -44,12 +52,15 @@ void setup() {
   setupSpectrometer();
 
   //setupAccel();
+
+  start_time = getClock();
   
 }
 
 void loop() {
 
-  data_arr[0] = getClock();
+  current_time = getClock();
+  data_arr[0] = current_time;
 
   data_arr[1] = getGPS();
 
@@ -59,6 +70,7 @@ void loop() {
   data_arr[3] = pressure_string;
   pressure_value = pressure_string.toDouble();
 
+  String currentTemp = getBMETemp();
   data_arr[4] = getBMETemp();
 
   data_arr[5] = getBMEHumidity();
@@ -73,8 +85,37 @@ void loop() {
   logDataToSD(data_arr, numObs);
 
   //change this to altitude later TODO: only cut down if the last couple measurements (e.g. 10+) are @threshold
-  if (pressure_value < PRESSURE_TO_CUT_DOWN)
+  if (getTimeDifference(current_time, start_time) > seconds_passed_to_cutdown)
   {
-    digitalWrite(cut_down_pin, HIGH);
+    if (current_temp.toDouble() < temp_to_cutdown)
+    {
+        if (pressure_value < PRESSURE_TO_CUT_DOWN)
+        {
+          num_times_cutdown_criteria_met += 1;
+          if (num_times_cutdown_criteria_met > 10)
+          {
+            digitalWrite(cut_down_pin, HIGH);
+          }
+        }
+    }
   }
+}
+
+int getTimeDifference(String time1, String time2)
+{
+  return (getTimeInSeconds(time1) - getTimeInSeconds(time2));
+}
+
+double getTimeInSeconds(String theTime)
+{
+  int firstColon = theTime.indexOf(':');
+  String hours = theTime.substring(0, firstColon);
+  int secondColon = theTime.indexOf(':', firstColon + 1);
+  String minutes = theTime.substring(firstColon + 1, secondColon);
+  String seconds = theTime.substring(secondColon + 1);
+
+  double hourSeconds = hours.toDouble() * 3600;
+  double minuteSeconds = minutes.toDouble() * 60;
+
+  return hourSeconds + minuteSeconds + seconds.toDouble();
 }
