@@ -5,7 +5,6 @@
 #include "sd_logger.h"
 #include "sensors.h"
 #include "accelerometer/accelerometer.h"
-#include "analog_individuals.h"
 
 /*
  * Index | data item
@@ -18,9 +17,9 @@
  * 6 | Inside Payload temperature (C)
  * 7 | Spectrometer data
  */
-#define numObs 10
+#define numObs 9
 String data_arr[numObs];
-const double PRESSURE_TO_CUT_DOWN = 1.08;
+const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
 String pressure_string = "";
 int cut_down_pin = 30;
@@ -49,10 +48,10 @@ void setup() {
   setupBME();
   setupSensors();
 
-  //individuals setup
+  //spectrometer setup (AV individual experiment)
   setupSpectrometer();
-  //setupAccel();
-  setupIndividuals();
+
+  setupAccel();
 
   start_time = getClock();
   
@@ -80,9 +79,7 @@ void loop() {
 
   data_arr[7] = checkSpectrometer();
 
-  data_arr[8] = "acceleration placeholder";//getAccel();
-  
-  data_arr[9] = getUV()
+  data_arr[8] = getAccel();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
