@@ -19,7 +19,7 @@
  */
 #define numObs 9
 String data_arr[numObs];
-const double PRESSURE_TO_CUT_DOWN = 1.08;
+const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
 String pressure_string = "";
 int cut_down_pin = 30;
@@ -51,7 +51,7 @@ void setup() {
   //spectrometer setup (AV individual experiment)
   setupSpectrometer();
 
-  //setupAccel();
+  setupAccel();
 
   start_time = getClock();
   
@@ -79,7 +79,7 @@ void loop() {
 
   data_arr[7] = checkSpectrometer();
 
-  data_arr[8] = "acceleration placeholder";//getAccel();
+  data_arr[8] = getAccel();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);

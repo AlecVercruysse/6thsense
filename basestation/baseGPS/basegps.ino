@@ -1,14 +1,17 @@
 #include <SoftwareSerial.h>
 #include <SD.h>
 
+
+#define rssipin 6
 SoftwareSerial gpsSerial(10, 11); // RX, TX (TX not used)
 const int sentenceSize = 80;
 
 char sentence[sentenceSize];
 
-void setupGPS() {
-  //Serial.begin(9600);
-  gpsSerial.begin(9600);
+void setup() {
+    Serial.begin(9600);
+    gpsSerial.begin(9600);
+    pinMode(rssipin, INPUT);
 }
 
 String getGPS() 
@@ -72,4 +75,10 @@ void getField(char* buffer, int index)
     sentencePos ++;
   }
   buffer[fieldPos] = '\0';
+}
+
+void loop() {
+    Serial.print(getGPS());
+    Serial.print(" ");
+    Serial.print(pulseIn(rssipin, HIGH));
 }

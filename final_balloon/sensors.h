@@ -1,3 +1,7 @@
+/**
+ * GPS, RTC, and barometer methods
+ */
+
 #include <SoftwareSerial.h>
 
 #include <Wire.h>
