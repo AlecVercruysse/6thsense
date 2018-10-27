@@ -16,6 +16,7 @@
  * 5 | Humidity (%)
  * 6 | Inside Payload temperature (C)
  * 7 | Spectrometer data
+ * 8 | Methane gas
  */
 #define numObs 9
 String data_arr[numObs];
@@ -51,7 +52,7 @@ void setup() {
   //spectrometer setup (AV individual experiment)
   setupSpectrometer();
 
-  setupAccel();
+  //setupAccel();
 
   start_time = getClock();
   
@@ -79,7 +80,7 @@ void loop() {
 
   data_arr[7] = checkSpectrometer();
 
-  data_arr[8] = getAccel();
+  data_arr[8] = getMethane();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
