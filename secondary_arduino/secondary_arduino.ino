@@ -1,41 +1,34 @@
-#include "tx_geiger.h"
-#include "sd_logger_geiger.h"
-#include "sensors_geiger.h"
 #include <SoftwareSerial.h>
-#include "RTClib/RTClib.h"
-#include "RTClib/RTClib.cpp"
-#include "accelerometer/accelerometer.h"
-
-/*
- * Index | data item
- * 0 | Time
- * 1 | Geiger
- * 2 | Accelerometer
- */
-#define numObs 3
-String data_arr[numObs];
+#include <elapsedMillis.h>
+#include <Wire.h>
+#include <RTClib.h>
 
 SoftwareSerial OpenLog(4, 5);
-RTC_DS1307 rtc;
-
+elapsedMillis timeElapsed;
+int count;
 
 void setup() {
-  Serial1.begin(9600);
-  OpenLog.begin(9600);
-  setupSensors();
-  setupAccel();
-  delay(500);
+  Serial1.begin(9600);
+  OpenLog.begin(9600);
+  Wire.begin();
+  delay(500);
+  count = 0;
+  timeElapsed = 0;
 }
 
 
 void loop() {
-
-  data_arr[0] = getClock();
-
-  data_arr[1] = getGeiger();
-
-  data_arr[2] = getAccel();
-
-  sendDataAsBytes(data_arr, numObs);
-  logDataToSD(data_arr, numObs);
+  if (Serial1.available() > 0) {
+    if (Serial1.read() > -1) {
+      count++;
+    }
+  }
+  if (timeElapsed > 10000) {
+    OpenLog.print("UTS: ");
+    OpenLog.print(RTC.now().unixtime());
+    OpenLog.print("CPM: ");
+    OpenLog.println(count*6);
+    timeElapsed = 0;
+    count = 0;
+  }
 }
