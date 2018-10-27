@@ -1,15 +1,20 @@
 #include <SoftwareSerial.h>
 #include "elapsedMillis/elapsedMillis.h"
+#include "accelerometer/accelerometer.h"
 
 SoftwareSerial OpenLog(4, 5);
 elapsedMillis timeElapsed;
 int count;
+int accelCount;
+int numAccelCountsBeforeLogging = 100;
+String accel_arr[numAccelCountsBeforeLogging];
 
 void setup() {
     Serial.begin(9600);
     OpenLog.begin(9600);
     delay(500);
     count = 0;
+    accelCount = 0;
     timeElapsed = 0;
 }
 
@@ -27,5 +32,17 @@ void loop() {
         OpenLog.println(count * 6);
         timeElapsed = 0;
         count = 0;
+    }
+    accel_arr[accelCount] = getAccel();
+    accelCount ++;
+    if (accelCount >= numAccelCountsBeforeLogging)
+    {
+      accelCount = 0;
+      for (int i = 0; i < numAccelCountsBeforeLogging; i ++)
+      {
+        OpenLog.print(accel_arr[i]);
+        OpenLog.print("; ");
+      }
+      OpenLog.println();
     }
 }
