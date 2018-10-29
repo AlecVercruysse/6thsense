@@ -44,9 +44,12 @@ THE SOFTWARE.
 // I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
 // for both classes must be in the include path of your project
 #include "I2Cdev.h"
+#include "I2Cdev.cpp"
 
 #include "MPU6050_6Axis_MotionApps20.h"
-//#include "MPU6050.h" // not necessary if using MotionApps include file
+#include "MPU6050.h"
+#include "MPU6050.cpp"
+// #include "MPU6050.h" // not necessary if using MotionApps include file
 
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
 // is used in I2Cdev.h
@@ -227,7 +230,7 @@ void setupAccel() {
 
 String getAccel() {
     // if programming failed, don't try to do anything
-    if (!dmpReady) return;
+    if (!dmpReady) return String("Accelerometer not ready");
 
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
