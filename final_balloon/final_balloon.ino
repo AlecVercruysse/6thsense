@@ -4,7 +4,7 @@
 #include "tx.h"
 #include "sd_logger.h"
 #include "sensors.h"
-//#include "accelerometer/accelerometer.h"
+#include "analog_individuals.h"
 
 /*
  * Index | data item
@@ -15,9 +15,14 @@
  * 4 | Outside Temperature (C)
  * 5 | Humidity (%)
  * 6 | Inside Payload temperature (C)
- * 7 | Spectrometer data
+ * 7 | Spectrometer data (Alec's individual)
+ * 8 | UVB data (Caroline's individual)
+ * 9 | Methane data (John's individual)
+ * 10 | Solar data (Vivian's individual)
+ *
+ * Luke and Simon's individuals are on a seperate arduino
  */
-#define numObs 8
+#define numObs 11
 String data_arr[numObs];
 const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
@@ -25,19 +30,16 @@ String pressure_string = "";
 int cut_down_pin = 30;
 String start_time = "8:32:15";
 String current_time = "8:32:15";
-double seconds_passed_to_cutdown = 7200.0;
+double seconds_passed_to_cutdown = 5400.0;
 String current_temp = "21.7";
 double temp_to_cutdown = -10.3;
 int num_times_cutdown_criteria_met = 0;
 
 void setup() {
-  
   //start serial comms with computer
   Serial.begin(9200);
   delay(4000);
 
-  num_times_cutdown_criteria_met = 0;
-  
   pinMode(cut_down_pin, OUTPUT);
 
   //setup tx and SD card logger;
@@ -48,17 +50,33 @@ void setup() {
   setupBME();
   setupSensors();
 
-  //spectrometer setup (AV individual experiment)
-  setupSpectrometer();
-
-//  setupAccel();
+  //individual experiments:
+  setupSpectrometer(); //Alec's
+  setupIndividuals(); //Caroline's, John's, Vivian's
 
   start_time = getClock();
-  
+}
+
+int getTimeDifference(String time1, String time2)
+{
+  return (getTimeInSeconds(time1) - getTimeInSeconds(time2));
+}
+
+double getTimeInSeconds(String theTime)
+{
+  int firstColon = theTime.indexOf(':');
+  String hours = theTime.substring(0, firstColon);
+  int secondColon = theTime.indexOf(':', firstColon + 1);
+  String minutes = theTime.substring(firstColon + 1, secondColon);
+  String seconds = theTime.substring(secondColon + 1);
+
+  double hourSeconds = hours.toDouble() * 3600;
+  double minuteSeconds = minutes.toDouble() * 60;
+
+  return hourSeconds + minuteSeconds + seconds.toDouble();
 }
 
 void loop() {
-
   current_time = getClock();
   data_arr[0] = current_time;
 
@@ -79,43 +97,26 @@ void loop() {
 
   data_arr[7] = checkSpectrometer();
 
-//  data_arr[8] = getAccel();
+  data_arr[8] = getUV();
+
+  data_arr[9] = getMethane();
+
+  data_arr[10] = getSolar();
 
   sendDataAsBytes(data_arr, numObs);
   logDataToSD(data_arr, numObs);
 
-  //change this to altitude later TODO: only cut down if the last couple measurements (e.g. 10+) are @threshold
-  if (getTimeDifference(current_time, start_time) > seconds_passed_to_cutdown)
-  {
-    if (current_temp.toDouble() < temp_to_cutdown)
-    {
-        if (pressure_value < PRESSURE_TO_CUT_DOWN)
-        {
+  //todo: test cutdown safety measures
+  if (num_times_cutdown_criteria_met <= 10) { //don't perpetually run this loop post-cutdown
+    if (getTimeDifference(current_time, start_time) > seconds_passed_to_cutdown) { //1.5 hours passed
+      if (current_temp.toDouble() < temp_to_cutdown) { // under -10 degrees C
+        if (pressure_value < PRESSURE_TO_CUT_DOWN) {  //@100k feet
           num_times_cutdown_criteria_met += 1;
-          if (num_times_cutdown_criteria_met > 10)
-          {
+          if (num_times_cutdown_criteria_met > 10) { //these measurements happen 10 times
             digitalWrite(cut_down_pin, HIGH);
           }
         }
+      }
     }
   }
-}
-
-int getTimeDifference(String time1, String time2)
-{
-  return (getTimeInSeconds(time1) - getTimeInSeconds(time2));
-}
-
-double getTimeInSeconds(String theTime)
-{
-  int firstColon = theTime.indexOf(':');
-  String hours = theTime.substring(0, firstColon);
-  int secondColon = theTime.indexOf(':', firstColon + 1);
-  String minutes = theTime.substring(firstColon + 1, secondColon);
-  String seconds = theTime.substring(secondColon + 1);
-
-  double hourSeconds = hours.toDouble() * 3600;
-  double minuteSeconds = minutes.toDouble() * 60;
-
-  return hourSeconds + minuteSeconds + seconds.toDouble();
 }

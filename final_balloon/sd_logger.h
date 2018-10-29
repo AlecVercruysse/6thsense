@@ -1,6 +1,9 @@
-//
-// Created by Alec Vercruysse on 10/15/18.
-//
+/**
+ * Code for the local microSD card logger. Sets up all csv headers and includes
+ * methods to log a data array. Final file should look like a csv for easy processing.
+ * Note that a file called "logger.txt" needs to be present in the root directory
+ * of the SD card for this code to work.
+ */
 
 #ifndef INC_6THSENSE_SD_LOGGER_H
 #define INC_6THSENSE_SD_LOGGER_H
@@ -29,7 +32,7 @@ void setupLogger() {
         Serial.print("Writing headers to logger.txt...");
 
         //column heads
-        myFile.println("Time, GPS, Pressure, Outer Temp, Humidity, Inner Temp, Spectrometer,");
+        myFile.println("Time, GPS, Pressure, Outside_temp, Humidity, Inside_temp, Spectrometer, UVB, Methane, Solar");
         // close the file:
         myFile.close();
         Serial.println("done.");
