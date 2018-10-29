@@ -21,7 +21,7 @@ data_buffer = ""
 
 gps_out = open("balloon_gps_out.txt", "w")
 
-latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "humidity", "inside temp", "spectrometer"]
+latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "humidity", "inside temp", "spectrometer", "uvb", "methane", "solar"]
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
