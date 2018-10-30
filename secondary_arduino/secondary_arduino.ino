@@ -6,8 +6,8 @@ SoftwareSerial OpenLog(4, 5);
 elapsedMillis timeElapsed;
 int count;
 int accelCount;
-int numAccelCountsBeforeLogging = 100;
-String accel_arr[numAccelCountsBeforeLogging];
+#define numAccelCounts 100
+String accel_arr[numAccelCounts];
 
 void setup() {
     Serial.begin(9600);
@@ -35,10 +35,10 @@ void loop() {
     }
     accel_arr[accelCount] = getAccel();
     accelCount ++;
-    if (accelCount >= numAccelCountsBeforeLogging)
+    if (accelCount >= numAccelCounts)
     {
       accelCount = 0;
-      for (int i = 0; i < numAccelCountsBeforeLogging; i ++)
+      for (int i = 0; i < numAccelCounts; i ++)
       {
         OpenLog.print(accel_arr[i]);
         OpenLog.print("; ");
