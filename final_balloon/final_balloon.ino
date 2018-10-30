@@ -19,10 +19,11 @@
  * 8 | UVB data (Caroline's individual)
  * 9 | Methane data (John's individual)
  * 10 | Solar data (Vivian's individual)
+ * 11 | Light Intensity Data (Vivian's individual)
  *
  * Luke and Simon's individuals are on a seperate arduino
  */
-#define numObs 11
+#define numObs 12
 String data_arr[numObs];
 const double PRESSURE_TO_CUT_DOWN = 108;
 double pressure_value = 100.0;
@@ -103,6 +104,8 @@ void loop() {
   data_arr[9] = getMethane();
 
   data_arr[10] = getSolar();
+
+  data_arr[11] = getLightIntensity();
 
   tx_counter++;
   if (tx_counter == 5 ){

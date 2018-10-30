@@ -14,6 +14,7 @@ void setupIndividuals() {
     pinMode(uv_pin, INPUT);
     pinMode(methane_pin, INPUT);
     pinMode(solar_pin, INPUT);
+    pinMode(light_intensity_pin, INPUT);
 }
 
 String getUV() {
