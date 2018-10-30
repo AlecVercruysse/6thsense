@@ -16,7 +16,7 @@ from sensitive_data import getapikey
 import webbrowser
 import os
 
-data_stream = open("radio_raw.txt")
+data_stream = open("radio_raw_test2.txt")
 data_buffer = ""
 
 gps_out = open("balloon_gps_out.txt", "w")
@@ -249,9 +249,11 @@ app = Application(master=root)
 
 while start_time == 0:
     data_buffer = data_buffer + data_stream.read(read_rate)
+    data_buffer = re.sub(r"[^\w \. \* \-]", "", data_buffer)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = get_vals(data_buffer)
+    print(latest_vals)
     if "time" in latest_vals:
         start_time = to_seconds(latest_vals["time"])
 print(start_time)
