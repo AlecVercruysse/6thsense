@@ -24,7 +24,7 @@ String getMethane() {
 }
 
 String getSolar() {
-    return String(analogRead(solar_pin));
+    return String(analogRead(solar_pin) * 5/1024);
 }
 
 #endif //INC_6THSENSE_ANALOG_INDIVIDUALS_H
