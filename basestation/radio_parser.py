@@ -16,7 +16,7 @@ from sensitive_data import getapikey
 import webbrowser
 import os
 
-data_stream = open("radio_raw.txt")
+data_stream = open("radio_raw_test2.txt")
 data_buffer = ""
 
 gps_out = open("balloon_gps_out.txt", "w")
@@ -25,7 +25,7 @@ latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "h
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
-read_rate = 10
+read_rate = 1
 
 vals_to_graph = ["altitude", "pressure", "outside temp", "inside temp"]
 
@@ -49,7 +49,7 @@ def get_vals(db):
         r = {}
         for i in range(len(latest_vals_indexes)):
             r[latest_vals_indexes[i]] = vals[i]
-        gps_out.write(latest_vals["GPS"])
+        gps_out.write(latest_vals["GPS"] + "\n")
         return r
 
 
@@ -77,15 +77,26 @@ def update_times():
 
 def update_vals_history():
     if vals_history["time"][-1] < time_since_start:
-        for key, val in vals_history.items():
-            if key == "time":
-                val.append(time_since_start)
-            else:
-                val.extend([time_since_start, float(latest_vals[key])])
+        vals_make_sense = True
+        if time_since_start - vals_history["time"][-1] < 60: # check vals aren't jumping around
+            for key, val in vals_history.items():
+                new_val = latest_vals[key]
+                if key == "time":
+                    new_val = time_since_start
+                latest_avg = sum(val[-5:])/5
+                if latest_avg != 0 and abs((latest_avg - float(new_val))/latest_avg) > 1:
+                    vals_make_sense = False
+        #vals_make_sense = True # disable value checking
+        if vals_make_sense:
+            for key, val in vals_history.items():
+                if key == "time":
+                    val.append(time_since_start)
+                else:
+                    val.extend([time_since_start, float(latest_vals[key])])
 
 
 def update_plot(canvases, scale, gtexts):
-    # TODO:https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
+    # adapted from https://arduino.stackexchange.com/questions/17486/graph-plotting-on-python-using-tkinter-canvas/17529
     for i in range(len(canvases)):
         point_list = vals_history[vals_to_graph[i]][-scale * 2:]
         x_min = min([point_list[xi] for xi in range(len(point_list)) if xi % 2 == 0])
@@ -96,9 +107,9 @@ def update_plot(canvases, scale, gtexts):
             x_min = 1
         point_list = [
             (point_list[xi] - x_min) / (2 + time_since_start - x_min) * canvases[i].winfo_width() if xi % 2 == 0
-            else (y_max - .75 * point_list[xi]) / y_max * canvases[i].winfo_height() for xi in range(len(point_list))]
+            else (y_max + 1 - .75 * point_list[xi]) / y_max * canvases[i].winfo_height() for xi in range(len(point_list))]
         canvases[i].coords("line", *point_list)
-        canvases[i].itemconfigure(gtexts[i], text=str(point_list[-1])[:5])
+        canvases[i].itemconfigure(gtexts[i], text=str(latest_vals[vals_to_graph[i]])[:5])
 
 
 def reset_vals():
@@ -142,6 +153,13 @@ def generate_map():
     map.marker(latdd, longdd, 'cornflowerblue')
     map.draw("map.html")
     webbrowser.open('file://' + os.path.realpath("map.html"))
+
+
+def strip_control_characters(input):
+    if input:
+        # ascii control characters
+        input = re.sub(r"(?!\n)[\x01-\x1F\x7F]", "", input)
+    return input
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -191,10 +209,10 @@ class Application(tk.Frame):
         self.graphs_frame = tk.Frame(self, width=100)
         self.graphs_frame.grid(row=1, column=4, sticky="nw")
 
-        self.grah_x_axis_scale_label = tk.Label(self.graphs_frame, text="Time to graph (s)", anchor="w")
+        self.grah_x_axis_scale_label = tk.Label(self.graphs_frame, text="# points to graph", anchor="w")
         self.grah_x_axis_scale_label.grid(row=1, column=0, sticky="ew")
 
-        self.graph_x_axis_scale_slider = tk.Scale(self.graphs_frame, from_=60, to=3600, orient="horizontal")
+        self.graph_x_axis_scale_slider = tk.Scale(self.graphs_frame, from_=5, to=3600, orient="horizontal")
         self.graph_x_axis_scale_slider.grid(row=2, column=0, sticky="ew")
 
         self.graph_x_axis_lowlim_label = tk.Label(self.graphs_frame, text="rewind (s)", anchor="w")
@@ -249,14 +267,17 @@ app = Application(master=root)
 
 while start_time == 0:
     data_buffer = data_buffer + data_stream.read(read_rate)
+    data_buffer = strip_control_characters(data_buffer)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = get_vals(data_buffer)
+    print(data_buffer)
     if "time" in latest_vals:
         start_time = to_seconds(latest_vals["time"])
 print(start_time)
 while True:
     data_buffer = data_buffer + data_stream.read(read_rate)
+    data_buffer = strip_control_characters(data_buffer)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = get_vals(data_buffer)

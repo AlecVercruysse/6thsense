@@ -34,6 +34,7 @@ double seconds_passed_to_cutdown = 5400.0;
 String current_temp = "21.7";
 double temp_to_cutdown = -10.3;
 int num_times_cutdown_criteria_met = 0;
+int tx_counter = 0;
 
 void setup() {
   //start serial comms with computer
@@ -103,7 +104,12 @@ void loop() {
 
   data_arr[10] = getSolar();
 
-  sendDataAsBytes(data_arr, numObs);
+  tx_counter++;
+  if (tx_counter == 5 ){
+      sendDataAsBytes(data_arr, numObs);
+      tx_counter = 0;
+  }
+  
   logDataToSD(data_arr, numObs);
 
   //todo: test cutdown safety measures
@@ -119,4 +125,5 @@ void loop() {
       }
     }
   }
+  delay(200);
 }
