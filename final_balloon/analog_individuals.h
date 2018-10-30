@@ -30,7 +30,6 @@ String getSolar() {
 
 String getLightIntensity() {
     voltage=analogRead(light_intensity_pin) *5/1024;
-    lux=(2500/voltage-500)/2.2;
-    return String(lux);
+    return String(voltage);
 }
 #endif //INC_6THSENSE_ANALOG_INDIVIDUALS_H
