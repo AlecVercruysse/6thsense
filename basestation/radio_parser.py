@@ -25,7 +25,7 @@ latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "h
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
-read_rate = 10
+read_rate = 1
 
 vals_to_graph = ["altitude", "pressure", "outside temp", "inside temp"]
 
@@ -98,7 +98,7 @@ def update_plot(canvases, scale, gtexts):
             (point_list[xi] - x_min) / (2 + time_since_start - x_min) * canvases[i].winfo_width() if xi % 2 == 0
             else (y_max - .75 * point_list[xi]) / y_max * canvases[i].winfo_height() for xi in range(len(point_list))]
         canvases[i].coords("line", *point_list)
-        canvases[i].itemconfigure(gtexts[i], text=str(point_list[-1])[:5])
+        canvases[i].itemconfigure(gtexts[i], text=str(latest_vals[vals_to_graph[i]])[:5])
 
 
 def reset_vals():
@@ -142,6 +142,14 @@ def generate_map():
     map.marker(latdd, longdd, 'cornflowerblue')
     map.draw("map.html")
     webbrowser.open('file://' + os.path.realpath("map.html"))
+
+
+def strip_control_characters(input):
+    if input:
+        # ascii control characters
+        input = re.sub(r"(?!\n)[\x01-\x1F\x7F]", "", input)
+
+    return input
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -249,16 +257,17 @@ app = Application(master=root)
 
 while start_time == 0:
     data_buffer = data_buffer + data_stream.read(read_rate)
-    data_buffer = re.sub(r"[^\w \. \* \-]", "", data_buffer)
+    data_buffer = strip_control_characters(data_buffer)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = get_vals(data_buffer)
-    print(latest_vals)
+    print(data_buffer)
     if "time" in latest_vals:
         start_time = to_seconds(latest_vals["time"])
 print(start_time)
 while True:
     data_buffer = data_buffer + data_stream.read(read_rate)
+    data_buffer = strip_control_characters(data_buffer)
     data_buffer = re.sub(r"\*+", "\n", data_buffer)
     data_buffer = re.sub(r"\n+", "\n", data_buffer)
     latest_vals = get_vals(data_buffer)
