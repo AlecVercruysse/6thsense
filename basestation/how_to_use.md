@@ -2,7 +2,7 @@
 
 ### setup your python environment by downloading all required packages:
   1. navigate in terminal to this directory (we'll assume this is the working directory from now on)
-  2. run `pip3 install requirements.txt` to download all required packages
+  2. run `pip3 install -r requirements.txt` to download all required packages
   3. ensure success by opening a new interactive python window with `python3`, and running `import tkinter` and import `gmplot`
   4. talk to Alec (PL) for the file containing the google maps api key. Please don't upload this to github ever (it should be in the shared .gitignore so no worries...)
 
