@@ -15,6 +15,7 @@
   5. connect the secondary basestation to the computer
   6. run `ls -la /dev/ > /tmp/devices2.txt`
   7. run `diff /tmp/devices2.txt /tmp/devices3.txt` you should somewhere see the serial port of the second basestation.~~
+  
   7. connect both arduinos to your computers, open two separate instances of the arduino app, and figure out what serial ports they're on (should be /dev/<something>)
   8. run `tail -f <main serial port> > radio_raw.txt` to write all output text to radio_raw.txt. Note that you need to open an instance of the serial monitor of the arduino ide to get output to start writing. Confirm this is working by running `tail -f radio_raw.txt` to see live output!!
   9. in a new terminal tab, run `tail -f <secondary serial port> > basestation_gps.txt` similarly to step 8
