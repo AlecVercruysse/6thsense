@@ -8,6 +8,7 @@
 #define uv_pin A7
 #define methane_pin A5
 #define solar_pin A3
+#define light_intensity_pin A4
 
 void setupIndividuals() {
     pinMode(uv_pin, INPUT);
@@ -27,4 +28,9 @@ String getSolar() {
     return String(analogRead(solar_pin) * 5/1024);
 }
 
+String getLightIntensity() {
+    voltage=analogRead(light_intensity_pin) *5/1024;
+    lux=(2500/voltage-500)/2.2;
+    return String(lux);
+}
 #endif //INC_6THSENSE_ANALOG_INDIVIDUALS_H
