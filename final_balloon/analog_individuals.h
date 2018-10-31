@@ -1,5 +1,6 @@
 /**
- * code for most individual experiments
+ * code for Vivian's, Caroline's, and John's individual experiments,
+ * which involve reading analog input.
 **/
 
 #ifndef INC_6THSENSE_ANALOG_INDIVIDUALS_H
@@ -14,6 +15,7 @@ void setupIndividuals() {
     pinMode(uv_pin, INPUT);
     pinMode(methane_pin, INPUT);
     pinMode(solar_pin, INPUT);
+    pinMode(light_intensity_pin, INPUT);
 }
 
 String getUV() {
@@ -25,12 +27,11 @@ String getMethane() {
 }
 
 String getSolar() {
-    return String(analogRead(solar_pin) * 5/1024);
+    return String(analogRead(solar_pin) * 5.0/1024);
 }
 
 String getLightIntensity() {
-    voltage=analogRead(light_intensity_pin) *5/1024;
-    lux=(2500/voltage-500)/2.2;
-    return String(lux);
+    voltage = analogRead(light_intensity_pin) * 5.0/1024;
+    return String(voltage);
 }
 #endif //INC_6THSENSE_ANALOG_INDIVIDUALS_H
