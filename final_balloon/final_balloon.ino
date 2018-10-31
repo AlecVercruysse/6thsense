@@ -108,7 +108,7 @@ void loop() {
   data_arr[11] = getLightIntensity();
 
   tx_counter++;
-  if (tx_counter == 5 ){
+  if (tx_counter == 10 ){
       sendDataAsBytes(data_arr, numObs);
       tx_counter = 0;
   }
@@ -128,5 +128,5 @@ void loop() {
       }
     }
   }
-  delay(200);
+  delay(500);
 }

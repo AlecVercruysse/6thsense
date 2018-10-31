@@ -27,11 +27,11 @@ String getMethane() {
 }
 
 String getSolar() {
-    return String(analogRead(solar_pin) * 5.0/1024);
+    return String(analogRead(solar_pin) * 5.0/1024.0);
 }
 
 String getLightIntensity() {
-    voltage = analogRead(light_intensity_pin) * 5.0/1024;
+    float voltage = analogRead(light_intensity_pin) * 5.0/102.0;
     return String(voltage);
 }
 #endif //INC_6THSENSE_ANALOG_INDIVIDUALS_H
