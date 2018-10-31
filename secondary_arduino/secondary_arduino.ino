@@ -44,19 +44,33 @@ void loop() {
     mpu6050.update();
     accel_arr[accelCount] = getTheAccel();
     accelCount ++;
-    if (accelCount >= numAccelCounts)
+    if (accelCount == numAccelCounts - 1)
     {
       accelCount = 0;
       for (int i = 0; i < numAccelCounts; i ++)
       {
-        OpenLog.print(accel_arr[i]);
-        OpenLog.print("; ");
+        String the_accel_data = accel_arr[i];
+        if (the_accel_data.length() > 7)
+        {
+          OpenLog.print(the_accel_data);
+          OpenLog.print(",\n"); 
+        }
       }
-      OpenLog.println();
     }
 }
 
 String getTheAccel()
 {
-  return String(mpu6050.getGyroZ() + mpu6050.getGyroY() + mpu6050.getGyroX());
+  String accx = String(mpu6050.getAccX());
+  //Serial.print(total); Serial.print(", ");
+  String accy = String(mpu6050.getAccY());
+  //Serial.print(accy); Serial.print(", ");
+  String accz = String(mpu6050.getAccZ());
+  //Serial.println(accz);
+  //total.concat(", ");
+  //total.concat(accy); total.concat(", ");
+  //total.concat(accz); total.concat("\n");
+  //return total;
+  return String(accx + "," + accy + "," + accz);
+//  return String(mpu6050.getGyroZ() + mpu6050.getGyroY() + mpu6050.getGyroX());
 }
