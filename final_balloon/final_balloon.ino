@@ -50,8 +50,10 @@ void setup() {
 
   // setup clock and the temp and GPS sensors and BME
   setupBME();
+  Serial.println("bme setup complete");
   setupSensors();
-
+  Serial.println("sensor setup complete");
+  
   //individual experiments:
   setupSpectrometer(); //Alec's
   setupIndividuals(); //Caroline's, John's, Vivian's
@@ -128,5 +130,5 @@ void loop() {
       }
     }
   }
-  delay(500);
+  delay(200);
 }

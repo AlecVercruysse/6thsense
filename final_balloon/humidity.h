@@ -8,7 +8,9 @@ float sensorReading; //create global variable to store sensor reading
 
 void setupBME() {
     bool status;
-    status = bme.begin();  
+    Serial.println("starting BME");
+    status = bme.begin();
+    Serial.println("bme status: "); Serial.println(status);
     if (!status) {
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
         while (1);
