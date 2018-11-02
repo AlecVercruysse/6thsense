@@ -16,7 +16,7 @@ from sensitive_data import getapikey
 import webbrowser
 import os
 
-data_stream = open("final_gps.txt")
+data_stream = open("final_tx.txt")
 data_buffer = ""
 
 gps_out = open("balloon_gps_out.txt", "w")
