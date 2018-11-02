@@ -16,12 +16,12 @@ from sensitive_data import getapikey
 import webbrowser
 import os
 
-data_stream = open("radio_raw_test2.txt")
+data_stream = open("final_gps.txt")
 data_buffer = ""
 
 gps_out = open("balloon_gps_out.txt", "w")
 
-latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "humidity", "inside temp", "spectrometer", "uvb", "methane", "solar"]
+latest_vals_indexes = ["time", "GPS", "altitude", "pressure", "outside temp", "humidity", "inside temp", "spectrometer", "uvb", "methane", "solar", "photoresistor"]
 latest_vals = {}
 for k in latest_vals_indexes:
     latest_vals[k] = "x"
