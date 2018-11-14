@@ -471,7 +471,7 @@ The data gathered from the pressure, humidity, and temperature sensors do not al
 
 # Experimental Results
 
-In the span of an hour and a half, the payload traveled 90 kilometers (56 miles), and reached an estimated maximum height of approximately 20 kilometers (12 miles). APRS packets show the balloon reached speeds of at least 111 km/h in the jet stream, and transmissions data shows the balloon spent significant time in the ozone layer. Figure __  shows the altitude calculated with the two tracking systems on board, as a function of time. Note that the density of the points correspond to the connectivity of each method of data retrieval at that altitude and moment in time.
+In the span of an hour and a half, the payload traveled 90 kilometers (56 miles), and reached an estimated maximum height of approximately 20 kilometers (12 miles). APRS packets show the balloon reached speeds of at least 111 km/h in the jet stream, and transmissions data shows the balloon spent significant time in the ozone layer. Figure 10 shows the altitude calculated with the two tracking systems on board, as a function of time. Note that the density of the points correspond to the connectivity of each method of data retrieval at that altitude and moment in time.
 
 ```{r altitude"}
 pv <- read.csv("data/pv.csv")
@@ -500,17 +500,20 @@ secondsSinceStart9xtend <- function(x) {
   return(toSeconds(toString(x)) - start_s_9xtend)
 }
 pv$sfromstart = sapply(pv$time, secondsSinceStart9xtend)
+pv$upper_error = sapply(pv$height, function(x) x + 0.00459 * x)
+pv$lower_error = sapply(pv$height, function(x) x - 0.00459 * x)
 
 secondsSinceStartAPRS <- function(x) {
   return(toSeconds(toString(x)) - start_s_9xtend - 25200)
 }
 aprs$sfromsstart = sapply(aprs$time, secondsSinceStartAPRS)
-b <- ggplot(pv, aes(x=sfromstart, y=height)) + geom_point(aes(color="From Barometer")) +
+b <- ggplot(pv, aes(x=sfromstart, y=height)) + geom_point(aes(color="From Barometer"), size=1) +
   geom_point(data=aprs, aes(x=sfromsstart, y=altitude, color="From PicoAPRS")) + 
   scale_color_manual("Calculated Altitude", breaks=c("From Barometer", "From PicoAPRS"), 
                                             values=c("black", "purple")) +
   theme(legend.position = c(0.9, 0.9)) + labs(title="Altitude from PicoAPRS and Transmitted Barometer Data\n as a function of time",
-                                              x="Time elapsed From Startup (s)", y="Calculated Altitude (m)")
+                                              x="Time elapsed From Startup (s)", y="Calculated Altitude (m)") + 
+  geom_errorbar(data=pv, aes(x=sfromstart, ymin = lower_error, ymax=upper_error))
 b
 ```
 Figure 10
@@ -518,7 +521,7 @@ Figure 10
 &nbsp;
 
 
-As seen in Figure 10, APRS data for the altitude lines up extremely closely with the altitude calculated from the barometer. The small shift is most likely due to a difference in timing: the PicoAPRS transceiver was on a separate clock than the arduino, and it is plausible that the timing was off by mere seconds.
+As seen in Figure 10, APRS data for the altitude lines up extremely closely with the altitude calculated from the barometer. The small shift is most likely due to a difference in timing: the PicoAPRS transceiver was on a separate clock than the arduino, and it is plausible that the timing was off by mere seconds. Note that this Figure includes error bars for the altitude calculated with the pressure sensor: the percent error is so low that the error bars are covered up by the size of the points.
 
 ## Descent
 
@@ -578,12 +581,16 @@ pv$cTemp = sapply(pv$height, tempFromAltitude)
 recaled <- predict(cal, data.frame(temp = pv$temp), se.fit=T)
 pv$temp_recal = recaled$fit
 
+pv$upper_temp_error = sapply(pv$temp_recal, function(x) x + 0.014598 * x)
+pv$lower_temp_error = sapply(pv$temp_recal, function(x) x - 0.014598 * x)
+
 a <- ggplot(pv, aes(x=height, y=temp_recal)) + geom_point(aes(color="Measured Inside")) + 
   geom_point(aes(y=cTemp, color="Calculated Outside")) + 
   scale_color_manual("Temperature", breaks=c("Measured Inside", "Calculated Outside"),
                         values=c("black", "purple")) + 
   theme(legend.position = c(0.7, 0.9)) + labs(title="Calculated External and Measured Internal Temperature\n vs. Height",
-                                        x="Height (m)", y="Temperature (C)")
+                                        x="Height (m)", y="Temperature (C)") +
+  geom_errorbar(data=pv, aes(x=height, ymin=lower_temp_error, ymax=upper_temp_error))
 a
 ```
 Figure 15

@@ -1,5 +1,5 @@
 Experiments,Percent Error (%)
 Pressure,0.459
 Humidity,0.659
-Temperature,0.429
-
+Temperature (calibrated to Fieldpiece),0.429
+Temperature (calibrated to Extech),1.459

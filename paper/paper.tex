@@ -1514,7 +1514,8 @@ Experiments & Percent error (\%)\tabularnewline
 \endhead
 Pressure & 0.459\tabularnewline
 Humidity & 0.659\tabularnewline
-Temperature & 0.429\tabularnewline
+Temperature (calibrated to Fieldpiece) & 0.429\tabularnewline
+Temperature (calibrated to Extech) & 1.459\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -1524,7 +1525,7 @@ In the span of an hour and a half, the payload traveled 90 kilometers
 (56 miles), and reached an estimated maximum height of approximately 20
 kilometers (12 miles). APRS packets show the balloon reached speeds of
 at least 111 km/h in the jet stream, and transmissions data shows the
-balloon spent significant time in the ozone layer. Figure \_\_ shows the
+balloon spent significant time in the ozone layer. Figure 10 shows the
 altitude calculated with the two tracking systems on board, as a
 function of time. Note that the density of the points correspond to the
 connectivity of each method of data retrieval at that altitude and
@@ -1540,7 +1541,10 @@ As seen in Figure 10, APRS data for the altitude lines up extremely
 closely with the altitude calculated from the barometer. The small shift
 is most likely due to a difference in timing: the PicoAPRS transceiver
 was on a separate clock than the arduino, and it is plausible that the
-timing was off by mere seconds.
+timing was off by mere seconds. Note that this Figure includes error
+bars for the altitude calculated with the pressure sensor: the percent
+error is so low that the error bars are covered up by the size of the
+points.
 
 \subsection{Descent}\label{descent}
 
