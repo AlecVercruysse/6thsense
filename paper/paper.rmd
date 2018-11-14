@@ -684,16 +684,16 @@ pv$cTemp = sapply(pv$height, tempFromAltitude)
 recaled <- predict(cal, data.frame(temp = pv$temp), se.fit=T)
 pv$temp_recal = recaled$fit
 
-pv$upper_temp_error = sapply(pv$temp_recal, function(x) x + 0.014598 * x)
-pv$lower_temp_error = sapply(pv$temp_recal, function(x) x - 0.014598 * x)
+pv$upper_temp_error = sapply(pv$temp_recal, function(x) x + 8.49)
+pv$lower_temp_error = sapply(pv$temp_recal, function(x) x - 8.49)
 
-a <- ggplot(pv, aes(x=height, y=temp_recal)) + geom_point(aes(color="Measured Inside")) + 
+a <- ggplot(pv, aes(x=height, y=temp_recal)) + geom_errorbar(data=pv, aes(x=height, ymin=lower_temp_error, ymax=upper_temp_error, color="Thermistor Error: 8.49 °C")) + 
+geom_point(aes(x=height, y=temp_recal, color="Measured Inside")) + 
   geom_point(aes(y=cTemp, color="Calculated Outside")) + 
-  scale_color_manual("Temperature", breaks=c("Measured Inside", "Calculated Outside"),
-                        values=c("black", "purple")) + 
-  theme(legend.position = c(0.7, 0.9)) + labs(title="Calculated External and Measured Internal Temperature\n vs. Height",
-                                        x="Height (m)", y="Temperature (C)") +
-  geom_errorbar(data=pv, aes(x=height, ymin=lower_temp_error, ymax=upper_temp_error))
+  scale_color_manual("Temperature", breaks=c("Measured Inside", "Calculated Outside", "Thermistor Error: 8.49 °C"),
+                        values=c("black", "purple", "darkblue")) + 
+  theme(legend.position = c(0.7, 0.8)) + labs(title="Calculated External and Measured Internal Temperature\n vs. Height",
+                                        x="Height (m)", y="Temperature (C)")
 a
 ```
 Figure 15
