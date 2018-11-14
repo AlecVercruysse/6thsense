@@ -22,14 +22,15 @@ abstract: This paper details 6thsense, a mission to send a weather balloon to to
 
 ```{r setup, include=FALSE}
 library(knitr)
-library(mosaic)
+library(ggplot2)
 library(gridExtra)
-opts_chunk$set(echo = F)
+library(latex2exp)
+opts_chunk$set(echo = F, warning = F)
 
 ```
 #Introduction
 
-There are four main layers to the atmosphere: the troposphere, stratosphere, mesosphere, and thermosphere. The **troposphere** is the section of the atmosphere from roughly 0km to 15km, and is the layer in which we live. It includes 75% of the mass of all gases in the atmosphere, consisting of 78% nitrogen gas, 21% oxygen, and less than 1% of argon, carbon dioxide, and other constituents. Because it is both the lowest in altitude and most massive layer, the pressure in the troposphere is the greatest: 100kPa. As you increase altitude in the troposphere, temperature decreases to about -60C. The **stratosphere** is the section from roughly 15km to 50km. The ozone layer, or the region in the atmosphere which absorbs most UV rays, is within the stratosphere at about 20km in altitude. The pressure in the stratosphere is 10kPa. The **mesosphere** is the region from 50km to 80km. The pressure in the mesosphere is 0.1 kPa. Finally, the **thermosphere** is the highest in altitude of the four layers, spanning from 80km into outer space. Here, the pressure is only 0.01kPa, as it is the least dense of the layers. The few air molecules in the thermosphere are heated to extremely high temperatures by the Sun’s radiation. However, because there are so few molecules, we cannot measure an appreciable difference in overall temperature, so the effective temperature of the thermosphere is less than that of the mesosphere.
+There are four main layers to the atmosphere: the troposphere, stratosphere, mesosphere, and thermosphere. The **troposphere** is the section of the atmosphere from roughly 0km to 15km, and is the layer in which we live. It includes 75% of the mass of all gases in the atmosphere, consisting of 78% nitrogen gas, 21% oxygen, and less than 1% of argon, carbon dioxide, and other constituents. Because it is both the lowest in altitude and most massive layer, the pressure in the troposphere is the greatest: 100kPa. As altitude increases in the troposphere, temperature decreases to about -60C. The** stratosphere** is the section from roughly 15km to 50km. The ozone layer, or the region in the atmosphere which absorbs most UV rays, is within the stratosphere at about 20km in altitude. The pressure in the stratosphere is 10kPa. The mesosphere is the region from 50km to 80km. The pressure in the mesosphere is 0.1 kPa. Finally, the thermosphere is the highest in altitude of the four layers, spanning from 80km into outer space. Here, the pressure is only 0.01kPa, as it is the least dense of the layers. The few air molecules in the thermosphere are heated to extremely high temperatures by the Sun’s radiation. However, because there are so few molecules, we cannot measure an appreciable difference in overall temperature, so the effective temperature of the thermosphere is less than that of the mesosphere. 
 
 The layers relevant to our experiment are the troposphere and stratosphere, as our balloon launch was designed to reach a maximum altitude of 30km (about the middle of the stratosphere but past the ozone layer). Therefore, we had to prepare the payload for temperatures as low as -60C and pressure as low as 10kPa (in the stratosphere). We expect to encounter the lowest temperature in the troposphere, around an altitude of 10km. As the balloon rises from sea level to the top of the troposphere, we expect to see temperature decrease because the ground absorbs most of the sun’s radiation (as opposed to the gas particles). However, as the balloon enters the stratosphere, we expect an increase in temperature due to the ozone layer’s blockage of UV rays. The UV rays that the ozone layer absorbs causes the gas particles in the stratosphere to heat up, so temperature increases with altitude. As the balloon gains altitude, the density of air around it decreases, so the pressure decreases. 
 
@@ -78,7 +79,7 @@ individuals <- data.frame("Team Member" = c("Alec Vercruysse", "Luke Bowsher", "
 kable(individuals)
 ```
 
-*shortly before launch it was discovered that the Geiger Counter was non-operable and therefore it was taken out of the payload. Instead, Simon Oros focused on ____.
+*shortly before launch it was discovered that the Geiger Counter was non-operable and therefore it was taken out of the payload. Instead, Simon Oros focused on ground-level radiation measurements.
 
 **INCLUDE INDIVIDUAL MOTIVATIONS HERE**
 
@@ -184,9 +185,9 @@ To ensure that the payload would collect accurate and reliable data, the lightwe
 
 ## The Vernier Gas Pressure Sensor
 
-The Vernier Gas Pressure Sensor, model GPS-BTA, was calibrated to the Extech SD700 Barometric Pressure/Humidity/Temperature Datalogger, which was used as our standard for pressure. The Vernier sensor was connected to an Arduino microcontroller with a Vernier Analog Protoboard Adaptor and configured to log data onto a micro-SD card every 1.50 seconds. Instead of having a output unit of hPa or kPa, the Arduino maps input voltages between 0 to 5 volts to 10-bit integer values between 0 and 1023—a total of 1024 bins with 0.49 mV resolution. Thus, each unit represents 4.9 mV. The SD700 has a pressure range of 10 to 1100 hPa, fine resolution of 0.1 hPa, optimal temperature range of 0 to 50°C, response time of 10 milliseconds, and total accuracy with its factory calibration ±4 kPa. It requires 6 AAA batteries, and records data to an external SD card in the format of an Excel worksheet. It was configured so that it sampled data every five seconds to have smoother and more gradual changes in pressure. After both sensors were turned on at the same time to easily compare the data later, they were immediately placed in a vacuum chamber, in which air and other gasses are removed by a vacuum pump, thus creating a low-pressure environment inside the chamber. The release valve was closed and the vacuum pump was opened. When the pressure reading from the valve reached its minimum of approximately 0 hPa, the vacuum pump was then disconnected. An important part of the pressure calibration process was having “plateaus,” or multiple data points at various pressure levels. To have plateaus in the data, the release valve was slowly opened and closed right after, and this process was repeated after waiting approximately 45 seconds multiple times. Graph 5 and 6 show the varying pressure readings from the standard Extech sensor and Arduino Vernier sensor across time, respectively. 
+The Vernier Gas Pressure Sensor, model GPS-BTA, was calibrated to the Extech SD700 Barometric Pressure/Humidity/Temperature Datalogger, which was used as our standard for pressure. The Vernier sensor was connected to an Arduino microcontroller with a Vernier Analog Protoboard Adaptor and configured to log data onto a micro-SD card every 1.50 seconds. Instead of having a output unit of hPa or kPa, the Arduino maps input voltages between 0 to 5 volts to 10-bit integer values between 0 and 1023—a total of 1024 bins with 0.0049 V resolution. Thus, each unit represents 4.9 mV. The SD700 has a pressure range of 10 to 1100 hPa, fine resolution of 0.1 hPa, optimal temperature range of 0 to 50°C, response time of 10 milliseconds, and total accuracy with its factory calibration ±4 kPa. It requires 6 AAA batteries, and records data to an external SD card in the format of an Excel worksheet. It was configured so that it sampled data every five seconds to have smoother and more gradual changes in pressure. After both sensors were turned on at the same time to easily compare the data later, they were immediately placed in a vacuum chamber, in which air and other gasses are removed by a vacuum pump, thus creating a low-pressure environment inside the chamber. The release valve was closed and the vacuum pump was opened. When the pressure reading from the valve reached its minimum of approximately 0 hPa, the vacuum pump was then disconnected. An important part of the pressure calibration process was having “plateaus,” or multiple data points at various pressure levels. To have plateaus in the data, the release valve was slowly opened and closed right after, and this process was repeated after waiting approximately 45 seconds multiple times. Graph 5 and 6 show the varying pressure readings from the standard Extech sensor and Arduino Vernier sensor across time, respectively. 
 
-```{r vernier_calibration, echo=F}
+```{r vernier_calibration, echo=F, fig.align='left'}
 th <- theme(plot.title = element_text(size=10))
 
 pressure1 <- read.csv("data/pressure1.csv")
@@ -198,24 +199,17 @@ p2 <- ggplot(pressure2, aes(x=pressure2$Time, y=pressure2$hPa)) + geom_point() +
 grid.arrange(p1, p2, ncol=2)
 ```
 
-Graph 7, shown below, shows the conversion between the output of the standard (Extech) sensor and that of the Arduino (Vernier) sensor, including the equation to convert the Arduino’s 0.49 mV resolution units to kPa.
+Graph 7, shown below, shows the conversion between the output of the standard (Extech) sensor and that of the Arduino (Vernier) sensor, including the equation to convert the Arduino’s 4.9 mV resolution units to kPa.  
 
+&nbsp;
 
-```{r vernier_cal2, fig.height=3.5}
+```{r vernier_cal2, fig.height=3.5, warning=F}
 pressure3 <- read.csv("data/pressure3.csv")
 names(pressure3)[1] <- "Vernier sensor (10-bit unit)"
 names(pressure3)[2] <- "Extech sensor (kPa)"
 
-lm_eqn_p3 <- function(df){
-    m <- lm(df$`Extech sensor (kPa)` ~ df$`Vernier sensor (10-bit unit)`, df);
-    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
-         list(a = format(coef(m)[1], digits = 3), 
-              b = format(coef(m)[2], digits = 3), 
-             r2 = format(summary(m)$r.squared, digits = 3)))
-    as.character(as.expression(eq));                 
-}
+p3 <- ggplot(pressure3, aes(x=pressure3$`Vernier sensor (10-bit unit)`, y=pressure3$`Extech sensor (kPa)`)) + geom_point() + labs(title="Graph 7: Pressure conversion between\n standard (Extech) and Arduino (Vernier) sensor", x="Pressure from Vernier (10-bit unit)", y="Pressure from Extech (kPa)") + geom_smooth(method = "lm") + geom_text(x=300, y=90, label=TeX("y = -25.3 + 0.255x, r^2 = 1"), parse=TRUE)
 
-p3 <- ggplot(pressure3, aes(x=pressure3$`Vernier sensor (10-bit unit)`, y=pressure3$`Extech sensor (kPa)`)) + geom_point() + labs(title="Graph 7: Pressure conversion between\n standard (Extech) and Arduino (Vernier) sensor", x="Pressure from Vernier (10-bit unit)", y="Pressure from Extech (kPa)") + geom_smooth(method = "lm") + geom_text(x=300, y=90, label=lm_eqn_p3(pressure3), parse=TRUE)
 p3
 
 ```
@@ -237,11 +231,13 @@ lm_eqn_h1 <- function(df){
              r2 = format(summary(m)$r.squared, digits = 3)))
     as.character(as.expression(eq));                 
 }
-h1 <- ggplot(humidity1, aes(x=humidity1$Arduino...., y=humidity1$Standard....)) + geom_point() + labs(title="Graph 8: Humidity conversion between\n standard (Vernier) and Arduino (BME280) sensor", x="Relative humidity from BME280 (% RH)", y="Relative humidity from Vernier (% RH)") + geom_smooth(method = "lm") + geom_text(x=55, y=60, label=lm_eqn_h1(humidity1), parse=TRUE)
+h1 <- ggplot(humidity1, aes(x=humidity1$Arduino...., y=humidity1$Standard....)) + geom_point() + labs(title="Graph 8: Humidity conversion between\n standard (Vernier) and Arduino (BME280) sensor", x="Relative humidity from BME280 (% RH)", y="Relative humidity from Vernier (% RH)") + geom_smooth(method = "lm") + geom_text(x=55, y=60, label=TeX("y = 9.12 + 1.07x, r^2 = 0.997"), parse=TRUE)
 h1
 ```
 
-In order to calibrate the temperature readings of the BME280 to a standard, the Fieldpiece ST4 Dual Temperature Meter, both sensors were placed in multiple locations of varying temperatures: a freezer, refrigerator, and the Menlo Quad at two different times of the day. 
+In order to calibrate the temperature readings of the BME280 to a standard, the Fieldpiece ST4 Dual Temperature Meter, both sensors were placed in multiple locations of varying temperatures: a freezer, refrigerator, and the Menlo Quad at two different times of the day.  
+
+&nbsp;
 
 ```{r bme_temp, fig.height=4}
 temp1 <- read.csv("data/temp1.csv")
@@ -253,7 +249,7 @@ lm_eqn_t1 <- function(df){
              r2 = format(summary(m)$r.squared, digits = 3)))
     as.character(as.expression(eq));                 
 }
-t1 <- ggplot(temp1, aes(x=temp1$Arduino...C., y=temp1$Fieldpiece...C.)) + geom_point() + labs(title="Graph 9: Temperature conversion between\n standard (Fieldpiece) and Arduino (BME280) sensor", x="Temperature from BME280 (°C)", y="Temperature from Fieldpiece's T1 rod (°C)") + geom_smooth(method = "lm") + geom_text(x=5, y=20, label=lm_eqn_t1(temp1), parse=TRUE)
+t1 <- ggplot(temp1, aes(x=temp1$Arduino...C., y=temp1$Fieldpiece...C.)) + geom_point() + labs(title="Graph 9: Temperature conversion between\n standard (Fieldpiece) and Arduino (BME280) sensor", x="Temperature from BME280 (°C)", y="Temperature from Fieldpiece's T1 rod (°C)") + geom_smooth(method = "lm") + geom_text(x=5, y=20, label=TeX("y = 0.122 + 1.03x, r^2 = 0.999"), parse=TRUE)
 t1
 errors <- read.csv("data/errors.csv")
 names(errors)[2] <- "Percent error (%)"
