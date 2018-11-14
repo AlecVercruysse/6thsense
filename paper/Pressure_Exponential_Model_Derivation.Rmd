@@ -1,0 +1,34 @@
+---
+title: "Pressure Exponential Model Derivation"
+author: "VL"
+date: "11/13/2018"
+output: html_document
+---
+## Derivation of Exponential Model of Pressure
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+$$pressure = \frac{Force}{Area} = \rho gh$$
+$$dP=-\rho g\,dh$$
+$$PV=nRT$$
+$$\frac{n}{v} = \frac{P}{rt}$$
+
+$$\rho = density = \frac{mass}{volume} $$
+$$\rho = \frac{nm_{mol}}{v} = \frac{Pm_{mol}}{rt}$$
+$$\rho = \frac{P}{Rt}(m_{mol})$$
+$$dP = -\frac{Pm_{mol}}{Rt}g\,dh$$
+$$\frac{dP}{P} =  -\frac{m_{mol}}{Rt}g\,dh$$
+$$\int_{0}^{h} \frac{dP}{P} =- \int_{0}^{h} \frac{m_{mol}}{Rt}g\,dh$$
+$$\ln{P} = -\frac{m_{mol}g}{Rt}\,dh$$
+$$m_{mol}=0.29\,g/mol, \,g=\,9.8m/s^2, \,R=8.314\,J/mol, \,t=273 \, K$$
+$$\frac{m_{mol}g}{Rt} = \frac{1}{8.4km}$$
+$$\ln{P} = -\frac{h}{8.4}$$
+$$e^{\ln{P}}=P_0 \,e^{\frac{-h}{8.4}}$$
+$$\boxed{P = P_0e^{\frac{-h}{8.4}}}$$
+$$\frac{P}{P_0} = e^{\frac{-h}{8.4}}$$
+$$\ln{(\frac{P}{P_0})} = \ln{e^{\frac{-h}{8.4}}}$$
+$$\frac{-h}{8.4} = \ln{(\frac{P}{P_0})}$$
+$$h = -8.4 \, \ln{(\frac{P}{P_0})}$$
+$$\boxed{h = -a \, \ln{(\frac{P}{P_0})}}$$
+

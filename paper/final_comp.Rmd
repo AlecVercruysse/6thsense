@@ -1,0 +1,29 @@
+---
+title: "final_comp"
+output: pdf_document
+header-includes:
+  - \AtBeginDocument{\let\maketitle\relax}
+  - \usepackage{pdfpages}
+
+---
+\includepdf[pages={-}]{paper.pdf}
+\includepdf[pages={-}]{bibliography.pdf}
+\includepdf[pages={-}]{bibliography.pdf}
+
+# Appendix II: Table Comparing Atmospheric Composition vs Altitude
+
+```{r appendix2, echo=F}
+knitr::include_graphics("assets/appendix2.png")
+```
+
+\newpage
+
+# Appendix III: Layers of the Atmosphere
+```{r appendix3, echo=F}
+knitr::include_graphics("assets/appendix3.png")
+```
+
+\includepdf[pages={-}]{assets/cad1.pdf}
+\includepdf[pages={-}]{assets/cad2.pdf}
+\includepdf[pages={-}]{assets/cad3.pdf}
+\includepdf[pages={-}]{assets/cad4.pdf}

@@ -1,0 +1,117 @@
+---
+title: "Bibliography"
+output: pdf_document
+header-includes:
+  - \AtBeginDocument{\let\maketitle\relax}
+  - \usepackage{setspace}
+indent: false
+---
+#References  
+
+
+*9XTend OEM RF module* [Product Manual]. (n.d.). Retrieved November 14, 2018, from
+
+|     https://www.sparkfun.com/datasheets/Wireless/Zigbee/xtend-productmanual.pdf  
+
+&nbsp;
+
+Bruninga, B. (n.d.). Automatic packet reporting system. Retrieved November 14, 2018, from 
+
+|        http://aprs.org  
+
+&nbsp;
+
+Bruninga, B. (n.d.). Kits: APRS MIC-Encoder. Retrieved November 14, 2018, from 
+
+|        https://www.tapr.org/kits_mic-e.html#project
+
+&nbsp;
+
+Buthod, B. (Ed.). (1997, December 27). AX.25 amateur packet-radio link-layer protocol. Retrieved November 14, 2018, from 
+
+|        https://www.tapr.org/pub_ax25.html
+
+&nbsp;
+
+*COCOM GPS tracking limits* [Fact sheet]. (n.d.). Retrieved November 14, 2018, from 
+
+|        http://ravtrack.com/GPStracking/cocom-gps-tracking-limits/469/
+
+&nbsp;
+
+*GPS Modules* [Fact sheet]. (2016, September 5). Retrieved November 14, 2018, from 
+
+|        https://ukhas.org.uk/guides:gps_modules
+
+&nbsp;
+
+GPS Systems: Space segment. (2018, September). In GPS.gov. Retrieved November 14, 2018, from 
+
+|        https://www.gps.gov/systems/gps/space/
+
+&nbsp;
+
+Greenhouse effect. (2018). In *Encyclopædia Britannica*.
+
+&nbsp;
+
+How does GPS work? (n.d.). Retrieved November 14, 2018, from 
+
+|        http://www.physics.org/article-questions.asp?id=55
+
+&nbsp;
+
+Kashiwase, H. (2017, August). *Evidence for ice-ocean albedo feedback in the Arctic Ocean shifting to a seasonal ice zone*. Retrieved from Nature website:
+
+|        https://www.nature.com/articles/s41598-017-08467-z
+
+&nbsp;
+
+Lindsey, R. (2018, August 1). Climate Change: Atmospheric Carbon Dioxide. Retrieved November 14, 2018, from
+
+|        https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide
+
+&nbsp;
+
+Loveall, P. (n.d.). APRS-IS [Fact sheet]. Retrieved November 14, 2018, from http://www.aprs-is.net/
+
+&nbsp;
+
+Pecsok, R. L., & Shields, L. D. (1968). *Modern Methods of Chemical Analysis*. New York: Wiley.
+
+&nbsp;
+
+Smith, D. M. (2015). *Terrestrial Gamma-Ray Flashes, Relativistic Runaway, and High-Energy Radiation in the Atmosphere*. Santa Cruz, CA: UC Santa Cruz.
+
+&nbsp;
+
+UCAR. (2011). *The Greenhouse Effect*. Retrieved November 14, 2018, from UCAR website:
+
+|        https://scied.ucar.edu/longcontent/greenhouse-effect
+
+&nbsp;
+
+UCAR. (2012). Molecules Vibrate. Retrieved November 14, 2018, from UCAR website: 
+
+|        https://scied.ucar.edu/molecular-vibration-modes
+
+&nbsp;
+
+Vaks, A. (2013, April). *Speleothems Reveal 500,000-Year History of Siberian Permafrost.* Retrieved from Science website:
+|        http://science.sciencemag.org/content/340/6129/183
+
+&nbsp;
+
+Wade, I. (Ed.). (2000, August 29). *APRS protocol reference* [White paper]. Retrieved November 14, 2018, from 
+
+|        http://www.aprs.org/doc/APRS101.PDF
+
+&nbsp;
+
+Yagi antenna theory: Yagi antenna basics. (n.d.). Retrieved November 14, 2018, from 
+
+|        https://www.electronics-notes.com/articles/antennas-propagation/yagi-uda-antenna-aerial/theory.php
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+\setlength{\parskip}{8pt}
