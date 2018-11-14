@@ -978,7 +978,7 @@ sensor. The built in voltage regulator on the Arduino was not powerful
 enough and causing the sensors to malfunction so exterior regulators
 were included. Every sensor connects individually to either an analog
 pin or digital pin, or is one of the three sensors that connect to the
-SDA and SCL pins. See Appendix for schematic.
+SDA and SCL pins. See Appendix VIII for schematic.
 
 \subsection{Software Design}\label{software-design}
 
@@ -992,7 +992,7 @@ The data acquisition organization for the microcontroller consists of
 the main arduino .ino file calling methods in different header files to
 get data for an array. Every loop, the data array is filled with the
 current time, GPS coordinates, pressure, and more sensor data (See
-Appendix V for full data index). The sensors are grouped into three
+Appendix IX for full data index). The sensors are grouped into three
 header files, one for the four individual experiments using analog
 sensors, one for the BME280 exterior humidity and temperature sensor,
 and one for the clock, GPS, interior temperature, and pressure sensors.
