@@ -287,14 +287,11 @@ energy exerted. This field of research is relatively new and active.
 \subsection{Empirical and Exponential Models for Temperature and
 Pressure}\label{empirical-and-exponential-models-for-temperature-and-pressure}
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{assets/nasa_model} \end{center}
 
-{\centering \includegraphics{assets/nasa_model} 
+Figure 1: NASA Empirical Models for Temperature and Pressure
 
-}
-
-\caption{\label{fig:figs} NASA Empirical Models for Temperatur and Pressure}\label{fig:NASA_image}
-\end{figure}
+~
 
 Figure 1 shows NASA's empirical models for pressure and temperature for
 the troposphere and stratosphere. For a height of 0, the temperature is
@@ -664,9 +661,9 @@ All physical CAD drawings are included in the appendix.
 
 \section{Cut Down Mechanism}\label{cut-down-mechanism}
 
-\begin{figure}[h]
+\begin{figure}
 
-{\centering \includegraphics{assets/cutdown} 
+{\centering \includegraphics[width=400px]{assets/cutdown} 
 
 }
 
@@ -852,14 +849,11 @@ does. Resistors reduce current flow by providing electrical resistance
 and dissipating power and therefore voltage in the form of heat and are
 used to control the amount of voltage that reach electrical components.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{assets/simple_circuit} \end{center}
 
-{\centering \includegraphics{assets/simple_circuit} 
+Figure 2: A simple example circuit
 
-}
-
-\caption{\label{fig:figs} A simple example circuit}\label{fig:simple_circuit}
-\end{figure}
+~
 
 Arduino is a software and hardware company that produces a variety of
 microcontrollers called Arduinos that can be programmed. The Arduinos
@@ -910,14 +904,11 @@ SDA and SCL pins.
 
 \subsection{Software Design}\label{software-design}
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px,height=400px]{assets/flow_code} \end{center}
 
-{\centering \includegraphics[height=400px]{assets/flow_code} 
+Figure 3: Code Flow Chart
 
-}
-
-\caption{\label{fig:figs} Code Flow Chart}\label{fig:code_flow_chart}
-\end{figure}
+~
 
 The data acquisition organization for the microcontroller consists of
 the main arduino .ino file calling methods in different header files to
@@ -1261,7 +1252,7 @@ interpretation. Transmission stopped after around 7400 meters,
 indicating that most likely the arduino lost power at 2:17pm, two and a
 quarter hours after powering up. The density of packets received from
 the 9XTend as a function of time and altitude can be seen in in Figure
-\_\_, in Section 8.
+10, in Section 8.
 
 Unfortunately, while the 9Xtend module paired with the Venus GPS failed
 its primary mission of providing GPS information, the transmission
@@ -1364,25 +1355,21 @@ this process was repeated after waiting approximately 45 seconds
 multiple times. Figure 5 shows the varying pressure readings from the
 standard Extech sensor and Arduino Vernier sensor across time.
 
-\begin{figure}[h]
+\begin{flushleft}\includegraphics[width=400px]{paper_files/figure-latex/vernier_calibration-1} \end{flushleft}
 
-\includegraphics{paper_files/figure-latex/vernier_calibration-1} \hfill{}
+Figure 5
 
-\caption{\label{fig:figs}}\label{fig:vernier_calibration}
-\end{figure}
+~
 
 Figure 6 shows the conversion between the output of the standard
 (Extech) sensor and that of the Arduino (Vernier) sensor, including the
 equation to convert the Arduino's 4.9 mV resolution units to kPa.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{paper_files/figure-latex/vernier_cal2-1} \end{center}
 
-{\centering \includegraphics{paper_files/figure-latex/vernier_cal2-1} 
+Figure 6
 
-}
-
-\caption{\label{fig:figs}}\label{fig:vernier_cal2}
-\end{figure}
+~
 
 Below is example data used to calibrate the Veriner Pressure Sensor.
 
@@ -1431,16 +1418,13 @@ Figure 7 depicts the relative humidity conversion between the output of
 the standard (Vernier) sensor and that of the Arduino (BME280) sensor
 across various humidity levels.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{paper_files/figure-latex/bme-1} \end{center}
 
-{\centering \includegraphics{paper_files/figure-latex/bme-1} 
+Figure 7
 
-}
+~
 
-\caption{\label{fig:figs}}\label{fig:bme}
-\end{figure}
-
-\section{Temperature}\label{temperature}
+\subsection{Temperature}\label{temperature}
 
 In order to calibrate the temperature readings of the BME280 to a
 standard, the Fieldpiece ST4 Dual Temperature Meter, both sensors were
@@ -1461,14 +1445,11 @@ Figure 8 shows the temperature conversion between the output of the
 standard (Fieldpiece) sensor and that of the Arduino (BME280) sensor
 across various temperatures.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{paper_files/figure-latex/bme_temp-1} \end{center}
 
-{\centering \includegraphics{paper_files/figure-latex/bme_temp-1} 
+Figure 8
 
-}
-
-\caption{\label{fig:figs}}\label{fig:bme_temp}
-\end{figure}
+~
 
 However, it was later found much after the final launch that the BME280
 sensor had failed during the payload's ascent and did not transmit or
@@ -1491,14 +1472,11 @@ converted to degrees in celsius following a equation provided by the
 thermistor's manufacturer to ultimately visualize a linear regression
 instead of a logarithmic curve during calibration.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{paper_files/figure-latex/temp2-1} \end{center}
 
-{\centering \includegraphics{paper_files/figure-latex/temp2-1} 
+Figure 9
 
-}
-
-\caption{\label{fig:figs}}\label{fig:temp2}
-\end{figure}
+~
 
 \subsection{Error Bars}\label{error-bars}
 
@@ -1552,14 +1530,11 @@ function of time. Note that the density of the points correspond to the
 connectivity of each method of data retrieval at that altitude and
 moment in time.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{paper_files/figure-latex/altitude"-1} \end{center}
 
-{\centering \includegraphics{paper_files/figure-latex/altitude-1} 
+Figure 10
 
-}
-
-\caption{\label{fig:figs}}\label{fig:altitude}
-\end{figure}
+~
 
 As seen in Figure 10, APRS data for the altitude lines up extremely
 closely with the altitude calculated from the barometer. The small shift
@@ -1581,32 +1556,26 @@ Go-Pro footage reveals that the balloon was popped by our APRS antenna.
 Stills from the footage (approximately 32 minutes into the flight) are
 shown below.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px,height=100px]{assets/IMAGEBREAKA} \end{center}
 
-{\centering \includegraphics[height=100px]{assets/IMAGEBREAKA} 
+Figure 11: APRS antenna touches the surface of the balloon in the lower
+middle section of the image.
 
-}
+~
 
-\caption{\label{fig:figs} APRS antenna touches the surface of teh balloon in the lower middle section of the image.}\label{fig:imagebreaka}
-\end{figure}
+\begin{center}\includegraphics[width=400px,height=100px]{assets/IMAGEBREAKB} \end{center}
 
-\begin{figure}[h]
+Figure 12: APRS antenna applies more pressure on the surface of the
+balloon.
 
-{\centering \includegraphics[height=100px]{assets/IMAGEBREAKB} 
+~
 
-}
+\begin{center}\includegraphics[width=400px,height=100px]{assets/IMAGEBREAKC} \end{center}
 
-\caption{\label{fig:figs} APRS antenna applies more pressure on the surface of the balloon.}\label{fig:imagebreakb}
-\end{figure}
+Figure 13: Pressure between APRS antenna and balloon is released. A
+puncture is visible in the balloon.
 
-\begin{figure}[h]
-
-{\centering \includegraphics[height=100px]{assets/IMAGEBREAKC} 
-
-}
-
-\caption{\label{fig:figs} Pressure between APRS antenna and balloon is released. A puncture is visible in the balloon.}\label{fig:imagebreakc}
-\end{figure}
+~
 
 When the balloon was first popped, the payload began experiencing a
 decrease in buoyant force. While the data for when the balloon was at
@@ -1616,14 +1585,11 @@ decent is not as rapid. This descent rate change is likely due to the
 balloon acting like a parachute. The Go-Pro captured a reflection of the
 balloon in the payload late into the flight.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px,height=100px]{assets/IMAGEBREAKD} \end{center}
 
-{\centering \includegraphics[height=100px]{assets/IMAGEBREAKD} 
+Figure 14: Reflection of balloon in payload on lower left side of photo.
 
-}
-
-\caption{\label{fig:figs} Reflection of balloon in payload on lower left side of photo.}\label{fig:imagebreakd}
-\end{figure}
+~
 
 The balloons puncture expanded and seems to be capturing air. Since the
 balloon acts a parachute, this would increase the air resistance on the
@@ -1648,14 +1614,11 @@ it, however, and most likely recorded temperature values closer to the
 outside temperature of the atmosphere. The calibrated temperature data
 as a function of time is displayed in Figure 11.
 
-\begin{figure}[h]
+\begin{center}\includegraphics[width=400px]{paper_files/figure-latex/temp_altitude-1} \end{center}
 
-{\centering \includegraphics{paper_files/figure-latex/temp_altitude-1} 
+Figure 15
 
-}
-
-\caption{\label{fig:figs}}\label{fig:temp_altitude}
-\end{figure}
+~
 
 The difference between calculated and actual values can most likely be
 explained by the fact that the calibration of the thermistor had a

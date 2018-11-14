@@ -8,7 +8,6 @@ output:
     keep_tex: yes
     includes:
       in_header: "preamble.tex"
-    fig_caption: yes
 fontsize: "12pt"
 indent: true
 abstract: This paper details 6thsense, a mission to send a weather balloon to to edge of space in order to study Earth's atmosphere. The weather balloon is outfitted with a payload that includes a camera, inside and outside temperature sensors, a barometer, multiple GPS tracking devices, as well as a host of individual experiments. The balloon most likely reached an altitude of 20,000 meters, into the stratosphere and ozone layer. The balloon was successfully recovered after approximately one and one half hours of flight.
@@ -26,7 +25,7 @@ library(knitr)
 library(ggplot2)
 library(gridExtra)
 library(latex2exp)
-opts_chunk$set(echo = F, warning = F, fig.align='center', fig.pos = 'h')
+opts_chunk$set(echo = F, warning = F, fig.align='center', out.width="400px")
 
 ```
 #Introduction
@@ -65,9 +64,12 @@ While there is an abundance of research done on upward directed TGFs (those dete
 
 ##Empirical and Exponential Models for Temperature and Pressure  
 
-```{r NASA_image, fig.cap="\\label{fig:figs} NASA Empirical Models for Temperatur and Pressure"}
+```{r NASA_image}
 include_graphics("assets/nasa_model.jpeg")
 ```
+Figure 1: NASA Empirical Models for Temperature and Pressure  
+
+&nbsp;
 
 Figure 1 shows NASA’s empirical models for pressure and temperature for the troposphere and stratosphere. For a height of 0, the temperature is that of sea level, or 15.06 \degree C. At a height of 11km, the predicted temperature is -56.35 \degree C, which is consistent with measurements recorded by the payload. As the balloon rises through the lower stratosphere, a constant temperature of -56.46 \degree C is expected. Finally, once the balloon rises beyond the ozone layer (around 25km altitude), temperatures are expected to rise again due to the ozone layer’s absorption of the sun’s radiation. Refer to section 8 for an overlay of NASA’s empirical models over experimental data.
 
@@ -246,9 +248,12 @@ A circuit is a set of electronic components that are connected by wires that con
 
 A simple circuit is one where an LED is connected in the middle of the current, which will light up the LED. However, the full voltage over an LED with low resistance would provide too much current for the LED to handle, so the voltage needs to be lowered, which is what a resistor does. Resistors reduce current flow by providing electrical resistance and dissipating power and therefore voltage in the form of heat and are used to control the amount of voltage that reach electrical components. 
 
-```{r simple_circuit, fig.cap="\\label{fig:figs} A simple example circuit"}
+```{r simple_circuit}
 include_graphics("assets/simple_circuit.png")
 ```
+Figure 2: A simple example circuit
+
+&nbsp;
 
 Arduino is a software and hardware company that produces a variety of microcontrollers called Arduinos that can be programmed. The Arduinos can interact with buttons, lights, motors, the internet, and much more. The microcontrollers have a built-in clock, memory, and voltage regulator. The arduino operates based on the code that is uploaded to it through the Arduino software environment, which provides an development environment to program the arduino using C++ with special arduino libraries built in, and a custom compiler. The way that the arduino works with different components is through pins. These pins can serve either to read input or as output. The first type of pins are those that deal with power, with the Arduino having both pins that output voltage (+) and that ground the circuit (-). Another type of pins are analog pins, which read in a signal from an analog sensor and convert that into a digital value. Conversely, digital pins can read input from digital sensors, but can also output power like to an LED. There are multiple ways to communicate with the Arduino. One way is Serial, which uses universal asynchronous receiver/transmitter (UART) circuitry. Serial UART is asynchronous and does not use the built in Arduino clock for data transfer, which reduces the number of wires and pins needed to communicate. This is how the arduino communicates with the computer programming it, for example. Another method of communication is called $I^2C$ communication which uses two pins on the arduino called SDA and SCL. $I^2C$ communication allows for multiple “slave” chips to communication with multiple “masters” which in our case are Arduinos. 
 
@@ -258,9 +263,12 @@ The circuit consists of two Arduinos, one Mega ATK and one Uno. The Mega ATK is 
 
 ## Software Design
 
-```{r code_flow_chart, out.height="400px", fig.align='center', fig.cap="\\label{fig:figs} Code Flow Chart"}
+```{r code_flow_chart, out.height="400px", fig.align='center'}
 include_graphics("assets/flow_code.jpg")
 ```
+Figure 3: Code Flow Chart
+
+&nbsp;
 
 The data acquisition organization for the microcontroller consists of the main arduino .ino file calling methods in different header files to get data for an array. Every loop, the data array is filled with the current time, GPS coordinates, pressure, and more sensor data (See Appendix V for full data index). The sensors are grouped into three header files, one for the four individual experiments using analog sensors, one for the BME280 exterior humidity and temperature sensor, and one for the clock, GPS, interior temperature, and pressure sensors. The GPS sensor uses Serial UART to send the coordinates of the antenna. Additionally, all of the getter methods for sensors like GPS check to make sure that if the sensor fails, the method will still return a value so that the Arduino can continue to get the rest of the data.
 
@@ -336,7 +344,7 @@ The balloon powered on at precisely 1:00pm with all three systems working: locat
 
 ### The Venus GPS and 9XTend Module
 
-Only about 14 minutes later, however, once the balloon had reached approximately 2600 meters, the Venus GPS module lost reception and stopped transmitting latitude and longitude data. The 9XTend module continued to transmit other telemetry data including altitude, however, for the duration of the flight, until the payload touched down, in which most likely the crash disconnected some circuitry essential to transmission, or the batteries lost their charge. Once the payload reached approximately 7800 meters, 9XTend transmissions became significantly damaged to the point where the data could no longer be programmatically parsed by simply finding values between the delimiters specified. Packets continued to be somewhat recognizable up to 20,000 meters, the estimated maximum height the ballon reached at approximately 1:50pm. Shortly after, at 1:53pm, the first packet was received indicating the balloon had began a slow descent (discussed in detail in section 8). During descent, especially back at around 7800 meters, transmissions became more recognizable but still required manual interpretation. Transmission stopped after around 7400 meters, indicating that most likely the arduino lost power at 2:17pm, two and a quarter hours after powering up. The density of packets received from the 9XTend as a function of time and altitude can be seen in in Figure __, in Section 8.
+Only about 14 minutes later, however, once the balloon had reached approximately 2600 meters, the Venus GPS module lost reception and stopped transmitting latitude and longitude data. The 9XTend module continued to transmit other telemetry data including altitude, however, for the duration of the flight, until the payload touched down, in which most likely the crash disconnected some circuitry essential to transmission, or the batteries lost their charge. Once the payload reached approximately 7800 meters, 9XTend transmissions became significantly damaged to the point where the data could no longer be programmatically parsed by simply finding values between the delimiters specified. Packets continued to be somewhat recognizable up to 20,000 meters, the estimated maximum height the ballon reached at approximately 1:50pm. Shortly after, at 1:53pm, the first packet was received indicating the balloon had began a slow descent (discussed in detail in section 8). During descent, especially back at around 7800 meters, transmissions became more recognizable but still required manual interpretation. Transmission stopped after around 7400 meters, indicating that most likely the arduino lost power at 2:17pm, two and a quarter hours after powering up. The density of packets received from the 9XTend as a function of time and altitude can be seen in in Figure 10, in Section 8.
 
 Unfortunately, while the 9Xtend module paired with the Venus GPS failed its primary mission of providing GPS information, the transmission system worked very well for the entirety of the time that it was powered. Not only did it provide the base station with live altitude data, it transmitted sensor data, including that of individual experiments. This proved invaluable to the team, since the SD logging module failed to write data.
 
@@ -360,7 +368,7 @@ To ensure that the payload would collect accurate and reliable data, the lightwe
 
 The Vernier Gas Pressure Sensor, model GPS-BTA, was calibrated to the Extech SD700 Barometric Pressure/Humidity/Temperature Datalogger, which was used as the standard for pressure. The Vernier sensor was connected to an Arduino microcontroller with a Vernier Analog Protoboard Adaptor and configured to log data onto a micro-SD card every 1.50 seconds. Instead of having a output unit of hPa or kPa, the Arduino maps input voltages between 0 to 5 volts to 10-bit integer values between 0 and 1023—a total of 1024 bins with 0.0049 V resolution. Thus, each unit represents 4.9 mV. The SD700 has a pressure range of 10 to 1100 hPa, fine resolution of 0.1 hPa, optimal temperature range of 0 to 50°C, response time of 10 milliseconds, and total accuracy with its factory calibration ±2 hPa. It requires 6 AAA batteries, and records data to an external SD card in the format of an Excel worksheet. It was configured so that it sampled data every five seconds to have smoother and more gradual changes in pressure. After both sensors were turned on at the same time to easily compare the data later, they were immediately placed in a vacuum chamber, in which air and other gasses are removed by a vacuum pump, thus creating a low-pressure environment inside the chamber. The release valve was closed and the vacuum pump was opened. When the pressure reading from the valve reached its minimum of approximately 0 hPa, the vacuum pump was then disconnected. An important part of the pressure calibration process was having “plateaus,” or multiple data points at various pressure levels. To have plateaus in the data, the release valve was slowly opened and closed right after, and this process was repeated after waiting approximately 45 seconds multiple times. Figure 5 shows the varying pressure readings from the standard Extech sensor and Arduino Vernier sensor across time. 
 
-```{r vernier_calibration, echo=F, fig.align='left', fig.cap="\\label{fig:figs}"}
+```{r vernier_calibration, echo=F, fig.align='left'}
 th <- theme(plot.title = element_text(size=10))
 
 pressure1 <- read.csv("data/pressure1.csv")
@@ -371,16 +379,23 @@ p2 <- ggplot(pressure2, aes(x=pressure2$Time, y=pressure2$hPa)) + geom_point() +
 
 grid.arrange(p1, p2, ncol=2)
 ```
+Figure 5
+
+&nbsp;
+
 
 Figure 6 shows the conversion between the output of the standard (Extech) sensor and that of the Arduino (Vernier) sensor, including the equation to convert the Arduino’s 4.9 mV resolution units to kPa.  
 
-```{r vernier_cal2, fig.height=3.5, warning=F, fig.cap="\\label{fig:figs}", fig.pos='h'}
+```{r vernier_cal2, fig.height=3.5, warning=F}
 pressure3 <- read.csv("data/pressure3.csv")
 names(pressure3)[1] <- "Vernier sensor (10-bit unit)"
 names(pressure3)[2] <- "Extech sensor (kPa)"
 p3 <- ggplot(pressure3, aes(x=pressure3$`Vernier sensor (10-bit unit)`, y=pressure3$`Extech sensor (kPa)`)) + geom_point() + labs(title="Pressure conversion between\n standard (Extech) and Arduino (Vernier) sensor", x="Pressure from Vernier (10-bit unit)", y="Pressure from Extech (kPa)") + geom_smooth(method = "lm") + geom_text(x=300, y=90, label=TeX("y = -25.3 + 0.255x, r^2 = 1"), parse=TRUE)
 p3
 ```
+Figure 6
+
+&nbsp;
 
 Below is example data used to calibrate the Veriner Pressure Sensor.
 
@@ -390,7 +405,7 @@ Below is example data used to calibrate the Veriner Pressure Sensor.
 
 The Adafruit BME280 sensor, which takes data on temperature, barometric pressure, and humidity, was calibrated to a Vernier Relative Humidity Sensor for humidity and the Fieldpiece ST4 Dual Temperature Meter for temperature. The BME280 humidity sensor has an operating temperature of -40 to 85°C, response time of 1 second, and total accuracy of ±3 %RH. To calibrate for humidity, the BME280 was connected to an Arduino mega with header pins and programmed to print out data every second to the serial monitor. The standard for humidity, a Vernier humidity probe, was connected to the same Arduino board via the Analog Protoboard Adaptor and also programmed to print out its humidity readings in the serial monitor every second. The Vernier Relative Humidity Sensor has a humidity range of 0 % to 95 %, resolution of 0.16% RH, operating temperature range of 0 to 85°C, response time of 40 seconds, and total accuracy with its standard calibration of ±10 %RH. Both sensors were exposed to environments with various humidity levels: the Menlo Quad at 3:00 PM and a shower 30, 60, 90, and 120 seconds after turning the hot water on. Multiple consecutive relative humidity readings from both sensors at each time point were then manually recorded in a csv file. Figure 7 depicts the relative humidity conversion between the output of the standard (Vernier) sensor and that of the Arduino (BME280) sensor across various humidity levels.
 
-```{r bme, fig.height=4, echo=F, fig.cap="\\label{fig:figs}"}
+```{r bme, fig.height=4, echo=F}
 
 humidity1 <- read.csv("data/humidity1.csv")
 lm_eqn_h1 <- function(df){
@@ -404,13 +419,17 @@ lm_eqn_h1 <- function(df){
 h1 <- ggplot(humidity1, aes(x=humidity1$Arduino...., y=humidity1$Standard....)) + geom_point() + labs(title="Humidity conversion between\n standard (Vernier) and Arduino (BME280) sensor", x="Relative humidity from BME280 (% RH)", y="Relative humidity from Vernier (% RH)") + geom_smooth(method = "lm") + geom_text(x=55, y=60, label=TeX("y = 9.12 + 1.07x, r^2 = 0.997"), parse=TRUE)
 h1
 ```
+Figure 7
 
-# Temperature
+&nbsp;
+
+
+## Temperature
 
 In order to calibrate the temperature readings of the BME280 to a standard, the Fieldpiece ST4 Dual Temperature Meter, both sensors were placed in multiple locations of varying temperatures: a freezer, refrigerator, and the Menlo Quad at two different times of the day. The BME280 sensor has an operating temperature range of -40 to 85°C, absolute accuracy of ±1.0°C, and resolution of 0.01°C. The Fieldpiece sensor has a functional temperature range of -50 to 1300°C, resolution of 0.1°C, ±2°C in cold temperatures from -50 to 0°C, and sample rate of 2.5 readings every second. It takes two readings at the same time due to the two temperature rods available, T1 and T2; however, only T1 was used across the experiment because T2 fluctuated significantly more than T1. Since the Fieldpiece sensor could not log data into an SD format or connect to an external controller interface for monitoring, the only way to calibrate the BME280 sensor to the Fieldpiece was to manually record the two list of temperature readings displayed in the serial monitor. Figure 8 shows the temperature conversion between the output of the standard (Fieldpiece) sensor and that of the Arduino (BME280) sensor across various temperatures.
 
 
-```{r bme_temp, fig.height=4, fig.cap="\\label{fig:figs}"}
+```{r bme_temp, fig.height=4}
 temp1 <- read.csv("data/temp1.csv")
 lm_eqn_t1 <- function(df){
     m <- lm(df$Arduino...C. ~ df$Fieldpiece...C., df);
@@ -425,16 +444,22 @@ t1
 errors <- read.csv("data/errors.csv")
 names(errors)[2] <- "Percent error (%)"
 ```
+Figure 8
+
+&nbsp;
 
 However, it was later found much after the final launch that the BME280 sensor had failed during the payload’s ascent and did not transmit or record any useful data. Thanks to a thermistor attached to the main board as backup, the payload was still able to transmit temperature data throughout its flight into the stratosphere.  However, the thermistor was not calibrated to a standard before the launch because the BME280 had been expected to function properly without issues. Once the payload was retrieved, only then could the thermistor be calibrated to the Extech SD700, which has both an accurate pressure and temperature sensor, resolution of 0.1°C, and accuracy of ±0.8°C. The Extech SD700 was used as the standard instead of the Fieldpiece ST4 because the SD700 was found to be more accurate than the previously used ST4 after the final launch. Graph 10 below shows the temperature conversion between the output of the standard (Extech) sensor and that of the thermistor on the Arduino board across various temperatures. It is noted that data from the thermistor has units of 10-bit voltage units that range from integer values 0 to 1023, each with a resolution of 4.9 mV. These units were converted to degrees in celsius following a equation provided by the thermistor’s manufacturer to ultimately visualize a linear regression instead of a logarithmic curve during calibration.
 
-```{r temp2, echo=F, fig.cap="\\label{fig:figs}"}
+```{r temp2, echo=F}
 
 thermcal <- read.csv("data/temp2.csv")
 temp <- thermcal$extech
 cal <- lm(thermcal$thermistor ~ temp)
 ggplot(thermcal, aes(x=temp, y=thermistor)) + geom_point() + geom_smooth(method="lm") + labs(title="Temperature Measured with Extech Sensor vs. Thermistor", x="Extech Measured Temperature (C)", y="Thermistor Measured Temperature")
 ```
+Figure 9
+
+&nbsp;
 
 ## Error Bars
 
@@ -448,7 +473,7 @@ The data gathered from the pressure, humidity, and temperature sensors do not al
 
 In the span of an hour and a half, the payload traveled 90 kilometers (56 miles), and reached an estimated maximum height of approximately 20 kilometers (12 miles). APRS packets show the balloon reached speeds of at least 111 km/h in the jet stream, and transmissions data shows the balloon spent significant time in the ozone layer. Figure __  shows the altitude calculated with the two tracking systems on board, as a function of time. Note that the density of the points correspond to the connectivity of each method of data retrieval at that altitude and moment in time.
 
-```{r altitude, fig.cap="\\label{fig:figs}"}
+```{r altitude"}
 pv <- read.csv("data/pv.csv")
 aprs <- read.csv("data/aprs.csv")
 toSeconds <- function(x){
@@ -488,6 +513,10 @@ b <- ggplot(pv, aes(x=sfromstart, y=height)) + geom_point(aes(color="From Barome
                                               x="Time elapsed From Startup (s)", y="Calculated Altitude (m)")
 b
 ```
+Figure 10
+
+&nbsp;
+
 
 As seen in Figure 10, APRS data for the altitude lines up extremely closely with the altitude calculated from the barometer. The small shift is most likely due to a difference in timing: the PicoAPRS transceiver was on a separate clock than the arduino, and it is plausible that the timing was off by mere seconds.
 
@@ -496,23 +525,37 @@ As seen in Figure 10, APRS data for the altitude lines up extremely closely with
 The cutdown never went off because the balloon never detached from the payload. The lowest recorded pressure sensor data was 5.86 kPa. Using NASA’s model for the relationship between pressure and altitude, this suggests that our ballon reached a max altitude of 64222 ft. This was below the cutdown height of 100,000 ft. The balloon began accelerating downwards at approximately 50 minutes into the flight (refer to altitude vs. time graph).
 
 Go-Pro footage reveals that the balloon was popped by our APRS antenna. Stills from the footage (approximately 32 minutes into the flight) are shown below.
-```{r imagebreaka, out.height="100px", fig.cap="\\label{fig:figs} APRS antenna touches the surface of teh balloon in the lower middle section of the image."}
+```{r imagebreaka, out.height="100px"}
 include_graphics("assets/IMAGEBREAKA.png")
 ```
+Figure 11: APRS antenna touches the surface of the balloon in the lower middle section of the image.
 
-```{r imagebreakb, out.height="100px", fig.cap="\\label{fig:figs} APRS antenna applies more pressure on the surface of the balloon."}
+&nbsp;
+
+
+```{r imagebreakb, out.height="100px"}
 include_graphics("assets/IMAGEBREAKB.png")
 ```
+Figure 12: APRS antenna applies more pressure on the surface of the balloon.
 
-```{r imagebreakc, out.height="100px", fig.cap="\\label{fig:figs} Pressure between APRS antenna and balloon is released. A puncture is visible in the balloon."}
+&nbsp;
+
+
+```{r imagebreakc, out.height="100px"}
 include_graphics("assets/IMAGEBREAKC.png")
 ```
+Figure 13: Pressure between APRS antenna and balloon is released. A puncture is visible in the balloon.
+
+&nbsp;
 
 When the balloon was first popped, the payload began experiencing a decrease in buoyant force. While the data for when the balloon was at its peak height is limited, the balloon should likely have accelerated downwards initially. Around an hour into the flight, the balloon’s decent is not as rapid. This descent rate change is likely due to the balloon acting like a parachute. The Go-Pro captured a reflection of the balloon in the payload late into the flight.
 
-```{r imagebreakd, out.height="100px", fig.cap="\\label{fig:figs} Reflection of balloon in payload on lower left side of photo."}
+```{r imagebreakd, out.height="100px"}
 include_graphics("assets/IMAGEBREAKD.png")
 ```
+Figure 14: Reflection of balloon in payload on lower left side of photo.
+
+&nbsp;
 
 The balloons puncture expanded and seems to be capturing air. Since the balloon acts a parachute, this would increase the air resistance on the payload and slow down its velocity. At a certain point, the payload begins descending more rapidly. The parachute affect of the balloon probably ceased at this point because the ballon was too damaged.
 
@@ -522,7 +565,7 @@ As the balloon entered thicker parts of the atmosphere, the parachute began beco
 
 The Arduino BME280 sensor, which was setup to measure outside temperature, failed quickly, reporting values of -144 \degree C and 100% Relative Humidity. Therefore, the only metric of temperature recorded is through the thermistor placed on the sensor PCB in the payload under the acrylic, which was designed to record the internal temperature of the payload. This thermistor had little insulation around it, however, and most likely recorded temperature values closer to the outside temperature of the atmosphere. The calibrated temperature data as a function of time is displayed in Figure 11.
 
-```{r temp_altitude, fig.cap="\\label{fig:figs}"}
+```{r temp_altitude}
 tempFromAltitude <- function(h){
   if (h < 11000) {
     return(15.04 - 0.00649*h)
@@ -543,12 +586,16 @@ a <- ggplot(pv, aes(x=height, y=temp_recal)) + geom_point(aes(color="Measured In
                                         x="Height (m)", y="Temperature (C)")
 a
 ```
+Figure 15
+
+&nbsp;
+
 
 The difference between calculated and actual values can most likely be explained by the fact that the calibration of the thermistor had a relatively high error, and there was most likely some insulation keeping the thermistor warm. Since the balloon never reached the upper stratosphere at 25,000 meters, no warming effect is observed at high altitudes. Instead, the temperature stays relatively constant past 11,000 meters in the lower stratosphere before the ozone layer is reached, since the atmosphere is too thin for much heating infrared radiation to be absorbed.
 
 The launch was an overall success, other than the BME sensor failing, Luke Bowsher’s accelerometer failing to log data, and the Arduino Mega failing to log data. Due to the backup tracking system transmitting live data to the ground, data for all sensors except the accelerometer were recovered using base station logs.
 
-# Conclusion 
+# Conclusion
 
 As discussed, the launch can be considered a technical success. With the payload and most data recovered, atmospheric analysis has been made possible by 6thsense's launch. The results discussed above agree with the scientific community's current understanding of the atmosphere and atmospheric layers. Not only was data recorded to study the atmosphere, however, but 6thsense's balloon launch was also a test of systems that the team designed to meet the technical challenges of sending equipment to the edge of space.
 
