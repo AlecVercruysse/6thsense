@@ -27,3 +27,8 @@ knitr::include_graphics("assets/appendix3.png")
 \includepdf[pages={-}]{assets/cad2.pdf}
 \includepdf[pages={-}]{assets/cad3.pdf}
 \includepdf[pages={-}]{assets/cad4.pdf}
+\includepdf[pages={-}]{assets/Yagi.pdf}
+\includepdf[pages={-}]{assets/reel_in.pdf}
+
+
+

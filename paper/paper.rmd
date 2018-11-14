@@ -32,7 +32,7 @@ opts_chunk$set(echo = F, warning = F, fig.align='center', out.width="400px")
 
 ## Background
 
-There are four main layers to the atmosphere: the troposphere, stratosphere, mesosphere, and thermosphere. The **troposphere** is the section of the atmosphere from roughly 0km to 15km, and is the layer in which humans live. It includes 75% of the mass of all gases in the atmosphere, consisting of 78% nitrogen gas, 21% oxygen, and less than 1% of argon, carbon dioxide, and other constituents. Because it is both the lowest in altitude and most massive layer, the pressure in the troposphere is the greatest: 100kPa. As altitude increases in the troposphere, temperature decreases to about -60 \degree C. The** stratosphere** is the section from roughly 15km to 50km. The ozone layer, or the region in the atmosphere which absorbs most UV rays, is within the stratosphere at about 20km in altitude. The pressure in the stratosphere is 10kPa. The mesosphere is the region from 50km to 80km. The pressure in the mesosphere is 0.1 kPa. Finally, the thermosphere is the highest in altitude of the four layers, spanning from 80km into outer space. Here, the pressure is only 0.01kPa, as it is the least dense of the layers. The few air molecules in the thermosphere are heated to extremely high temperatures by the Sun’s radiation. However, because there are so few molecules, an appreciable difference in overall temperature cannot be measured, so the effective temperature of the thermosphere is less than that of the mesosphere. 
+There are four main layers to the atmosphere: the troposphere, stratosphere, mesosphere, and thermosphere. The **troposphere** is the section of the atmosphere from roughly 0km to 15km, and is the layer in which humans live. It includes 75% of the mass of all gases in the atmosphere, consisting of 78% nitrogen gas, 21% oxygen, and less than 1% of argon, carbon dioxide, and other constituents. Because it is both the lowest in altitude and most massive layer, the pressure in the troposphere is the greatest: 100kPa. As altitude increases in the troposphere, temperature decreases to about -60 \degree C. The **stratosphere** is the section from roughly 15km to 50km. The ozone layer, or the region in the atmosphere which absorbs most UV rays, is within the stratosphere at about 20km in altitude. The pressure in the stratosphere is 10kPa. The mesosphere is the region from 50km to 80km. The pressure in the mesosphere is 0.1 kPa. Finally, the thermosphere is the highest in altitude of the four layers, spanning from 80km into outer space. Here, the pressure is only 0.01kPa, as it is the least dense of the layers. The few air molecules in the thermosphere are heated to extremely high temperatures by the Sun’s radiation. However, because there are so few molecules, an appreciable difference in overall temperature cannot be measured, so the effective temperature of the thermosphere is less than that of the mesosphere. 
 
 The layers relevant to the experiments conducted are the troposphere and stratosphere, as the balloon was designed to reach a maximum altitude of 30km (about the middle of the stratosphere but past the ozone layer). Therefore, the payload had to prepared for temperatures as low as -60 \degree C and pressure as low as 10kPa (in the stratosphere). The payload is expected to encounter the lowest temperature in the troposphere, around an altitude of 10km. As the balloon rises from sea level to the top of the troposphere, temperature is expected to decrease because the ground absorbs most of the sun’s radiation (as opposed to the gas particles). However, as the balloon enters the stratosphere, an increase in temperature is expected due to the ozone layer’s blockage of UV rays. The UV rays that the ozone layer absorbs causes the gas particles in the stratosphere to heat up, so temperature increases with altitude. As the balloon gains altitude, the density of air around it decreases, so the pressure decreases. 
 
@@ -181,9 +181,12 @@ All physical CAD drawings are included in the appendix.
 
 # Cut Down Mechanism
 
-```{r cutdown_diagram, fig.cap="\\label{fig:figs} Cutdown mechanism circuit design"}
+```{r cutdown_diagram}
 include_graphics("assets/cutdown.png")
 ```
+Figure 2: Cutdown mechanism circuit design
+
+&nbsp;
 
 ## Cutdown Method
 
@@ -251,7 +254,7 @@ A simple circuit is one where an LED is connected in the middle of the current, 
 ```{r simple_circuit}
 include_graphics("assets/simple_circuit.png")
 ```
-Figure 2: A simple example circuit
+Figure 3: A simple example circuit
 
 &nbsp;
 
@@ -259,14 +262,14 @@ Arduino is a software and hardware company that produces a variety of microcontr
 
 ## Electrical Design
 
-The circuit consists of two Arduinos, one Mega ATK and one Uno. The Mega ATK is our primary microcontroller and controls the logger, transmitter, and receives input from every sensor except for the accelerometer. The accelerometer and another microSD logger are the only two components on the secondary Arduino Uno. The reason for the accelerometer needing it’s own Arduino is because the $I^2C$ library it required was not compatible with the other devices running on $I^2C$, such as the BME280 and spectrometer. The primary Arduino is powered by three batteries, and one battery powers the secondary arduino and the methane sensor. The methane sensor uses a large amount of power so it is with the secondary Arduino’s power supply so that if the sensor uses too much power it will not disrupt the majority of the data collection and sensors. All batteries go through 1 Amp 5 Volt voltage regulators, one for the primary Arduino and one for the secondary Arduino and methane sensor. The built in voltage regulator on the Arduino was not powerful enough and causing the sensors to malfunction so exterior regulators were included. Every sensor connects individually to either an analog pin or digital pin, or is one of the three sensors that connect to the SDA and SCL pins.
+The circuit consists of two Arduinos, one Mega ATK and one Uno. The Mega ATK is our primary microcontroller and controls the logger, transmitter, and receives input from every sensor except for the accelerometer. The accelerometer and another microSD logger are the only two components on the secondary Arduino Uno. The reason for the accelerometer needing it’s own Arduino is because the $I^2C$ library it required was not compatible with the other devices running on $I^2C$, such as the BME280 and spectrometer. The primary Arduino is powered by three batteries, and one battery powers the secondary arduino and the methane sensor. The methane sensor uses a large amount of power so it is with the secondary Arduino’s power supply so that if the sensor uses too much power it will not disrupt the majority of the data collection and sensors. All batteries go through 1 Amp 5 Volt voltage regulators, one for the primary Arduino and one for the secondary Arduino and methane sensor. The built in voltage regulator on the Arduino was not powerful enough and causing the sensors to malfunction so exterior regulators were included. Every sensor connects individually to either an analog pin or digital pin, or is one of the three sensors that connect to the SDA and SCL pins. See Appendix for schematic.
 
 ## Software Design
 
 ```{r code_flow_chart, out.height="400px", fig.align='center'}
 include_graphics("assets/flow_code.jpg")
 ```
-Figure 3: Code Flow Chart
+Figure 4: Code Flow Chart
 
 &nbsp;
 
@@ -379,10 +382,9 @@ p2 <- ggplot(pressure2, aes(x=pressure2$Time, y=pressure2$hPa)) + geom_point() +
 
 grid.arrange(p1, p2, ncol=2)
 ```
-Figure 5
+Figure 5:
 
 &nbsp;
-
 
 Figure 6 shows the conversion between the output of the standard (Extech) sensor and that of the Arduino (Vernier) sensor, including the equation to convert the Arduino’s 4.9 mV resolution units to kPa.  
 
@@ -390,7 +392,7 @@ Figure 6 shows the conversion between the output of the standard (Extech) sensor
 pressure3 <- read.csv("data/pressure3.csv")
 names(pressure3)[1] <- "Vernier sensor (10-bit unit)"
 names(pressure3)[2] <- "Extech sensor (kPa)"
-p3 <- ggplot(pressure3, aes(x=pressure3$`Vernier sensor (10-bit unit)`, y=pressure3$`Extech sensor (kPa)`)) + geom_point() + labs(title="Pressure conversion between\n standard (Extech) and Arduino (Vernier) sensor", x="Pressure from Vernier (10-bit unit)", y="Pressure from Extech (kPa)") + geom_smooth(method = "lm") + geom_text(x=300, y=90, label=TeX("y = -25.3 + 0.255x, r^2 = 1"), parse=TRUE)
+p3 <- ggplot(pressure3, aes(x=pressure3$`Vernier sensor (10-bit unit)`, y=pressure3$`Extech sensor (kPa)`)) + geom_point() + labs(title="Pressure conversion between\n standard (Extech) and Arduino (Vernier) sensor", x="Pressure from Vernier (10-bit unit)", y="Pressure from Extech (kPa)") + geom_smooth(method = "lm", color="purple") + geom_text(x=300, y=90, label=TeX("y = -25.3 + 0.255x, r^2 = 1"), parse=TRUE)
 p3
 ```
 Figure 6
@@ -398,7 +400,6 @@ Figure 6
 &nbsp;
 
 Below is example data used to calibrate the Veriner Pressure Sensor.
-
 `r kable(pressure3, caption="Varying average pressure readings from Arduino (Vernier) vs. Standard (Extech) sensor")`
 
 ## Humidity
@@ -416,7 +417,7 @@ lm_eqn_h1 <- function(df){
              r2 = format(summary(m)$r.squared, digits = 3)))
     as.character(as.expression(eq));                 
 }
-h1 <- ggplot(humidity1, aes(x=humidity1$Arduino...., y=humidity1$Standard....)) + geom_point() + labs(title="Humidity conversion between\n standard (Vernier) and Arduino (BME280) sensor", x="Relative humidity from BME280 (% RH)", y="Relative humidity from Vernier (% RH)") + geom_smooth(method = "lm") + geom_text(x=55, y=60, label=TeX("y = 9.12 + 1.07x, r^2 = 0.997"), parse=TRUE)
+h1 <- ggplot(humidity1, aes(x=humidity1$Arduino...., y=humidity1$Standard....)) + geom_point() + labs(title="Humidity conversion between\n standard (Vernier) and Arduino (BME280) sensor", x="Relative humidity from BME280 (% RH)", y="Relative humidity from Vernier (% RH)") + geom_smooth(method = "lm", color="purple") + geom_text(x=55, y=60, label=TeX("y = 9.12 + 1.07x, r^2 = 0.997"), parse=TRUE)
 h1
 ```
 Figure 7
@@ -439,7 +440,7 @@ lm_eqn_t1 <- function(df){
              r2 = format(summary(m)$r.squared, digits = 3)))
     as.character(as.expression(eq));                 
 }
-t1 <- ggplot(temp1, aes(x=temp1$Arduino...C., y=temp1$Fieldpiece...C.)) + geom_point() + labs(title="Temperature conversion between\n standard (Fieldpiece) and Arduino (BME280) sensor", x="Temperature from BME280 (°C)", y="Temperature from Fieldpiece's T1 rod (°C)") + geom_smooth(method = "lm") + geom_text(x=5, y=20, label=TeX("y = 0.122 + 1.03x, r^2 = 0.999"), parse=TRUE)
+t1 <- ggplot(temp1, aes(x=temp1$Arduino...C., y=temp1$Fieldpiece...C.)) + geom_point() + labs(title="Temperature conversion between\n standard (Fieldpiece) and Arduino (BME280) sensor", x="Temperature from BME280 (°C)", y="Temperature from Fieldpiece's T1 rod (°C)") + geom_smooth(method = "lm", color="purple") + geom_text(x=5, y=20, label=TeX("y = 0.122 + 1.03x, r^2 = 0.999"), parse=TRUE)
 t1
 errors <- read.csv("data/errors.csv")
 names(errors)[2] <- "Percent error (%)"
@@ -455,7 +456,7 @@ However, it was later found much after the final launch that the BME280 sensor h
 thermcal <- read.csv("data/temp2.csv")
 temp <- thermcal$extech
 cal <- lm(thermcal$thermistor ~ temp)
-ggplot(thermcal, aes(x=temp, y=thermistor)) + geom_point() + geom_smooth(method="lm") + labs(title="Temperature Measured with Extech Sensor vs. Thermistor", x="Extech Measured Temperature (C)", y="Thermistor Measured Temperature")
+ggplot(thermcal, aes(x=temp, y=thermistor)) + geom_point() + geom_smooth(method="lm", color="purple") + labs(title="Temperature Measured with Extech Sensor vs. Thermistor", x="Extech Measured Temperature (C)", y="Thermistor Measured Temperature") + geom_text(x=-4, y=15, label=TeX("y = -12.89 + 1.499x, r^2 = 0.985"), parse=TRUE)
 ```
 Figure 9
 
@@ -463,9 +464,7 @@ Figure 9
 
 ## Error Bars
 
-The data gathered from the pressure, humidity, and temperature sensors do not all accurately represent the universally true values. There is bound to be inaccuracy from at least one of the three sources of error: accuracy, resolution, and calibration of the sensor. The standard for pressure and temperature, the Extech SD700, has a very high accuracy of ±2 hPa and , which can be disregarded as insignificant. Using Graphical Analysis and the LINEST function in Excel, the uncertainty of the slope of Graph 7 was calculated. Thus, the percent error of the slope = uncertainty of slopeslope*100, which was later multiplied with all of the pressure readings collected by the sensor to calculate error bars. To calculate the error bars that either contain or depend on the humidity and temperature data, multiplying the percent error of the slope of the conversion graphs does not work because the accuracy of the standards could not be regarded as perfectly accurate. Instead of solely using the percent errors, the room mean square error (RMSE) was found for all sensors, as shown below in Table 5. Table 6 lists the total errors and percent errors for the four main experiments—one extra due to the addition of the thermistor calibration after the final launch.
-
-**JOHN INSERT RMSE TABLE HERE**
+The data gathered from the pressure, humidity, and temperature sensors do not all accurately represent the universally true values. There is bound to be inaccuracy from at least one of the three sources of error: accuracy, resolution, and calibration of the sensor. The standard for pressure and temperature, the Extech SD700, has a very high accuracy of ±2 hPa and , which can be disregarded as insignificant. Using Graphical Analysis and the LINEST function in Excel, the uncertainty of the slope of Graph 7 was calculated. Thus, the percent error of the slope = uncertainty of slope / slope * 100, which was later multiplied with all of the pressure readings collected by the sensor to calculate error bars. To calculate the error bars that either contain or depend on the humidity and temperature data, multiplying the percent error of the slope of the conversion graphs does not work because the accuracy of the standards could not be regarded as perfectly accurate. Instead of solely using the percent errors, the room mean square error (RMSE) was found for all sensors, as shown below in Table 5. Table 6 lists the total errors and percent errors for the four main experiments—one extra due to the addition of the thermistor calibration after the final launch.
 
 `r kable(errors, caption="Percent errors for the group sensors used relative to standards")`
 
