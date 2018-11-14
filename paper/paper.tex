@@ -25,7 +25,7 @@
 \usepackage{hyperref}
 \hypersetup{unicode=true,
             pdftitle={Sending a Balloon to the Edge of Space},
-            pdfauthor={Luker Bowsher, John Kim, Vivian Liu, Simon Oros, Caroline Pang, Alec Vercruysse},
+            pdfauthor={Luke Bowsher, John Kim, Vivian Liu, Simon Oros, Caroline Pang, Alec Vercruysse},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -75,7 +75,7 @@
   \title{Sending a Balloon to the Edge of Space}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-    \author{Luker Bowsher, John Kim, Vivian Liu, Simon Oros, Caroline Pang, Alec
+    \author{Luke Bowsher, John Kim, Vivian Liu, Simon Oros, Caroline Pang, Alec
 Vercruysse}
     \preauthor{\centering\large\emph}
   \postauthor{\par}
@@ -472,6 +472,14 @@ panel that was placed outside of the shadow of the balloon. From this
 voltage, power output of the solar panel can be calculated. The purpose
 of the experiments on solar properties is to see if there is a
 correlation between altitude and solar output.
+
+\subsubsection{Luke Bowsher:
+Acceleromter}\label{luke-bowsher-acceleromter}
+
+As altitude rises, it has been previously observed that wind speed
+~increases. To measure how the change in wind speed affected the
+turbulence of the balloon, an accelerometer chip was placed inside the
+payload to quantify the acceleration along all three axes.
 
 \section{Physical Design}\label{physical-design}
 
@@ -1569,21 +1577,126 @@ for all sensors, as shown below in Table 5. Table 6 lists the total
 errors and percent errors for the four main experiments---one extra due
 to the addition of the thermistor calibration after the final launch.
 
-\begin{longtable}[]{@{}lr@{}}
-\caption{Percent errors for the group sensors used relative to
-standards}\tabularnewline
+Tables 5 through 9 show the calculations of the root mean squared error
+(RMSE), or standard error, which are each used to calculate the total
+errors.
+
+\begin{longtable}[]{@{}lrll@{}}
+\caption{Calculated Pressure Standard Error (kPa)}\tabularnewline
 \toprule
-Experiments & Percent error (\%)\tabularnewline
+Vernier.Measurement & Vernier.Predicted & Extech.Measured &
+Square.errors\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Experiments & Percent error (\%)\tabularnewline
+Vernier.Measurement & Vernier.Predicted & Extech.Measured &
+Square.errors\tabularnewline
 \midrule
 \endhead
-Pressure & 0.459\tabularnewline
-Humidity & 0.659\tabularnewline
-Temperature (calibrated to Fieldpiece) & 0.429\tabularnewline
-Temperature (calibrated to Extech) & 1.459\tabularnewline
+105.77 & 1.7200 & 1.48 & 0.057\tabularnewline
+149.44 & 12.8700 & 12.75 & 0.014\tabularnewline
+207.92 & 27.8100 & 27.79 & 0.000\tabularnewline
+274.45 & 44.8000 & 45.04 & 0.059\tabularnewline
+344.59 & 62.7100 & 62.95 & 0.058\tabularnewline
+409.80 & 79.3700 & 79.86 & 0.239\tabularnewline
+497.34 & 101.7300 & 101.09 & 0.401\tabularnewline
+RMSE & 0.3441 & \ldots{} & \ldots{}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\(error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(0.3441374353)^2 + (0.2554 / 2)^2} = 0.367066567 \approx 0.367\)
+
+~
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Calculated Humidity Standard Error (°C)}\tabularnewline
+\toprule
+BME280.Predicted & Vernier.Measured & Square.error\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+BME280.Predicted & Vernier.Measured & Square.error\tabularnewline
+\midrule
+\endhead
+32.11 & 22.03 & 101.61\tabularnewline
+32.12 & 21.74 & 107.74\tabularnewline
+32.12 & 21.59 & 110.88\tabularnewline
+\ldots{} & \ldots{} & \ldots{}\tabularnewline
+81.15 & 65.87 & 233.48\tabularnewline
+81.20 & 66.31 & 221.71\tabularnewline
+81.25 & 66.31 & 223.20\tabularnewline
+RMSE / standard error & 12.3143298 & \ldots{}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\(error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(12.3143298)^2 + (0.9337 / 2)^2} = 12.323176025 \approx 12.32\)
+
+~
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Calculated Temperature Standard Error (°C)}\tabularnewline
+\toprule
+BME280.Predicted & Fieldpiece.Measured & Square.errors\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+BME280.Predicted & Fieldpiece.Measured & Square.errors\tabularnewline
+\midrule
+\endhead
+-21.05 & -20.90 & 0.023\tabularnewline
+-21.16 & -21.00 & 0.026\tabularnewline
+-21.20 & -21.10 & 0.010\tabularnewline
+\ldots{} & \ldots{} & \ldots{}\tabularnewline
+4.12 & 4.70 & 0.336\tabularnewline
+4.12 & 4.60 & 0.230\tabularnewline
+4.13 & 4.40 & 0.073\tabularnewline
+RMSE / standard error & 0.7755410298 & \ldots{}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\(error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(0.7755410298)^2 + (0.9747 / 2)^2} = 0.915955191 \approx 0.916\)
+
+~
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Calculated Thermistor Standard Error (°C)}\tabularnewline
+\toprule
+Thermistor.Predicted & Extech.Measured & Square.errors\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Thermistor.Predicted & Extech.Measured & Square.errors\tabularnewline
+\midrule
+\endhead
+18.38 & 20.80 & 5.86\tabularnewline
+18.38 & 20.70 & 5.38\tabularnewline
+18.38 & 20.70 & 5.38\tabularnewline
+\ldots{} & \ldots{} & \ldots{}\tabularnewline
+-14.67 & -3.30 & 129.28\tabularnewline
+-14.83 & -3.50 & 128.37\tabularnewline
+-14.67 & -3.70 & 120.34\tabularnewline
+RMSE / standard error & 8.493267690 & \ldots{}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\(error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(8.493267690)^2 + (0.657 / 2)^2} = 8.499618127 \approx 8.50\)
+
+~
+
+\begin{longtable}[]{@{}lr@{}}
+\caption{Total Standard Errors}\tabularnewline
+\toprule
+Experiment\ldots{}sensor & Total.error\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Experiment\ldots{}sensor & Total.error\tabularnewline
+\midrule
+\endhead
+Pressure & 0.367\tabularnewline
+Humidity & 12.320\tabularnewline
+Temperature (BME280) & 0.916\tabularnewline
+Temperature (thermistor) & 8.500\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -1701,6 +1814,26 @@ altitudes. Instead, the temperature stays relatively constant past
 11,000 meters in the lower stratosphere before the ozone layer is
 reached, since the atmosphere is too thin for much heating infrared
 radiation to be absorbed.
+
+\subsection{Modeled vs Actual
+Trajectory}\label{modeled-vs-actual-trajectory}
+
+\begin{center}\includegraphics[width=400px]{assets/kml} \end{center}
+
+Figure 16
+
+~
+
+Figure 16 an overlay of the simulated balloon trajectory (taken 12 hours
+before the launch) and the actual recorded balloon trajectory. The
+trajectory in the back is the actual data, and the trajectory in front
+is the simulated. There is a gap in the actual trajectory, which is due
+to the fact that the logger stopped recording data midway through its
+flight. In addition, because the balloon popped earlier than
+anticipated, it was not able to gain the expected altitude of 33km so it
+landed closer to the launch site. However, had conditions been optimal
+and the balloon reached its optimal altitude, the simulation probably
+would have been a good predictor of actual balloon trajectory.
 
 The launch was an overall success, other than the BME sensor failing,
 Luke Bowsher's accelerometer failing to log data, and the Arduino Mega

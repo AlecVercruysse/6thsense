@@ -1,6 +1,6 @@
 ---
 title: "Sending a Balloon to the Edge of Space"
-author: Luker Bowsher, John Kim, Vivian Liu, Simon Oros, Caroline Pang, Alec Vercruysse
+author: Luke Bowsher, John Kim, Vivian Liu, Simon Oros, Caroline Pang, Alec Vercruysse
 date: "November 13, 2018"
 output: 
   pdf_document:
@@ -120,9 +120,14 @@ Ultraviolet light is a harmful form of radiation which enters our atmosphere. Th
 Therefore, a UVB light sensor was placed vertically inside the payload with the top half of the rod outside of the acrylic top to measure the intensity of UVB light.
 
 ### Vivian Liu: Light Intensity and Solar Power
+
 Light intensity, specifically for the purposes of solar energy, is an important part of the initiative for cleaner energy. It is also interesting to learn about how light intensity increases or decreases as it passes through the ozone layer. 
 
 To test light intensity, a photoresistor was placed on a board, and the resistances of the photoresistor attached in series to a 1.2k Ohm resistor were recorded as a function of altitude. From the resistance of the photoresistor, lux, or the units of light intensity, can be calculated. For solar power, the arduino read the voltage of a solar panel that was placed outside of the shadow of the balloon. From this voltage, power output of the solar panel can be calculated. The purpose of the experiments on solar properties is to see if there is a correlation between altitude and solar output. 
+
+### Luke Bowsher: Acceleromter
+
+As altitude rises, it has been previously observed that wind speed  increases. To measure how the change in wind speed affected the turbulence of the balloon, an accelerometer chip was placed inside the payload to quantify the acceleration along all three axes.
 
 # Physical Design
 
@@ -529,7 +534,43 @@ Figure 9
 
 The data gathered from the pressure, humidity, and temperature sensors do not all accurately represent the universally true values. There is bound to be inaccuracy from at least one of the three sources of error: accuracy, resolution, and calibration of the sensor. The standard for pressure and temperature, the Extech SD700, has a very high accuracy of ±2 hPa and , which can be disregarded as insignificant. Using Graphical Analysis and the LINEST function in Excel, the uncertainty of the slope of Graph 7 was calculated. Thus, the percent error of the slope = uncertainty of slope / slope * 100, which was later multiplied with all of the pressure readings collected by the sensor to calculate error bars. To calculate the error bars that either contain or depend on the humidity and temperature data, multiplying the percent error of the slope of the conversion graphs does not work because the accuracy of the standards could not be regarded as perfectly accurate. Instead of solely using the percent errors, the room mean square error (RMSE) was found for all sensors, as shown below in Table 5. Table 6 lists the total errors and percent errors for the four main experiments—one extra due to the addition of the thermistor calibration after the final launch.
 
-`r kable(errors, caption="Percent errors for the group sensors used relative to standards")`
+Tables 5 through 9 show the calculations of the root mean squared error (RMSE), or standard error, which are each used to calculate the total errors.
+
+```{r loading, include=F}
+presse <- read.csv("data/table/presse.csv")
+humse <- read.csv("data/table/humse.csv")
+tempse <- read.csv("data/table/tempse.csv")
+thermse <- read.csv("data/table/thermse.csv")
+total_se <- read.csv("data/table/total.csv")
+```
+
+`r kable(presse, caption="Calculated Pressure Standard Error (kPa)")`
+
+$error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(0.3441374353)^2 + (0.2554 / 2)^2} = 0.367066567 \approx 0.367$
+
+&nbsp;
+
+`r kable(humse, caption="Calculated Humidity Standard Error (°C)")`
+
+$error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(12.3143298)^2 + (0.9337 / 2)^2} = 12.323176025 \approx 12.32$
+
+&nbsp;
+
+`r kable(tempse, caption="Calculated Temperature Standard Error (°C)")`
+
+$error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(0.7755410298)^2 + (0.9747 / 2)^2} = 0.915955191 \approx 0.916$
+
+&nbsp;
+
+`r kable(thermse, caption="Calculated Thermistor Standard Error (°C)")`
+
+$error_{total} = \sqrt{(error_{standard})^2 + (error_{sensor})^2} = \sqrt{(error_{standard})^2 + (slope_{conversion}/2)^2} = \sqrt{(8.493267690)^2 + (0.657 / 2)^2} = 8.499618127 \approx 8.50$
+
+&nbsp;
+
+`r kable(total_se, caption="Total Standard Errors")`
+
+<!--`r kable(errors, caption="Percent errors for the group sensors used relative to standards")`-->
 
 # Experimental Results
 
@@ -661,6 +702,17 @@ Figure 15
 
 
 The difference between calculated and actual values can most likely be explained by the fact that the calibration of the thermistor had a relatively high error, and there was most likely some insulation keeping the thermistor warm. Since the balloon never reached the upper stratosphere at 25,000 meters, no warming effect is observed at high altitudes. Instead, the temperature stays relatively constant past 11,000 meters in the lower stratosphere before the ozone layer is reached, since the atmosphere is too thin for much heating infrared radiation to be absorbed.
+
+## Modeled vs Actual Trajectory
+
+```{r kml, echo=F, out.width="400px"}
+knitr::include_graphics("assets/kml.png")
+```
+Figure 16
+
+&nbsp;
+
+Figure 16 an overlay of the simulated balloon trajectory (taken 12 hours before the launch) and the actual recorded balloon trajectory. The trajectory in the back is the actual data, and the trajectory in front is the simulated. There is a gap in the actual trajectory, which is due to the fact that the logger stopped recording data midway through its flight. In addition, because the balloon popped earlier than anticipated, it was not able to gain the expected altitude of 33km so it landed closer to the launch site. However, had conditions been optimal and the balloon reached its optimal altitude, the simulation probably would have been a good predictor of actual balloon trajectory.
 
 The launch was an overall success, other than the BME sensor failing, Luke Bowsher’s accelerometer failing to log data, and the Arduino Mega failing to log data. Due to the backup tracking system transmitting live data to the ground, data for all sensors except the accelerometer were recovered using base station logs.
 
