@@ -73,6 +73,8 @@ Figure 1: NASA Empirical Models for Temperature and Pressure
 
 Figure 1 shows NASA’s empirical models for pressure and temperature for the troposphere and stratosphere. For a height of 0, the temperature is that of sea level, or 15.06 \degree C. At a height of 11km, the predicted temperature is -56.35 \degree C, which is consistent with measurements recorded by the payload. As the balloon rises through the lower stratosphere, a constant temperature of -56.46 \degree C is expected. Finally, once the balloon rises beyond the ozone layer (around 25km altitude), temperatures are expected to rise again due to the ozone layer’s absorption of the sun’s radiation. Refer to section 8 for an overlay of NASA’s empirical models over experimental data.
 
+In addition to information about temperature, NASA’s empirical model also accounts for the relationship between air pressure and time. Since atmospheric composition and temperature vary, a simple exponential model is not enough to correctly predict the relationship between pressure and height. For example, the temperature stops changes in most parts of the atmosphere and remains constant in the lower stratosphere. A simple exponential model would not account for this variation in temperature change. NASA’s empirical model separates fitted curves to account for differences in atmospheric compositions in order to derive a more accurate relationship between pressure and altitude.
+
 # Experiments Conducted
 
 The payload included two tracking devices, a GoPro Hero 3+ to record the ascent, and sensors to monitor the atmosphere and record altitude data. In addition, each team member implemented a sensor as part of an individual experiment. This paper focuses on the results of the group experiments, but the setups for the individual experiments are still described. Separate papers can be found for each team member's individual experiment.
@@ -177,6 +179,67 @@ All three elements, the were each measured and cut to the appropriate length fro
 
 A coax cable had one end separated into the grounded shield and signal conductor, each which was attached to an opposite end of the driven element. A wire was also connected to the driven element to complete the dipole. The other end of the coax cable included a BNC connector that was attached to a radio receiver.  
 
+## Calculating Payload Weight
+
+### Buoyancy Force Calculations
+
+$$F_B=\rho g V$$
+$$\rho = 1.225kg/m^3, \, g = 9.8m/s^2, \, V = \frac{4}{3}\pi(0.8382m)^3=2.87m^3$$
+$$F_B = (1.225kg/m^3)(9.8m/s^2)(2.87m^3)= 37.2N$$
+$$F_{net} = F_B - F_{weight} = (mass)(acceleration)$$
+$$let\, \,\,mass = m_{system}, \, F_B = 37.2N, \, F_{weight} = mg = m_{system}(9.8m/s^2)$$
+$$a = \frac{37.2 - 9.8m_{system}}{m_{system}}$$
+We want to reach an altitude of 33,500 m and come back within 3 hours:
+$$v_{avg} = \frac{33500 * 2}{10,800} = 6.2m/s$$
+$$\int a\,dt = v_{avg} = 6.2m/s$$
+$$\int a\,dt = \int \frac{37.2-9.8m_{system}}{m_{system}} \, dt$$
+$$6.2 = \frac{37.2-9.8m_{system}}{m_{system}}$$
+$$6.2m_{system} = 37.2 - 9.8m_{payload}$$
+$$16m_{system} = 37.2$$
+$$\boxed{m_{system} = 2.325kg}$$
+$$m_{system} = m_{balloon} + m_{payload}, \, \, m_{balloon} \approx 1kg$$
+$$m_{payload} \approx 1.3kg$$
+
+### Buoyancy Force at Highest Altitude
+
+$$F_B = \rho_{air} V_{balloon} g$$
+$$PV=nRT$$
+$$V_{balloon}=\frac{nRT}{P}$$
+
+$$n=128.125mol, \, R = 0.8206, \, T=223K, \, P=0.00967atm$$
+$$V_{balloon} = \frac{128.125 * 0.8206 *223}{0.00967} = 242462\,\,liters$$
+$$V_{balloon} = 242.5m^3$$
+$$\rho_{35000m}=0.0082kg/m^3$$
+$$\boxed{F_B = (0.0082kg/m^3)(242.5m^3)(9.8m/s^2)=19.49N}$$
+
+### Derivation of Exponential Model of Pressure
+
+$$pressure = \frac{Force}{Area} = \rho gh$$
+$$dP=-\rho g\,dh$$
+$$PV=nRT$$
+$$\frac{n}{v} = \frac{P}{rt}$$
+
+$$\rho = density = \frac{mass}{volume} $$
+$$\rho = \frac{nm_{mol}}{v} = \frac{Pm_{mol}}{rt}$$
+$$\rho = \frac{P}{Rt}(m_{mol})$$
+$$dP = -\frac{Pm_{mol}}{Rt}g\,dh$$
+$$\frac{dP}{P} =  -\frac{m_{mol}}{Rt}g\,dh$$
+$$\int_{0}^{h} \frac{dP}{P} =- \int_{0}^{h} \frac{m_{mol}}{Rt}g\,dh$$
+$$\ln{P} = -\frac{m_{mol}g}{Rt}\,dh$$
+$$m_{mol}=0.29\,g/mol, \,g=\,9.8m/s^2, \,R=8.314\,J/mol, \,t=273 \, K$$
+$$\frac{m_{mol}g}{Rt} = \frac{1}{8.4km}$$
+$$\ln{P} = -\frac{h}{8.4}$$
+$$e^{\ln{P}}=P_0 \,e^{\frac{-h}{8.4}}$$
+$$\boxed{P = P_0e^{\frac{-h}{8.4}}}$$
+$$\frac{P}{P_0} = e^{\frac{-h}{8.4}}$$
+$$\ln{(\frac{P}{P_0})} = \ln{e^{\frac{-h}{8.4}}}$$
+$$\frac{-h}{8.4} = \ln{(\frac{P}{P_0})}$$
+$$h = -8.4 \, \ln{(\frac{P}{P_0})}$$
+$$\boxed{h = -a \, \ln{(\frac{P}{P_0})}}$$
+The exponential model of pressure only holds up to the edge of the stratosphere, and does not apply to higher altitudes. This is because this model depends on temperature being relatively constant, which is true up to the stratosphere. However, beyond the stratosphere, temperatures are wildyly variable,  and therefore this model no longer holds true. 
+
+&nbsp;
+
 All physical CAD drawings are included in the appendix.
 
 # Cut Down Mechanism
@@ -235,7 +298,7 @@ Many tests were conducted where power supplies simulated the voltage outputs of 
 
 Next, the cutdown was tested during the tethered launch. A helium balloon was attached at the top of the payload. The cutdown went off while the payload was still on the ground. Pressure sensor fluctuations were so severe that they managed to drop below the specified cutdown pressure. To correct for this, the arduino now tests for the average of 10 readings dropping below the cutdown pressure and not single measurements. Thus, fluctuations will be averaged out and the pressure sensor will not incorrectly trigger the cutdown. 
 
-The cutdown was tested on a seperate arduino in a vacuum chamber. The code used for this test follows the averaging method described above and can be found in the appendix. The cutdown successfully burnt through a string to release a 1.4 kg weight when the vacuum chamber dropped below 1.08 kPa. 1.08 kPa is the cutdown pressure specified in the code. This value was chosen because it was the pressure at 100,000 ft.
+The cutdown was tested on a seperate arduino in a vacuum chamber. The code used for this test follows the averaging method described above. The cutdown successfully burnt through a string to release a 1.4 kg weight when the vacuum chamber dropped below 1.08 kPa. 1.08 kPa is the cutdown pressure specified in the code. This value was chosen because it was the pressure at 100,000 ft.
 
 ## Final Code
 
@@ -603,6 +666,12 @@ The launch was an overall success, other than the BME sensor failing, Luke Bowsh
 
 # Conclusion
 
-As discussed, the launch can be considered a technical success. With the payload and most data recovered, atmospheric analysis has been made possible by 6thsense's launch. The results discussed above agree with the scientific community's current understanding of the atmosphere and atmospheric layers. Not only was data recorded to study the atmosphere, however, but 6thsense's balloon launch was also a test of systems that the team designed to meet the technical challenges of sending equipment to the edge of space.
+As discussed, the launch can be considered a technical success. With the payload and most data recovered, atmospheric analysis has been made possible by 6thsense's launch. The results discussed above agree with the scientific community's current understanding of the atmosphere and atmospheric layers. Not only was data recorded to study the atmosphere, but 6thsense's balloon launch was also a test of systems that the team designed to meet the technical challenges of sending equipment to the edge of space.
 
-The 6thsense team, working together for the first time on such a large project, grew not only their knowledge of the subject matter required to develop and launch such a payload, but also communication and collaboration skills, necessary in any large scall venture.
+The 6thsense team, working together for the first time on such a large project, grew not only their knowledge of the subject matter required to develop and launch such a payload, but also communication and collaboration skills, necessary in any large scale venture.
+
+# Acknowledgements
+
+This project would have been possible without the continued support of Dr. James Dann and Mr. Ward. Their willingness to go out of their way to provide guidance has been extremely helpful greatly appreciated by the entire team.
+
+In addition, we would like to thank all the members of other ASR teams who we collaborated with, whose knowledge we benefited from. 

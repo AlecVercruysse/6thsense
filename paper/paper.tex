@@ -304,6 +304,17 @@ expected. Finally, once the balloon rises beyond the ozone layer (around
 layer's absorption of the sun's radiation. Refer to section 8 for an
 overlay of NASA's empirical models over experimental data.
 
+In addition to information about temperature, NASA's empirical model
+also accounts for the relationship between air pressure and time. Since
+atmospheric composition and temperature vary, a simple exponential model
+is not enough to correctly predict the relationship between pressure and
+height. For example, the temperature stops changes in most parts of the
+atmosphere and remains constant in the lower stratosphere. A simple
+exponential model would not account for this variation in temperature
+change. NASA's empirical model separates fitted curves to account for
+differences in atmospheric compositions in order to derive a more
+accurate relationship between pressure and altitude.
+
 \section{Experiments Conducted}\label{experiments-conducted}
 
 The payload included two tracking devices, a GoPro Hero 3+ to record the
@@ -657,6 +668,68 @@ element. A wire was also connected to the driven element to complete the
 dipole. The other end of the coax cable included a BNC connector that
 was attached to a radio receiver.
 
+\subsection{Calculating Payload
+Weight}\label{calculating-payload-weight}
+
+\subsubsection{Buoyancy Force
+Calculations}\label{buoyancy-force-calculations}
+
+\[F_B=\rho g V\]
+\[\rho = 1.225kg/m^3, \, g = 9.8m/s^2, \, V = \frac{4}{3}\pi(0.8382m)^3=2.87m^3\]
+\[F_B = (1.225kg/m^3)(9.8m/s^2)(2.87m^3)= 37.2N\]
+\[F_{net} = F_B - F_{weight} = (mass)(acceleration)\]
+\[let\, \,\,mass = m_{system}, \, F_B = 37.2N, \, F_{weight} = mg = m_{system}(9.8m/s^2)\]
+\[a = \frac{37.2 - 9.8m_{system}}{m_{system}}\] We want to reach an
+altitude of 33,500 m and come back within 3 hours:
+\[v_{avg} = \frac{33500 * 2}{10,800} = 6.2m/s\]
+\[\int a\,dt = v_{avg} = 6.2m/s\]
+\[\int a\,dt = \int \frac{37.2-9.8m_{system}}{m_{system}} \, dt\]
+\[6.2 = \frac{37.2-9.8m_{system}}{m_{system}}\]
+\[6.2m_{system} = 37.2 - 9.8m_{payload}\] \[16m_{system} = 37.2\]
+\[\boxed{m_{system} = 2.325kg}\]
+\[m_{system} = m_{balloon} + m_{payload}, \, \, m_{balloon} \approx 1kg\]
+\[m_{payload} \approx 1.3kg\]
+
+\subsubsection{Buoyancy Force at Highest
+Altitude}\label{buoyancy-force-at-highest-altitude}
+
+\[F_B = \rho_{air} V_{balloon} g\] \[PV=nRT\]
+\[V_{balloon}=\frac{nRT}{P}\]
+
+\[n=128.125mol, \, R = 0.8206, \, T=223K, \, P=0.00967atm\]
+\[V_{balloon} = \frac{128.125 * 0.8206 *223}{0.00967} = 242462\,\,liters\]
+\[V_{balloon} = 242.5m^3\] \[\rho_{35000m}=0.0082kg/m^3\]
+\[\boxed{F_B = (0.0082kg/m^3)(242.5m^3)(9.8m/s^2)=19.49N}\]
+
+\subsubsection{Derivation of Exponential Model of
+Pressure}\label{derivation-of-exponential-model-of-pressure}
+
+\[pressure = \frac{Force}{Area} = \rho gh\] \[dP=-\rho g\,dh\]
+\[PV=nRT\] \[\frac{n}{v} = \frac{P}{rt}\]
+
+\[\rho = density = \frac{mass}{volume} \]
+\[\rho = \frac{nm_{mol}}{v} = \frac{Pm_{mol}}{rt}\]
+\[\rho = \frac{P}{Rt}(m_{mol})\] \[dP = -\frac{Pm_{mol}}{Rt}g\,dh\]
+\[\frac{dP}{P} =  -\frac{m_{mol}}{Rt}g\,dh\]
+\[\int_{0}^{h} \frac{dP}{P} =- \int_{0}^{h} \frac{m_{mol}}{Rt}g\,dh\]
+\[\ln{P} = -\frac{m_{mol}g}{Rt}\,dh\]
+\[m_{mol}=0.29\,g/mol, \,g=\,9.8m/s^2, \,R=8.314\,J/mol, \,t=273 \, K\]
+\[\frac{m_{mol}g}{Rt} = \frac{1}{8.4km}\] \[\ln{P} = -\frac{h}{8.4}\]
+\[e^{\ln{P}}=P_0 \,e^{\frac{-h}{8.4}}\]
+\[\boxed{P = P_0e^{\frac{-h}{8.4}}}\]
+\[\frac{P}{P_0} = e^{\frac{-h}{8.4}}\]
+\[\ln{(\frac{P}{P_0})} = \ln{e^{\frac{-h}{8.4}}}\]
+\[\frac{-h}{8.4} = \ln{(\frac{P}{P_0})}\]
+\[h = -8.4 \, \ln{(\frac{P}{P_0})}\]
+\[\boxed{h = -a \, \ln{(\frac{P}{P_0})}}\] The exponential model of
+pressure only holds up to the edge of the stratosphere, and does not
+apply to higher altitudes. This is because this model depends on
+temperature being relatively constant, which is true up to the
+stratosphere. However, beyond the stratosphere, temperatures are wildyly
+variable, and therefore this model no longer holds true.
+
+~
+
 All physical CAD drawings are included in the appendix.
 
 \section{Cut Down Mechanism}\label{cut-down-mechanism}
@@ -782,11 +855,11 @@ measurements. Thus, fluctuations will be averaged out and the pressure
 sensor will not incorrectly trigger the cutdown.
 
 The cutdown was tested on a seperate arduino in a vacuum chamber. The
-code used for this test follows the averaging method described above and
-can be found in the appendix. The cutdown successfully burnt through a
-string to release a 1.4 kg weight when the vacuum chamber dropped below
-1.08 kPa. 1.08 kPa is the cutdown pressure specified in the code. This
-value was chosen because it was the pressure at 100,000 ft.
+code used for this test follows the averaging method described above.
+The cutdown successfully burnt through a string to release a 1.4 kg
+weight when the vacuum chamber dropped below 1.08 kPa. 1.08 kPa is the
+cutdown pressure specified in the code. This value was chosen because it
+was the pressure at 100,000 ft.
 
 \subsection{Final Code}\label{final-code}
 
@@ -879,8 +952,6 @@ communication with multiple ``masters'' which in our case are Arduinos.
 
 \subsection{Electrical Design}\label{electrical-design}
 
-\begin{center}\includegraphics[width=400px]{assets/schematic} \end{center}
-
 The circuit consists of two Arduinos, one Mega ATK and one Uno. The Mega
 ATK is our primary microcontroller and controls the logger, transmitter,
 and receives input from every sensor except for the accelerometer. The
@@ -899,7 +970,7 @@ sensor. The built in voltage regulator on the Arduino was not powerful
 enough and causing the sensors to malfunction so exterior regulators
 were included. Every sensor connects individually to either an analog
 pin or digital pin, or is one of the three sensors that connect to the
-SDA and SCL pins.
+SDA and SCL pins. See Appendix for schematic.
 
 \subsection{Software Design}\label{software-design}
 
@@ -1644,14 +1715,24 @@ payload and most data recovered, atmospheric analysis has been made
 possible by 6thsense's launch. The results discussed above agree with
 the scientific community's current understanding of the atmosphere and
 atmospheric layers. Not only was data recorded to study the atmosphere,
-however, but 6thsense's balloon launch was also a test of systems that
-the team designed to meet the technical challenges of sending equipment
-to the edge of space.
+but 6thsense's balloon launch was also a test of systems that the team
+designed to meet the technical challenges of sending equipment to the
+edge of space.
 
 The 6thsense team, working together for the first time on such a large
 project, grew not only their knowledge of the subject matter required to
 develop and launch such a payload, but also communication and
-collaboration skills, necessary in any large scall venture.
+collaboration skills, necessary in any large scale venture.
+
+\section{Acknowledgements}\label{acknowledgements}
+
+This project would have been possible without the continued support of
+Dr.~James Dann and Mr.~Ward. Their willingness to go out of their way to
+provide guidance has been extremely helpful greatly appreciated by the
+entire team.
+
+In addition, we would like to thank all the members of other ASR teams
+who we collaborated with, whose knowledge we benefited from.
 
 
 \end{document}
