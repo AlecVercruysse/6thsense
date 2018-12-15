@@ -1,0 +1,8 @@
+
+```{r cars}
+library(knitr)
+data <- read.csv("~/Downloads/data.csv")
+names(data)[1] <- "Location (map symbol)"
+names(data)[2] <- "Average CO2 concentration (ppm)"
+kable(data, caption="Table 1: Average CO2 concentration readings in various locations")
+```
